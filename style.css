@@ -1,0 +1,330 @@
+textarea,body {
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif
+}
+
+.miniPicture {
+	clear:left;
+	position:static
+}
+
+.miniPicture,.miniPictureText,.gigantic,img.gbImage,h6.regNum1,h6.regNum2 {
+	float:left
+}
+
+.miniPictureText {
+	clear:none;
+	margin-left:10px
+}
+
+.selectBox {
+	background:#eee
+}
+
+.selectBox,.plainTHead,.plainTHead2,A:HOVER,.a3,.formbutton,textarea.forum,input.forum,input.submit,.plainText,.inputbox,.checkboxar,.userList,.inputBorder,.addGB,.addMessage,.secondInput,.activityList,div.BoxLeft,h4.boxContent,h4.boxContentCalendar,h4.boxContentRight,div.BoxRight,div.littleBox,div.mediumBox,span.galleryThumb,td.galleryThumb,td.welcome,div.bottom,a.link,a.link:visited {
+	color:black
+}
+
+.plainTHead,.plainTextWhite,.inputBorder,.addGB,.addMessage,.secondInput,td.guestBookEntry {
+	font-weight:normal
+}
+
+.plainTHead,.redAngry {
+	font-size:13px
+}
+
+.plainTHead,.plainTHeadWhite,.message,.plainTextWhite,.plainTHead2 {
+	line-height:normal;
+	font-style:normal
+}
+
+.plainTHead,.plainTHeadWhite,.message,.plainTextWhite,.plainTHead2,A,.a3,.inputBorder,.secondInput,.formbutton,a.link,a.link:visited {
+	text-decoration:none
+}
+
+.plainTHeadWhite,.message,.plainTHead2,A,.formbutton,.boxLogin,h3.boxHeader,h3.boxHeaderRight {
+	font-weight:bold
+}
+
+.plainTextWhite,.plainTHead2,div.bottom,td.diary,td.triviaList,.plainTHeadWhite,.a2,.a3,div.BoxLeft,h4.boxContentCalendar,td.presentationInfoTop,.inputbox,.inputBorder,.addGB,.addMessage,.secondInput,.activityList,td.guestBookEntry,h3.boxHeader,h3.boxHeaderRight,div.newstext {
+	font-size:10px
+}
+
+.plainTHeadWhite,.plainTextWhite,.boxLogin,h3.boxHeader,h3.boxHeaderRight {
+	color:white
+}
+
+.message,.boxLogin {
+	font-size:11px
+}
+
+.message,.a2 {
+	color:#7a500e
+}
+
+.checkboxar,input.file,.addGB,.formbutton,textarea.forum,input.forum,input.submit,div.littleBox,div.mediumBox,.select {
+	background:transparent
+}
+
+.checkboxar,.select,.presentationTop,.showOnline,input.file,.userList,.inputBorder,.addGB,.addMessage,textarea.forum,input.forum,input.submit,.boxLogin,div.BoxLeft,div.BoxRight,div.littleBox,div.mediumBox,.regWindow1,img.galleryThumb,span.galleryThumb,td.galleryThumb,td.welcome,.showMessage {
+	border:1px solid black
+}
+
+.checkboxar,.userList,div.littleBox,div.mediumBox,.regWindow1,td.triviaList {
+	padding:5px
+}
+
+.userList,.redAngry,span.galleryThumb,td.galleryThumb,td.presentationPhoto,.inputbox {
+	background:white
+}
+
+textarea,textarea.forum,input.forum,input.submit,div.BoxRight,div td,OPTION,td.galleryThumb,.plainText,.userList,h4.boxContentRight,div.littleBox,div.mediumBox,.regWindow1,td.welcome,.formbutton,.small,h4.boxContent,span.galleryThumb,input.file {
+	font-size:9px
+}
+
+.userList {
+	list-style-image:url(images/pluss.gif);
+	text-transform:capitalize;
+	line-height:15px;
+	letter-spacing:2px
+}
+
+textarea.inputborder,textarea.forum,td.triviaList,.showOnline {
+	width:400px
+}
+
+textarea.inputborder {
+	height:400px
+}
+
+.inputBorder {
+	background:#f0edc3;
+	margin-top:3px
+}
+
+.inputBorder,input.forum,.showMessage {
+	overflow:hidden
+}
+
+.addGB,textarea.forum,input.submit {
+	overflow:auto
+}
+
+.addGB,.addMessage {
+	height:150px
+}
+
+.addMessage {
+	background:#ded5b5
+}
+
+.secondInput,td.guestBookEntry,.regWindow1,td.diary,td.triviaList,td.presentationInfoTop,tr.forumTopic1,.presentationTop,.showOnline,.showMessage {
+	background:#e0d1bc
+}
+
+.secondInput {
+	border-style:none
+}
+
+.formbutton {
+	border:1px solid white
+}
+
+textarea.forum {
+	height:200px
+}
+
+textarea.forum,.boxLogin {
+	text-align:left
+}
+
+input.forum,input.submit {
+	left:0;
+	top:0
+}
+
+input.forum {
+	width:200px
+}
+
+input.submit,img.gbImage {
+	width:50px
+}
+
+input.submit,.boxLogin,div.littleBox,div.mediumBox,.inputbox {
+	position:relative
+}
+
+.boxLogin {
+	padding-right:5px;
+	padding-left:5px;
+	left:8px;
+	width:170px
+}
+
+.redAngry {
+	color:red
+}
+
+.redAngry,h3.boxHeader,h3.boxHeaderRight,h4.boxContentCalendar,img.galleryThumb,span.galleryThumb,td.galleryThumb {
+	text-align:center
+}
+
+.gigantic,h6.regNum1,h6.regNum2 {
+	font-size:80px
+}
+
+.gigantic,h6.regNum1 {
+	color:#cc9
+}
+
+.activityList {
+	border:1px solid gray
+}
+
+img.gbImage {
+	/* height:50px; */
+	margin:3px
+}
+
+div.BoxLeft,h4.boxContent,h4.boxContentCalendar,h4.boxContentRight,div.BoxRight,td.welcome {
+	background:#fc6
+}
+
+div.BoxLeft,div.BoxRight {
+	margin-bottom:20px
+}
+
+div.BoxLeft {
+	margin-right:6px;
+	width:125px;
+	vertical-align:baseline
+}
+
+h3.boxHeader,h3.boxHeaderRight {
+	background:#c96;
+	border-bottom:1px solid black
+}
+
+.presentationTop,h3.boxHeader,h3.boxHeaderRight,h4.boxContent,h4.boxContentRight,td.galleryThumb,td.welcome {
+	padding:3px
+}
+
+h3.boxHeader,h3.boxHeaderRight,h4.boxContent,h4.boxContentCalendar,h4.boxContentRight,.regWindow1 {
+	margin:0
+}
+
+h4.boxContent {
+	width:115px
+}
+
+h4.boxContentRight {
+	width:123px
+}
+
+div.BoxRight {
+	margin-left:8px
+}
+
+div.littleBox,div.mediumBox {
+	margin:8px
+}
+
+div.littleBox {
+	width:100px
+}
+
+.regWindow1 {
+	width:450px
+}
+
+h6.regNum2 {
+	color:#993
+}
+
+img.galleryThumb,span.galleryThumb {
+	display:block
+}
+
+img.galleryThumb,span.galleryThumb,td.galleryThumb {
+	margin:auto
+}
+
+span.galleryThumb,.showOnline,.showMessage {
+	padding:2px
+}
+
+span.galleryThumb {
+	width:110px
+}
+
+td.galleryThumb {
+	width:120px
+}
+
+td.galleryThumb,td.presentationPhoto {
+	padding-bottom:0
+}
+
+td.welcome {
+	margin:30px 3px
+}
+
+div.bottom {
+	background:url(images/orangeback.gif);
+	margin-top:11px;
+	margin-left:3px;
+	width:736px;
+	height:35px
+}
+
+div.bottom,.showOnline,.showMessage {
+	margin-bottom:3px
+}
+
+td.diary {
+	padding:5px 10px
+}
+
+td.diary,.showMessage {
+	width:600px
+}
+
+td.presentationInfoTop {
+	padding-left:3px;
+	padding-bottom:5px
+}
+
+td.presentationPhoto {
+	padding-right:8px;
+	margin-bottom:0
+}
+
+tr.forumTopic1 {
+	padding-bottom:3px
+}
+
+.presentationTop {
+	width:466px;
+	margin-bottom:8px;
+	height:23px
+}
+
+.inputbox {
+	height:16px;
+	border:1px solid #8c8cad
+}
+
+a.link,a.link:visited {
+	height:10px
+}
+
+#bottom {
+	background:#f49104
+}
+
+hr {
+	color: #999;
+	background-color: #999;
+	height: 1px;
+	border: 0;
+}

@@ -1,0 +1,164 @@
+body {
+	background: white;
+	margin: 0;
+	padding: 0;
+	font-size: 10px;	
+	font-family: Lucida grande, Verdana, Arial, sans-serif;
+}
+
+#wrap {
+	background: transparent url('background-fade-white.jpg') no-repeat center top;
+	margin: 0;
+	padding: 0;
+	padding-top: 40px;
+}
+
+#footer-wrap {
+	clear: both;
+}
+
+#footer-right {
+	text-align: right;
+}
+
+#header h1 {
+	height: 68px;
+	width: 312px;
+	background: transparent url('banner.png') no-repeat;
+}
+
+#header h1 span {
+	display: none;
+}
+
+#navbar {
+	margin-bottom: 10px;
+	opacity: 0.8;
+	background: #9E7937;
+	padding: 5px;
+}
+
+#navbar a {
+	font-family: Verdana;
+	color: #fff;
+	/* text-transform: uppercase; */
+	font-weight: normal;
+	padding: 0 10px;
+	font-size: 12px;
+}
+
+.userList, .redAngry, span.galleryThumb, td.galleryThumb, td.presentationPhoto, .inputbox {
+	background: transparent;
+}
+
+span.galleryThumb, td.galleryThumb {
+	border: none;
+}
+
+.box h3, h3.boxHeader, h3.boxHeaderRight {
+	font-size: 12px;
+	border-bottom: 3px solid #9E7937;
+	color: #000;
+	background: transparent;
+	text-align: left;
+}
+
+.box .boxContents {
+	padding: 3px;
+	font-weight: bold;
+}
+/*
+.box {
+	width: 125px;
+}
+*/
+.plainTHeadWhite, .plainTextWhite, .boxLogin, h3.boxHeader, h3.boxHeaderRight {
+	color: #000;
+}
+
+div.boxLeft, div.boxRight {
+	margin-bottom: 5px;
+}
+
+div.boxLeft, div.boxRight, h4.boxContent, td.presentationInfoTop, h4.boxContentCalendar, .calendarHeader, .calendarDayName {
+	border: none;
+	background-color: transparent;
+	background: none;
+}
+
+.box, h4.boxContent {
+	color: #333;
+}
+
+.calendarDateBox {
+	background: #e4c898;
+}
+
+.plainText {
+	line-height: 12px;
+	color: inherit;
+}
+
+.presentationTop {
+	height: auto;
+	width: auto;
+	font-size: 16px;
+	background: none;
+	border: none;
+	border-bottom: 3px solid #9E7937;
+	margin-bottom: 0;
+	margin-top: -5px;
+	padding-left: 0;
+}
+
+.presentationSub {
+	margin-bottom: 8px;
+}
+
+#menuItems {
+	float: left;
+}
+
+#quicksearch {
+	float: right;
+	margin-bottom: 0;
+}
+
+.clear {
+	clear: both;
+	display: block;
+	font-size: 1px;
+	line-height: 1px;
+	margin-bottom: -1px;
+}
+
+#footer {
+	color: #333;
+}
+
+#footer a {
+	color: #555;
+}
+
+#footer-text {
+	text-align: center;
+	clear: both;
+	margin-bottom: 1em;
+	padding-top: 1em;
+}
+
+#search #userName {
+	border: 1px solid black;
+}
+
+.float-left {
+	float: left;
+}
+
+.float-right {
+	float: right;
+}
+
+td {
+	vertical-align: top;
+}

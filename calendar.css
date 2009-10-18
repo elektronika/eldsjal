@@ -1,0 +1,205 @@
+.calendarHeader
+{
+background-color: #CCCCCC;
+}
+.calendarFooter
+{
+font-weight: bold;
+font-size: 12px;
+font-family: Arial, Verdana, 'Courier New';
+background-color: #ffcc66;
+text-align: center;
+}
+.calendarBottom
+{
+background-color: #ffcc66;
+}
+.calendarReduceMonth
+{
+width: 20px;
+position: static;
+background-color: #ffcc66;
+text-align: center;
+}
+.calendarIncreaseMonth
+{
+width: 20px;
+position: static;
+background-color: #ffcc66;
+text-align: center;
+}
+
+.calendarDayName
+{
+font-weight: bold;
+font-size: 9px;
+font-family: Verdana, Arial, 'Courier New';
+background-color: #ffcc66;
+text-align: center;
+}
+.calendarDates
+{
+font-size: 8px;
+color: #000000;
+font-family: Verdana, Arial;
+}
+.calendarDateBox
+{
+border-right: gray 1px solid;
+border-top: gray 1px solid;
+margin: 2px;
+border-left: gray 1px solid;
+color: #000000;
+border-bottom: gray 1px solid;
+text-align: center;
+}
+.calendarDateBoxFilled
+{
+border-right: #cccccc 1px solid;
+border-top: #cccccc 1px solid;
+margin: 2px;
+border-left: #cccccc 1px solid;
+color: #000000;
+border-bottom: #cccccc 1px solid;
+background-color: #ffcc66;
+text-align: center;
+}
+.calendarDateBoxFilledToday
+{
+border-right: #ff6666 2px solid;
+border-top: #ff6666 2px solid;
+border-left: #ff6666 2px solid;
+color: #000000;
+border-bottom: #ff6666 2px solid;
+background-color: #ff6666;
+text-align: center;
+}
+.calendarDateBoxToday
+{
+border-right: #ff6666 2px solid;
+border-top: #ff6666 2px solid;
+border-left: #ff6666 2px solid;
+color: #000000;
+border-bottom: #ff6666 2px solid;
+text-align: center;
+}
+.calendarDateBoxFilledActive
+{
+border-right: #339933 2px solid;
+border-top: #339933 2px solid;
+border-left: #339933 2px solid;
+color: #000000;
+border-bottom: #339933 2px solid;
+background-color: #ffcc66;
+text-align: center;
+}
+.calendarDateBoxActive
+{
+border-right: #339933 2px solid;
+border-top: #339933 2px solid;
+border-left: #339933 2px solid;
+color: #000000;
+border-bottom: #339933 2px solid;
+text-align: center;
+}
+.calendarMarkEvent
+{
+font-weight: bold;
+font-size: 8px;
+color: #000000;
+}
+.calendarMarkEventToday
+{
+font-weight: bold;
+font-size: 8px;
+color: #000000;
+}
+tr.calendarViewHeader
+{
+font-weight: bold;
+font-size: 10px;
+color: white;
+font-family: Arial, Verdana;
+background-color: #cc9966;
+}
+.calendarView
+{
+border-right: #000000 1px solid;
+border-top: #000000 1px solid;
+border-left: #000000 1px solid;
+border-bottom: #000000 1px solid;
+}
+.calendarViewContentLeft
+{
+border-right: #000000 1px solid;
+padding-right: 3px;
+padding-left: 3px;
+padding-bottom: 3px;
+border-left: #000000 1px solid;
+padding-top: 3px;
+text-align: left;
+}
+.calendarViewContentRight
+{
+border-right: #000000 1px solid;
+padding-right: 3px;
+padding-bottom: 3px;
+padding-top: 3px;
+text-align: right;
+}
+.calendarViewBottomLeft
+{
+padding-right: 3px;
+padding-left: 3px;
+margin-bottom: 10px;
+padding-bottom: 3px;
+border-left: #000000 1px solid;
+padding-top: 3px;
+border-bottom: #000000 1px solid;
+}
+.calendarViewBottomRight
+{
+border-right: #000000 1px solid;
+padding-right: 3px;
+margin-bottom: 10px;
+padding-bottom: 3px;
+padding-top: 3px;
+border-bottom: #000000 1px solid;
+text-align: right;
+}
+.calendarViewTopRight
+{
+border-right: #000000 1px solid;
+padding-right: 3px;
+border-top: #000000 1px solid;
+font-size: 10px;
+width: 150px;
+color: #ffffff;
+font-family: Verdana, Arial;
+text-align: right;
+}
+.calendarViewTopLeft
+{
+border-top: #000000 1px solid;
+padding-left: 3px;
+font-weight: bold;
+font-size: 11px;
+border-left: #000000 1px solid;
+color: #ffffff;
+font-family: Verdana, Arial;
+}
+.calendarImage
+{
+border-right: #000000 1px solid;
+
+border-top: #000000 1px solid;
+float: left;
+border-left: #000000 1px solid;
+border-bottom: #000000 1px solid;
+text-align: right;
+}
+.calendarImageText
+{
+float: right;
+text-align: left;
+}

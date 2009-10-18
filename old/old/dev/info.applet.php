@@ -1,0 +1,4 @@
+<?php
+$content = "F&ouml;reningen Eldsj&auml;l &auml;r helt utan kopplingar till politiska samt religi&ouml;sa f&ouml;rbund. F&ouml;reningen Eldsj&auml;l handlar om att samla m&auml;nniskor med liknande intressen och underl&auml;tta f&ouml;r &ouml;kat utbyte av erfarenheter, v&auml;rme och medm&auml;nsklighet. F&ouml;reningen Eldsj&auml;l verkar f&ouml;r &ouml;kad kulturell bredd i hela Norden med fokus p&aring; kulturyttringar som inte f&aring;r stor uppm&auml;rksamhet i den allm&auml;nna debatten. F&ouml;reningen Eldsj&auml;l arbetar aktivt f&ouml;r att motarbeta mobbing, fr&auml;mlingsfientlighet och f&ouml;rtryck.<br/><br/>Eldsjal.org &auml;r en tj&auml;nst som F&ouml;reningen Eldsj&auml;l med stolthet tillhandah&aring;ller allm&auml;nheten kostnadsfritt, oavsett medlemsskap i f&ouml;reningen f&ouml;r att sprida v&aring;ra budskap och aktivt arbeta med v&aring;ra m&aring;ls&auml;ttningar";
+
+print theme_box('Om Eldsjäl', $content);
