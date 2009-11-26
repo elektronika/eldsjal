@@ -1,13 +1,5 @@
 <?php
-
-class Gallery extends Controller {	
-	public function __construct() {
-		parent::Controller();
-		$this->load->model('tag');
-		$this->load->model('image');
-		// $this->output->enable_profiler(TRUE);
-	}
-	
+class Gallery extends MY_Controller {		
 	public function _remap($method) {
 		$arguments = array_slice($this->uri->segment_array(), 2);
 		if(method_exists($this, $method))
@@ -16,17 +8,14 @@ class Gallery extends Controller {
 			$this->get_index();
 	}
 	
-	public function get_index()
-	{
-		$this->load->library('pagination');
-		
-		$images_per_page = $this->user->setting('images_per_page');
-		
+	public function get_index() {
+		// $this->load->library('pagination');
+		$images_per_page = $this->session->setting('images_per_page');
 		$cur_page = $this->arguments->get('page', 0);
 		
 		// Taggar
 		if($tagArgs = $this->arguments->getArray('tags')) {
-			$tags = $this->tag->get_by_slugs($tagArgs);
+			$tags = $this->models->tag->get_by_slugs($tagArgs);
 			foreach($tags as $tag) {
 				$tag_ids[] = $tag->artid;
 				$tag_names[] = $tag->artname;
@@ -40,11 +29,11 @@ class Gallery extends Controller {
 			$this->_tags_filter($this->db, $tag_ids);
 		if($user = $this->arguments->get('user'))
 			$this->_user_filter($this->db, $user);
-		$images = $this->db->get('images', $images_per_page, $cur_page)->result();
+		$this->images = $this->db->get('images', $images_per_page, $cur_page)->result();
 		
 		// Taggmolnet
 		if(isset($tags)) {
-			$tagcloud_prefix = '/gallery/tags:'.implode(':', $tag_slugs).':';
+			$this->tagcloud_prefix = '/gallery/tags:'.implode(':', $tag_slugs).':';
 			
 			$tag_joins = '';
 			foreach ($tags as $x => $tag)
@@ -55,7 +44,7 @@ class Gallery extends Controller {
 			$tagcloud = $this->db->query("SELECT DISTINCT ial.artid AS tid, al.artname AS tag, slug, COUNT(DISTINCT ial.imageid) AS size FROM imageartlist AS ial JOIN artlist AS al ON ial.artid = al.artid {$tag_joins} WHERE NOT ($whereors) GROUP BY al.artid ORDER BY size DESC")->result();
 		} else {
 			$tagcloud_prefix = '/gallery/tags:';
-			$tagcloud = $this->db->query('SELECT artname AS tag, COUNT( * ) AS size, slug FROM `imageartlist` JOIN artlist ON imageartlist.artid = artlist.artid GROUP BY artname ORDER BY size DESC')->result();
+			$this->tagcloud = $this->db->query('SELECT artname AS tag, COUNT( * ) AS size, slug FROM `imageartlist` JOIN artlist ON imageartlist.artid = artlist.artid GROUP BY artname ORDER BY size DESC')->result();
 		}
 		
 		// "Avtaggningslänkarna"
@@ -70,7 +59,7 @@ class Gallery extends Controller {
 			}
 			unset($tag);
 			
-			$this->dwootemplate->assign('tags', $tags);
+			$this->tags = $tags;
 		}
 		
 		// Siduppdelning
@@ -88,16 +77,10 @@ class Gallery extends Controller {
 			'total_rows' => $number_of_images,
 			'cur_page' => $cur_page
 		));
-		$pager = $this->pagination->create_links();
-
-		// Mata ut skrotet!
-		$this->dwootemplate->assign('pager', $pager);
-		$this->dwootemplate->assign('tagcloud', $tagcloud);
-		$this->dwootemplate->assign('tagcloud_prefix', $tagcloud_prefix);
-		$this->dwootemplate->assign('images', $images);
-		$this->dwootemplate->display('gallery_index.tpl');
+		$this->pager = $this->pagination->create_links();
 	}
 	
+	// Borde egentligen ligga i image-modellen
 	protected function _tags_filter(&$db, $tag_ids) {
 		$db->select('COUNT(artid) AS matches')
 			->join('imageartlist', 'images.imageid = imageartlist.imageid')
@@ -106,25 +89,18 @@ class Gallery extends Controller {
 			->having('matches', count($tag_ids));
 	}
 	
-	protected function _user_filter(&$db, $user_slug) {
-		$this->load->model('user_model');
-		
-		$user_id = $this->user_model->user_id_for_slug($user_slug);
-		$db->where('uploadedby', $user_id);
+	// Borde egentligen ligga i image-modellen
+	protected function _user_filter(&$db, $user_slug) {		
+		$db->where('uploadedby', $this->models->user->user_id_for_slug($user_slug));
 	}
 	
 	public function get_upload() {
-		$this->load->helper('form');
-		$this->dwootemplate->assign('tags', $this->tag->get_all());
-		$this->dwootemplate->display('gallery_upload.tpl');
+		$this->tags = $this->models->tag->get_all();
 	}
 	
 	public function post_upload() {
 		$config['upload_path'] = './tmp_upload/';
 		$config['allowed_types'] = 'gif|jpg|png|jpeg';
-		
-		$this->load->library('upload', $config);
-		$this->load->library('image_lib');
 
 		$this->form_validation->set_rules('title', 'Rubrik', 'trim|xss_clean|required');
 		$this->form_validation->set_rules('body', 'Beskrivning', 'trim|xss_clean|required');
@@ -134,18 +110,15 @@ class Gallery extends Controller {
 			$this->get_upload();
 		} else {
 			if( ! $this->upload->do_upload('file') ) {
-				$this->dwootemplate->assign('upload_errors', $this->upload->display_errors());
+				$this->upload_errors = $this->upload->display_errors();
 				$this->get_upload();
 			} else {
 				$upload_data = $this->upload->data();
 				$error = '';
 
 				// Mata in i bautadasen
-				$image = new stdClass();
-				$image->title = $this->input->post('title');
-				$image->body = $this->input->post('body');
-				$image->private = $this->input->post('private');
-				$image_id = $this->image->save($image);
+				$image = (object) $this->input->post_array(array('title', 'body', 'private'));
+				$image_id = $this->models->image->save($image);
 
 				// Byt namn på originalfilen
 				$original_file = $this->util->setting('original_image_folder').$image_id.$upload_data['file_ext'];
@@ -187,40 +160,32 @@ class Gallery extends Controller {
 				}
 				
 				// Lägg till kategorier
-				$this->image->set_categories($image_id, array_keys($this->input->post('tag')));
+				$this->models->image->set_categories($image_id, array_keys($this->input->post('tag')));
 				
-				$this->dwootemplate->assign('resize_error', $error);
-				$this->dwootemplate->display('gallery_upload_success.tpl');
+				$this->resize_error = $error;
+				$this->template = 'gallery_upload_success.tpl';
 			}
 		}
 	}
 	
 	public function acl_upload() {
-		return $this->user->isLoggedIn();
+		return $this->session->isLoggedIn();
 	}
 	
 	public function get_view($image_id) {
-		$image = $this->image->get_by_id($image_id);
-		
-		$this->dwootemplate->assign('image', $image);
-		$this->dwootemplate->display('gallery_view.tpl');
+		$this->image = $this->models->image->get_by_id($image_id);
 	}
 	
 	public function get_random() {
-		$image_id = $this->image->get_random_public_id();
-		$this->load->helper('url');
-		redirect('/gallery/view/'.$image_id);
+		$this->redirect('/gallery/view/'.$this->models->image->get_random_public_id());
 	}
 	
 	public function acl_view($image_id) {
-		return $this->image->is_private($image_id) ? $this->user->isLoggedIn() : TRUE;
+		return $this->models->image->is_private($image_id) ? $this->session->isLoggedIn() : TRUE;
 	}
 	
 	public function get_edit($image_id) {
-		$image = $this->image->get_by_id($image_id);
-		
-		$this->dwootemplate->assign('image', $image);
-		$this->dwootemplate->display('gallery_edit.tpl');
+		$this->image = $this->models->image->get_by_id($image_id);
 	}
 	
 	public function acl_edit($image_id) {
@@ -228,13 +193,7 @@ class Gallery extends Controller {
 	}
 	
 	public function get_user($user_slug) {
-		$this->load->model('user_model');
-		$user = $this->user_model->get_by_slug($this->uri->rsegment(3));
-		
-		$images = $this->db->select('images.*')->where('uploadedby', $user->userid)->order_by('imageuploaddate DESC')->get('images')->result();
-		
-		$this->dwootemplate->assign('user', $user);
-		$this->dwootemplate->assign('images', $images);
-		$this->dwootemplate->display('gallery_user.tpl');
+		$this->user = $this->models->user->get_by_slug($this->uri->rsegment(3));
+		$this->images = $this->db->select('images.*')->where('uploadedby', $this->user->userid)->order_by('imageuploaddate DESC')->get('images')->result();
 	}
 }

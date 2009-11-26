@@ -1,17 +1,5 @@
 <?php
-
-class Welcome extends Controller {
-
-	function __construct()
-	{
-		parent::Controller();	
-	}
-	
-	function get_index()
-	{
-		$this->load->view('welcome_message');
-	}
+class Welcome extends MY_Controller {
+	public function get_index() {}
 }
-
-/* End of file welcome.php */
-/* Location: ./system/application/controllers/welcome.php */
+?>

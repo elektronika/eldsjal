@@ -30,31 +30,24 @@ class Admin extends Controller {
 		}
 	}
 	
-	public function get_reindex_all_threads($offset) {
-		$this->load->model('forum_model');
-		
+	public function get_reindex_all_threads($offset) {		
 		$threads = $this->db->get('forumtopics', 10000, $offset)->result();
 		foreach($threads as $thread)
-			$this->forum_model->reindex_thread($thread->topicId);
+			$this->models->forum->reindex_thread($thread->topicId);
 	}
 	
-	public function get_whatsup() {
-		$this->dwootemplate->display('admin_whatsup.tpl');
-	}
+	public function get_whatsup() {}
 	
-	public function post_whatsup() {
-		$this->load->model('whatsup');
-		
+	public function post_whatsup() {		
 		$this->form_validation->set_rules('text', 'Just nu', 'trim|xss_clean|required');
 		$this->form_validation->set_message('required', 'Något måste ju hända!');
 		
 		if($this->form_validation->run() == FALSE) {
-			$this->get_whatsup();
+			$this->template = 'admin_whatsup.tpl';
 		} else {
-			$this->whatsup->set($this->input->post('text'), 0);
-			$this->user->message('Fixelidonat!');
-			$this->load->helper('url');
-			redirect('/admin/whatsup');
+			$this->models->whatsup->set($this->input->post('text'), 0);
+			$this->session->message('Fixelidonat!');
+			$this->redirect('/admin/whatsup');
 		}
 	}
 	

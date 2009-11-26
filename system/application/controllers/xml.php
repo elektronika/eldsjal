@@ -1,25 +1,27 @@
 <?php
-class Xml extends Controller {	
-	function __construct() {
-		parent::Controller();
+class Xml extends MY_Controller {
+	public function __construct() {
+		parent::__construct();
+		$this->show_profiler = FALSE;
 	}
 	
-	function acl_controller() {
-		return $this->user->isLoggedIn();
+	public function acl_controller() {
+		return $this->session->isLoggedIn();
 	}
 
-	function get_usermenu($user_id) {
-		$this->load->model('user_model');
-		
-		$user = $this->user_model->get_by_id($user_id);
-		$user->does = $this->user_model->artList($user_id);
-		
-		$this->dwootemplate->assign('user', $user);
-		$this->dwootemplate->display('usermenu.tpl');
+	public function get_usermenu($user_id) {
+		$this->user = $this->models->user->get_by_id($user_id);
+		$this->user->does = $this->models->user->artList($user_id);
+		$this->template = 'usermenu.tpl';
 	}
 	
-	function get_guestbook($user_id) {
-		$this->dwootemplate->assign('userid', $user_id);
-		$this->dwootemplate->display('usermenu_guestbook.tpl');
+	public function get_guestbook($user_id) {
+		$this->userid = $user_id;
+		$this->template = 'usermenu_guestbook.tpl';
+	}
+	
+	public function get_message($user_id) {
+		$this->userid = $user_id;
+		$this->template = 'usermenu_message.tpl';
 	}
 }

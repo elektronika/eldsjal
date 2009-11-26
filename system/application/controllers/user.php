@@ -1,35 +1,21 @@
 <?php
-
-class User extends Controller {	
-	public function __construct() {
-		parent::Controller();
-		$this->load->model('user_model');
-		$this->load->model('location');
-		// $this->output->enable_profiler(TRUE);
-	}
-	
+class User extends MY_Controller {	
 	function get_view($user_slug) {
-		$user = $this->user_model->get_by_slug($user_slug);
-		$user->does = $this->user_model->artList($user->userid);
-		$this->dwootemplate->assign('user', $user);
-		$this->dwootemplate->display('user_view.tpl');
+		$this->user = $this->models->user->get_by_slug($user_slug);
+		$this->user->does = $this->models->user->artList($this->user->userid);
 	}
 	
 	function acl_view($user_slug) {
-		if( ! $this->user->isLoggedIn()) {
-			$user_id = $this->user_model->user_id_for_slug($user_slug);
-			return $this->user_model->allow_anonymous_viewers($user_id);
+		if( ! $this->session->isLoggedIn()) {
+			$user_id = $this->models->user->user_id_for_slug($user_slug);
+			return $this->models->user->allow_anonymous_viewers($user_id);
 		} else
 			return TRUE;
 	}
 	
 	function get_edit($user_slug) {
-		$user = $this->user_model->get_by_slug($user_slug);
-		$locations = $this->location->get_all_assoc();
-		
-		$this->dwootemplate->assign('user', $user);
-		$this->dwootemplate->assign('locations', $locations);
-		$this->dwootemplate->display('user_edit.tpl');
+		$this->user = $this->models->user->get_by_slug($user_slug);
+		$this->locations = $this->models->location->get_all_assoc();
 	}
 	
 	function post_edit($user_slug) {
@@ -37,17 +23,13 @@ class User extends Controller {
 	}
 	
 	function acl_edit($user_slug) {
-		return ($this->user->isAdmin() || $this->user_model->user_id_for_slug($user_slug) == $this->user->userId());
+		return ($this->session->isAdmin() || $this->models->user->user_id_for_slug($user_slug) == $this->session->userId());
 	}
 	
 	function get_admin($user_slug) {
-		$user = $this->user_model->get_by_slug($user_slug);
-		$fields = $this->user_model->get_restricted_fields();
-		
-		$this->dwootemplate->assign('fields', $fields);
-		$this->dwootemplate->assign('user', $user);
-		$this->dwootemplate->assign('user_array', (array) $user);
-		$this->dwootemplate->display('user_admin.tpl');
+		$this->user = $this->models->user->get_by_slug($user_slug);
+		$this->fields = $this->models->user->get_restricted_fields();
+		$this->user_array = (array) $user;
 	}
 	
 	function post_admin($user_slug) {
@@ -55,14 +37,11 @@ class User extends Controller {
 	}
 	
 	function acl_admin($user_slug) {
-		return $this->user->isAdmin();
+		return $this->session->isAdmin();
 	}
 	
 	function get_password($user_slug) {
-		$user = $this->user_model->get_by_slug($user_slug);
-
-		$this->dwootemplate->assign('user', $user);
-		$this->dwootemplate->display('user_password.tpl');
+		$this->user = $this->models->user->get_by_slug($user_slug);
 	}
 	
 	function post_password($user_slug) {
@@ -78,39 +57,30 @@ class User extends Controller {
 		if($this->form_validation->run() == FALSE) {
 			$this->get_password($user_slug);
 		} else {
-			$user_id = $this->user_model->user_id_for_slug($user_slug);
-			$this->user_model->set_password($user_id, $this->input->post('new'));
+			$user_id = $this->models->user->user_id_for_slug($user_slug);
+			$this->models->user->set_password($user_id, $this->input->post('new'));
 			$this->user->message('Nuså, nytt lösenord för hela slanten!');
-			
-			$this->load->helper('url');
-			redirect('/user/'.$user_slug);
+			$this->redirect('/user/'.$user_slug);
 		}
 	}
 	
 	function acl_password($user_slug) {
-		return ($this->user_model->user_id_for_slug($user_slug) == $this->user->userId());
+		return ($this->models->user->user_id_for_slug($user_slug) == $this->session->userId());
 	}
 	
 	function password_check($password) {
-		return $this->user->checkPassword($password);
+		return $this->models->user->checkPassword($password);
 	}
 	
 	function get_image($user_slug) {
-		$user = $this->user_model->get_by_slug($user_slug);
-		
-		$this->dwootemplate->assign('user', $user);
-		$this->dwootemplate->display('user_image.tpl');
+		$this->user = $this->models->user->get_by_slug($user_slug);
 	}
 	
 	function post_image($user_slug) {
-		$user = $this->user_model->get_by_slug($user_slug);
-		$this->load->helper('url');
+		$this->user = $this->models->user->get_by_slug($user_slug);
 		
 		$config['upload_path'] = './tmp_upload/';
 		$config['allowed_types'] = 'gif|jpg|png|jpeg';
-		
-		$this->load->library('upload', $config);
-		$this->load->library('image_lib');
 		
 		if( ! $this->upload->do_upload('file') ) {
 			$this->user->message($this->upload->display_errors(), 'warning');
@@ -141,15 +111,16 @@ class User extends Controller {
 			if( ! empty($errors)) {
 				foreach($errors as $error)
 					$this->user->message($error, 'warning');
-				redirect('/user/'.$user_slug.'/image');
+				$this->redirect('/user/'.$user_slug.'/image');
 			} else {
+				$this->models->user->mark_as_having_image($this->user->userid);
 				$this->user->message('Ny bild, fränt!');
-				redirect('/user/'.$user_slug);				
+				$this->redirect('/user/'.$user_slug);				
 			}
 		}
 	}
 	
 	function acl_image($user_slug) {
-		return ($this->user->isAdmin() || $this->user_model->user_id_for_slug($user_slug) == $this->user->userId());
+		return ($this->session->isAdmin() || $this->models->user->user_id_for_slug($user_slug) == $this->session->userId());
 	}
 }

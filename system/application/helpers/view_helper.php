@@ -1,17 +1,5 @@
 <?php
-function Dwoo_Plugin_usersonline(Dwoo $dwoo) {
-	static $count;
-	
-	if( empty($count)) {
-		$CI =& get_instance();
-		$count = $CI->util->onlineCount();
-	}
-	
-	return $count;
-}
-
 function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
-
 		if( $content != "" ) {
 			$content = str_replace( "&#59;", ";", $content );
 			$content = str_replace( "&amp;#59;", ";", $content );
@@ -73,22 +61,6 @@ function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
 		return '<a href="'.$full_url.'">'.$link.'</a>';
 	}
 
-	function Dwoo_Plugin_isloggedin(Dwoo $dwoo) {
-		static $is_logged_in;
-
-		if( empty($is_logged_in)) {
-			$CI =& get_instance();
-			$is_logged_in = $CI->user->isLoggedIn();
-		}
-
-		return $is_logged_in;
-	}
-
-	function Dwoo_Plugin_active_userlink(Dwoo $dwoo) {
-		$CI =& get_instance();
-		return $CI->util->userlink($CI->user->userId(), $CI->user->username());
-	}
-
 	function Dwoo_Plugin_remove_tags( Dwoo $dwoo, $content ) {
 			if( $content != "" ) {
 				$content = str_replace( "&#59;", ";", $content );
@@ -148,27 +120,17 @@ function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
 				return substr($value, 0, $length) . $etc;
 			}
 			return substr($value, 0, ceil($length/2)) . $etc . substr($value, -floor($length/2));
-		}
-		
-		function Dwoo_plugin_wisdom( Dwoo $dwoo ) {
-			$CI =& get_instance();
-			return $CI->db->query('select wisdom from wisebox order by rand() limit 1')->row()->wisdom;
-		}
-		
-		function Dwoo_plugin_whatsup( Dwoo $dwoo ) {
-			$CI =& get_instance();
-			return $CI->whatsup->get();
 		}		
 		
 		function Dwoo_plugin_alertcounter( Dwoo $dwoo ) {
 			$CI =& get_instance();
-			$alert_count = $CI->alert->total_count();
+			$alert_count = $CI->models->alert->total_count();
 			return ($alert_count > 0 ? '('.$alert_count.')' : '');
 		}
 		
 		function Dwoo_plugin_usersetting( Dwoo $dwoo, $key, $default ) {
 			$CI =& get_instance();
-			return $CI->user->setting($key, $default);
+			return $CI->session->setting($key, $default);
 		}
 		
 		function Dwoo_plugin_slugify( Dwoo $dwoo, $string ) {
@@ -184,11 +146,6 @@ function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
 		function Dwoo_plugin_age( Dwoo $dwoo, $timestamp ) {
 			$CI =& get_instance();
 			return $CI->util->fuzzyage($timestamp);
-		}
-		
-		function Dwoo_plugin_getMessages( Dwoo $dwoo ) {
-			$CI =& get_instance();
-			return $CI->user->getMessages();
 		}
 		
 		function Dwoo_Plugin_escape(Dwoo $dwoo, $value='', $format='html', $charset=null)
@@ -232,18 +189,14 @@ function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
 
 			}
 		}
-		
-function Dwoo_plugin_to_array(Dwoo $dwoo, $object) {
-	return (array) $object;
-}
 
-function Dwoo_plugin_natural_implode(Dwoo $dwoo, $array, $and = 'and') {
-	$count = count($array);
-	if($count == 1)
-		return current($array);
-	elseif($count > 1) {
-		$last = array_pop($array);
-		return implode(', ', $array).' '.$and.' '.$last;
-	}
+	function Dwoo_plugin_natural_implode(Dwoo $dwoo, $array, $and = 'and') {
+		$count = count($array);
+		if($count == 1)
+			return current($array);
+		elseif($count > 1) {
+			$last = array_pop($array);
+			return implode(', ', $array).' '.$and.' '.$last;
+		}
 	
-}
+	}

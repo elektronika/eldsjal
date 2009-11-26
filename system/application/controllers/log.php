@@ -1,11 +1,6 @@
 <?php
-
 class Log extends Controller {
-	public function post_in() {
-		
-	}
+	public function post_in() {}
 	
-	public function get_out() {
-		
-	}
+	public function get_out() {}
 }

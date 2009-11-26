@@ -49,7 +49,7 @@ foreach($tags as &$tag) {
 </div>
 {/template}
 
-{template bubble data}
+{template bubble_old data}
 <div class="bubble">{if $data->id}<a name="post-{$data->id}"></a>{/if}
 	<div class="bubble-userdata">
 		{userimage $data}
@@ -64,6 +64,26 @@ foreach($tags as &$tag) {
 	{$data->created|fuzzytime} {actions $data->actions}
 	</div>
 	<span class="clear"> </span>
+</div>
+{/template}
+
+{template bubble data}
+<div class="bubble">{if $data->id}<a name="post-{$data->id}"></a>{/if}
+	<div class="bubble-content-wrap">
+		<div class="bubble-content">
+			{$data->body|escape|rq}
+		</div>
+	</div>
+	<div class="bubble-meta">
+	<div class="userdata">
+		{userimage $data}
+		{userlink $data}
+	</div>
+	<div class="meta">
+	{$data->created|fuzzytime} {actions $data->actions}
+	</div>
+	<span class="clear"> </span>
+	</div>
 </div>
 {/template}
 
@@ -85,7 +105,7 @@ foreach($tags as &$tag) {
 	{if $data->body}
 		<div class="teaser-text body">
 		{if $truncate}
-			{$data->body|remove_tags|truncate:120}
+			{$data->body|remove_tags|truncate:100}
 		{else}
 			{$data->body|rq}
 		{/if}
@@ -285,4 +305,21 @@ rows_in_calendar = {$rows_in_calendar}<br/>
 	</div>
 	<div class="clear"> </div>
 </div>
+{/template}
+
+{template pagespan pages href items_per_page = 20}
+{if $pages > 1}
+<span class="pagespan">
+	{if $pages < 6}
+[ {for i 0 $pages-1}<a href="{$href}/page:{$i*$items_per_page}".>{$i+1}</a> {/for}]
+	{else}
+	{assign $pages-1 'penultimate'}
+[ <a href="{$href}/page:0".>1</a> <a href="{$href}/page:{$items_per_page*2}".>2</a> ... <a href="{$href}/page:{$penultimate * $items_per_page}".>{$pages-1}</a> <a href="{$href}/page:{$pages*$items_per_page}".>{$pages}</a> ]
+	{/if}
+</span>
+{/if}
+{/template}
+
+{template userlink_lazy data users}
+{userlink $users[$data->userid]}
 {/template}

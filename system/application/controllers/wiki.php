@@ -1,12 +1,8 @@
 <?php
-
-class Wiki extends Controller {
-    function get_index()
-    {
-    	$this->dwootemplate->display('wiki_index.tpl');
-    }
+class Wiki extends MY_Controller {
+    function get_index() {}
 
 	public function acl_controller() {
-		return $this->user->isLoggedIn();
+		return $this->session->isLoggedIn();
 	}
 }

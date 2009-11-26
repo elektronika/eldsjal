@@ -1,12 +1,5 @@
 <?php
-
-class Thoughts extends Controller {
-	public function __construct() {
-		parent::Controller();
-		$this->load->model('thought');
-		// $this->output->enable_profiler(TRUE);
-	}
-	
+class Thoughts extends MY_Controller {	
 	public function _remap($method) {
 		if(method_exists($this, $method)) {
 			call_user_func_array(array($this, $method), array_slice($this->uri->segment_array(), 2));
@@ -15,33 +8,24 @@ class Thoughts extends Controller {
 		}
 	}
 	
+	public function acl_controller() {
+		return $this->session->isLoggedIn();
+	}
+	
     public function get_index() {
-		$this->load->library('pagination');
-		
-		$thoughts = $this->thought->get_timeline($this->arguments->get('page', 0));
+		$this->thoughts = $this->models->thought->get_timeline($this->arguments->get('page', 0));
 				
 		$this->pagination->initialize(array(
 			'base_url' => '/thoughts/page:',
-			'per_page' => $this->user->setting('thoughts_per_page'),
-			'total_rows' => $this->thought->total_amount(),
+			'per_page' => $this->session->setting('thoughts_per_page'),
+			'total_rows' => $this->models->thought->total_amount(),
 			'cur_page' => $this->arguments->get('page', 0)
 		));
-		$pager = $this->pagination->create_links();
-		
-		$this->dwootemplate->assign('pager', $pager);
-		$this->dwootemplate->assign('thoughts', $thoughts);
-    	$this->dwootemplate->display('thoughts_index.tpl');
+		$this->pager = $this->pagination->create_links();
     }
-
-	public function acl_controller() {
-		return $this->user->isLoggedIn();
-	}
 	
 	public function get_today() {
-		$thought = $this->thought->get_todays_thought($this->user->userId());
-		
-		$this->dwootemplate->assign('thought', $thought);
-		$this->dwootemplate->display('thoughts_today.tpl');
+		$this->thought = $this->models->thought->get_todays_thought($this->session->userId());
 	}
 	
 	public function post_today() {
@@ -50,42 +34,26 @@ class Thoughts extends Controller {
 		$this->form_validation->set_message('required', 'Fältet "%s" måste fyllas i hörru.');
 		
 		if ($this->form_validation->run() == FALSE) {
-			$this->dwootemplate->display('thoughts_today.tpl');
+			$this->template = 'thoughts_today.tpl';
 		} else {
-			$new_thought = new stdClass();
-			$new_thought->diarytopic = $this->input->post('title');
-			$new_thought->diary = $this->input->post('body');
+			$new_thought = (object) $this->input->post_array(array('title', 'body'));
+			$thought_id = $this->models->thought->set_todays_thought($new_thought, $this->session->userId());
 			
-			$thought_id = $this->thought->set_todays_thought($new_thought, $this->user->userId());
-			
-			$this->load->helper('url');			
-			redirect('/thoughts/view/'.$thought_id);
+			$this->redirect('/thoughts/view/'.$thought_id);
 		}
 	}
 	
 	public function get_view($tid) {
-		$thought = $this->thought->get_by_id($tid);
-		
-		$this->dwootemplate->assign('thought', $thought);
-		$this->dwootemplate->display('thoughts_view.tpl');
+		$this->thought = $this->models->thought->get_by_id($tid);
 	}
 	
 	public function get_mine() {
-		$thoughts = $this->thought->get_by_user($this->user->userId());
-		
-		$this->dwootemplate->assign('thoughts', $thoughts);
-		$this->dwootemplate->display('thoughts_mine.tpl');
+		$this->thoughts = $this->models->thought->get_by_user($this->session->userId());
 	}
 	
-	public function get_user($user_slug) {
-		$this->load->model('user_model');
-		
+	public function get_user($user_slug) {		
 		//Av någon anledning så blir $user_slug "thoughts". Det har något med routingen att göra, men vad vette tusan!
-		$user = $this->user_model->get_by_slug($this->uri->rsegment(3));
-		$thoughts = $this->thought->get_by_user($user->userid);
-		
-		$this->dwootemplate->assign('thoughts', $thoughts);
-		$this->dwootemplate->assign('user', $user);
-		$this->dwootemplate->display('thoughts_user.tpl');
+		$this->user = $this->models->session->get_by_slug($this->uri->rsegment(3));
+		$this->thoughts = $this->models->thought->get_by_user($user->userid);
 	}
 }

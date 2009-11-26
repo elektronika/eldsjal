@@ -1,47 +1,32 @@
 <?php
-
-class Auth extends Controller {
-
-	function __construct() {
-		parent::Controller();	
-		$this->load->helper('url');
-	}
-	
+class Auth extends MY_Controller {	
 	function post_login() {
 		// Gör auth-grejen		
 		$this->form_validation->set_rules('username', NULL, 'trim|xss_clean|required');
 		$this->form_validation->set_rules('password', NULL, 'trim|xss_clean|required');
 		
 		if($this->form_validation->run() == FALSE) {
-			// Visa ett fint litet meddelande
+			$this->session->message('Men du, du måste fylla i både användarnamn och lösenord. Annars funkar det ju inte.');
 		} else {
-			if($this->user->authenticate($this->input->post('username'), $this->input->post('password'))) {
-				// Visa joy-meddelande
-				$this->user->message('Inloggad och klar!');
-				redirect('main');
-			} else {
-				// Visa sad-meddelande
-				$this->user->message('Något gick fel när du försökte logga in. Det är bara att försöka igen!', 'warning');
-				redirect('main');
-			}
+			if($this->session->authenticate($this->input->post('username'), $this->input->post('password')))
+				$this->session->message('Inloggad och klar!');
+			else
+				$this->session->message('Något gick fel när du försökte logga in. Det är bara att försöka igen!', 'warning');
+			$this->redirect('/main');
 		}
 	}
 	
 	function get_logout() {
 		// Gör auth-grejen baklänges
-		$this->user->logout();
-		redirect('/main');
+		$this->session->logout();
+		$this->redirect('/main');
 	}
 	
 	function post_logout() {
 		$this->get_logout();
 	}
 	
-	function get_forgotpassword() {
-		$this->dwootemplate->display('auth_forgotpassword.tpl');
-	}
+	function get_forgotpassword() {}
 	
-	function post_forgotpassword() {
-		
-	}
+	function post_forgotpassword() {}
 }

@@ -10,6 +10,7 @@
 |
 */
 
+
 $hook['post_controller_constructor'][] = array(
                                 'class'    => 'ACL',
                                 'function' => 'checkAclHook',
@@ -23,6 +24,13 @@ $hook['post_controller_constructor'][] = array(
                                 'filename' => 'Ping.php',
                                 'filepath' => 'hooks'
                                 );
+
+							$hook['display_override'][] = array(
+								'class' => '',
+								'function' => 'auto_render',
+								'filename' => 'auto_render.php',
+								'filepath' => 'hooks'
+								);
 
 // $hook['pre_controller'][] = array(
 // 								'function' => 'bootstrap_doctrine',

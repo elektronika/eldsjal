@@ -39,7 +39,7 @@
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'Dwootemplate', 'Session', 'User', 'Arguments', 'form_validation', 'Util');
+$autoload['libraries'] = array('database', 'Dwootemplate', 'Session', 'Arguments', 'form_validation', 'Util');
 
 
 /*
@@ -51,7 +51,7 @@ $autoload['libraries'] = array('database', 'Dwootemplate', 'Session', 'User', 'A
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('view');
+$autoload['helper'] = array('view', 'text');
 
 
 /*
@@ -108,7 +108,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('alert', 'whatsup');
+$autoload['model'] = array();
 
 
 

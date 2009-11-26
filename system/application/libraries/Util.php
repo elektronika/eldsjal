@@ -19,7 +19,8 @@ class CI_Util {
 			'default_image_extension' => 'jpg',
 			'event_image_folder' => './uploads/eventImages/',
 			'user_image_folder' => './uploads/userImages/',
-			'original_user_image_folder' => './original_images/users/'
+			'original_user_image_folder' => './original_images/users/',
+			'forum_posts_per_page' => 20
 		);
 	}
 	

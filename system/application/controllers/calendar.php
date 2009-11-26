@@ -1,20 +1,8 @@
 <?php
-class Calendar extends Controller {
-
-    function __construct() {
-        parent::Controller();
-		$this->load->model('event');
-		$this->load->model('location');
-		// $this->output->enable_profiler(TRUE);
-    }
-
-    function get_index() {
-		$upcoming = $this->event->get_upcoming(5);
-		$attending = $this->event->get_upcoming_by_attendance($this->user->userId());
-		
-		$this->dwootemplate->assign('upcoming', $upcoming);
-		$this->dwootemplate->assign('attending', $attending);
-    	$this->dwootemplate->display('calendar_index.tpl');
+class Calendar extends MY_Controller {
+	function get_index() {
+		$this->upcoming = $this->models->event->get_upcoming(5);
+		$this->attending = $this->models->event->get_upcoming_by_attendance($this->session->userId());
     }
 
 	function get_browse($year = NULL, $month = NULL, $day = NULL) {
@@ -34,66 +22,85 @@ class Calendar extends Controller {
 		$timestamp_start = $this->util->timestamp_start($year);
 		$timestamp_end = $this->util->timestamp_end($year);
 
-		$events = $this->event->get_interval($timestamp_start, $timestamp_end);
-		$events = $this->event->group_by_month($events);
-		foreach($events as &$month)
-			$month = $this->event->group_by_day($month);
+		$this->events = $this->models->event->get_interval($timestamp_start, $timestamp_end);
+		$this->events = $this->models->event->group_by_month($this->events);
+		foreach($this->events as &$month)
+			$month = $this->models->event->group_by_day($month);
 		
-		$this->dwootemplate->assign('events', $events);
-		$this->dwootemplate->assign('year', $year);
-		$this->dwootemplate->display('calendar_year.tpl');		
+		$this->year = $year;
+		$this->template = 'calendar_year.tpl';
 	}
 	
 	function get_month($year, $month) {
 		$timestamp_start = $this->util->timestamp_start($year, $month);
 		$timestamp_end = $this->util->timestamp_end($year, $month);
 
-		$events = $this->event->get_interval($timestamp_start, $timestamp_end);
-		$events = $this->event->group_by_day($events);
+		$this->events = $this->models->event->get_interval($timestamp_start, $timestamp_end);
+		$this->events = $this->models->event->group_by_day($this->events);
 		
-		$this->dwootemplate->assign('events', $events);
-		$this->dwootemplate->assign('year', $year);
-		$this->dwootemplate->assign('month', $month);
-		$this->dwootemplate->display('calendar_month.tpl');		
+		$this->year = $year;
+		$this->month = $month;
+		
+		$this->template = 'calendar_month.tpl';
 	}
 	
 	function get_day($year, $month, $day) {
 		$timestamp_start = $this->util->timestamp_start($year, $month, $day);
 		$timestamp_end = $this->util->timestamp_end($year, $month, $day);
 
-		$events = $this->event->get_interval($timestamp_start, $timestamp_end);
+		$this->events = $this->models->event->get_interval($timestamp_start, $timestamp_end);
 		
-		$this->dwootemplate->assign('events', $events);
-		$this->dwootemplate->assign('year', $year);
-		$this->dwootemplate->assign('month', $month);
-		$this->dwootemplate->assign('day', $day);
-		$this->dwootemplate->display('calendar_day.tpl');		
+		$this->year = $year;
+		$this->month = $month;
+		$this->day = $day;
+		
+		$this->template = 'calendar_day.tpl';
 	}
 
 	function get_upcoming() {
-		$events = $this->event->get_upcoming();
-		
-		$this->dwootemplate->assign('events', $events);
-		$this->dwootemplate->display('calendar_upcoming.tpl');
+		$this->events = $this->models->event->get_upcoming();
 	}
 	
 	function get_view($event_id) {
-		$event = $this->event->get_by_id($event_id);
-		unset($event->href); // Så eventet inte visas med länk till sig själv
-		$attendees = $this->event->get_attendees($event_id);
-		$user_has_signed_up = $this->event->user_has_signed_up($this->user->userId(), $event_id);
+		$this->event = $this->models->event->get_by_id($event_id);
+		unset($this->event->href); // Så eventet inte visas med länk till sig själv
+		$this->attendees = $this->models->event->get_attendees($event_id);
+		$this->user_has_signed_up = $this->models->event->user_has_signed_up($this->session->userId(), $event_id);
+		if( ! is_null($this->event->topic_id))
+			$this->posts = $this->models->forum->get_posts_for_topic($this->event->topic_id);
+		$this->user_can_comment = $this->session->isLoggedIn();
+		$this->models->event->delete_notifications($event_id, $this->session->userid());
+	}
+	
+	function post_view($event_id) {
+		$this->event = $this->models->event->get_by_id($event_id);
 		
-		$this->dwootemplate->assign('user_has_signed_up', $user_has_signed_up);
-		$this->dwootemplate->assign('event', $event);
-		$this->dwootemplate->assign('attendees', $attendees);
-		$this->dwootemplate->display('calendar_view.tpl');
+		$this->form_validation->set_rules('body', 'Inlägg', 'trim|xss_clean|required');
+		$this->form_validation->set_message('required', 'Men du, är det så bra med tomma inlägg, egentligen?');
+		
+		if($this->form_validation->run() == FALSE) {
+			$this->get_view($event_id);
+		} else {
+			$new_reply = (object) $this->input->post_array(array('body', 'title'));
+			$new_reply->userid = $this->session->userId();
+			if( ! is_null($this->event->topic_id) && $this->event->topic_id != 0) {
+				$new_reply->topicid = $this->event->topic_id;
+				$this->models->forum->create_post($new_reply);				
+			} else {
+				$new_reply->category = 21;
+				$new_reply->userid = $this->session->userid();
+				$topic_id = $this->models->forum->create_topic($new_reply);
+				$this->models->event->set_topic_id($event_id, $topic_id);
+			}
+			$this->session->message('Inlägg sparat. Yay!');
+			$this->redirect('/calendar/view/'.$event_id);
+		}
 	}
 	
 	function get_new() {
-		$locations = $this->location->get_all();
-		$this->dwootemplate->assign('form_action', '/calendar/new');
-		$this->dwootemplate->assign('locations', $locations);
-		$this->dwootemplate->display('calendar_handle.tpl');
+		$this->locations = $this->location->get_all();
+		$this->form_action = '/calendar/new';
+		$this->template = 'calendar_handle.tpl';
 	}
 	
 	function post_new() {
@@ -108,7 +115,6 @@ class Calendar extends Controller {
 		
 		$this->load->library('upload', $config);
 		$this->load->library('image_lib');
-		$this->load->helper('url');
 				
 		$this->form_validation->set_rules('title', 'Rubrik', 'trim|xss_clean|required');
 		$this->form_validation->set_rules('body', 'Beskrivning', 'trim|xss_clean|required');
@@ -120,12 +126,9 @@ class Calendar extends Controller {
 			$this->$action($event_id);
 		} else {
 			// Spara skrotet
-			$new_event = new stdClass();
-			$new_event->title = $this->input->post('title');
-			$new_event->body = $this->input->post('body');
+			$new_event = (object) $this->input->post_array(array('title', 'body', 'location'));
 			$new_event->date = $this->input->post('date') / 1000;
-			$new_event->location = $this->input->post('location');
-			$new_event->creator = $this->user->userId();
+			$new_event->creator = $this->session->userId();
 
 			if($event_id != 0)
 				$new_event->id = $event_id;
@@ -163,22 +166,19 @@ class Calendar extends Controller {
 				$this->event->flag_as_having_image($event_id);
 			}
 			
-			redirect('/calendar/view/'.$event_id);
+			$this->redirect('/calendar/view/'.$event_id);
 		}
 	}
 	
 	function acl_new() {
-		return $this->user->isLoggedIn();
+		return $this->session->isLoggedIn();
 	}
 	
 	function get_edit($event_id) {
-		$event = $this->event->get_by_id($event_id);
-		$locations = $this->location->get_all();
-		
-		$this->dwootemplate->assign('form_action', '/calendar/edit/'.$event_id);
-		$this->dwootemplate->assign('event', $event);
-		$this->dwootemplate->assign('locations', $locations);		
-		$this->dwootemplate->display('calendar_handle.tpl');
+		$this->event = $this->models->event->get_by_id($event_id);
+		$this->locations = $this->location->get_all();		
+		$this->form_action = '/calendar/edit/'.$event_id;
+		$this->template = 'calendar_handle.tpl';
 	}
 	
 	function post_edit($event_id) {
@@ -186,7 +186,7 @@ class Calendar extends Controller {
 	}
 	
 	function acl_edit($event_id) {
-		return $this->user->isLoggedIn(); // Men ska såklart checka mer sen.
+		return $this->session->isLoggedIn(); // Men ska såklart checka mer sen.
 	}
 	
 	function get_history() {
@@ -194,26 +194,24 @@ class Calendar extends Controller {
 	}
 	
 	function acl_history() {
-		return $this->user->isLoggedIn();
+		return $this->session->isLoggedIn();
 	}
 	
 	function post_signup($event_id) {
-		$this->event->signup($event_id, $this->user->userId());
-		$this->load->helper('url');
-		redirect('/calendar/view/'.$event_id);
+		$this->models->event->signup($event_id, $this->session->userId());
+		$this->redirect('/calendar/view/'.$event_id);
 	}
 	
 	function acl_signup() {
-		return $this->user->isLoggedIn();
+		return $this->session->isLoggedIn();
 	}
 	
 	function post_signoff($event_id) {
-		$this->event->signoff($event_id, $this->user->userId());
-		$this->load->helper('url');
-		redirect('/calendar/view/'.$event_id);		
+		$this->models->event->signoff($event_id, $this->session->userId());
+		$this->redirect('/calendar/view/'.$event_id);		
 	}
 	
 	function acl_signoff() {
-		return $this->user->isLoggedIn();
+		return $this->session->isLoggedIn();
 	}
 }

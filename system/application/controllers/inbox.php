@@ -1,16 +1,6 @@
 <?php
-
-class Inbox extends Controller {
-
-	function __construct() {
-		parent::Controller();	
-		// $this->output->enable_profiler(TRUE);
-	}
-
+class Inbox extends MY_Controller {
 	function get_index() {
-		$alerts = $this->alert->get_all_for_user($this->user->userId());
-		
-		$this->dwootemplate->assign('alerts', $alerts);
-		$this->dwootemplate->display('inbox.tpl');
+		$this->alerts = $this->models->alert->get_all_for_user($this->session->userId());
 	}
 }

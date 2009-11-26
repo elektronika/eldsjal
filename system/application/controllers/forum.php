@@ -1,34 +1,32 @@
 <?php
-class Forum extends Controller {
-	public function __construct() {
-		parent::Controller();
-		// if($this->user->isAdmin())
-		// 		$this->output->enable_profiler(TRUE);
-		$this->load->model('forum_model');
-	}
-	
+class Forum extends MY_Controller {	
 	public function get_index() {
-		$categories = $this->forum_model->get_categories_for_usertype($this->user->usertype(), $this->user->userId(), $this->user->lastlogin());
-		
-		$this->dwootemplate->assign('categories', $categories);
-		$this->dwootemplate->display('forum_index.tpl');
+		$this->categories = $this->models->forum->get_categories_for_usertype($this->session->usertype(), $this->session->userId(), $this->session->lastlogin());
 	}
 	
 	public function acl_topic($id) {
-		return $this->forum_model->acl_topic($id, $this->user->usertype());
+		return $this->models->forum->acl_topic($id, $this->session->usertype());
 	}
 	
 	public function get_topic($id) {
-		$topic = $this->forum_model->get_topic_by_id($id);
-		$posts = $this->forum_model->get_posts_for_topic($id);
+		$posts_per_page = $this->util->setting('forum_posts_per_page');
+		$cur_page = $this->arguments->get('page', 0);
+
+		$this->topic = $this->models->forum->get_topic_by_id($id);
+		$this->posts = $this->models->forum->get_posts_for_topic($id, $cur_page, $posts_per_page);
 		
-		if($this->user->isLoggedIn())
-			$this->forum_model->add_track($id, $this->user->userId());
+		if($this->session->isLoggedIn())
+			$this->models->forum->add_track($id, $this->session->userId());
 		
-		$this->dwootemplate->assign('posts', $posts);
-		$this->dwootemplate->assign('user_can_reply', ($topic->locked != 1));
-		$this->dwootemplate->assign('topic', $topic);
-		$this->dwootemplate->display('forum_topic.tpl');
+		$this->pagination->initialize(array(
+			'base_url' => '/forum/topic/'.$id.'/page:',
+			'per_page' => $posts_per_page,
+			'total_rows' => $this->topic->replies + 1,
+			'cur_page' => $cur_page
+		));
+		$this->pager = $this->pagination->create_links();
+		
+		$this->dwootemplate->assign('user_can_reply', ($this->topic->locked != 1));
 	}
 	
 	public function post_topic($id) {
@@ -38,31 +36,28 @@ class Forum extends Controller {
 		if($this->form_validation->run() == FALSE) {
 			$this->get_topic($id);
 		} else {
-			$new_reply = new stdClass();
-			$new_reply->body = $this->input->post('body');
+			$new_reply = (object) $this->input->post_array(array('body'));
 			$new_reply->topicid = $id;
-			$new_reply->userid = $this->user->userId();
+			$new_reply->userid = $this->session->userId();
 			
-			$post_id = $this->forum_model->create_post($new_reply);
+			$post_id = $this->models->forum->create_post($new_reply);
 			
-			$this->load->helper('url');
-			redirect('/forum/topic/'.$id.'#post-'.$post_id);
+			$this->redirect('/forum/topic/'.$id.'#post-'.$post_id);
 		}
 	}
 		
 	public function acl_category($id) {
-		return $this->forum_model->acl_category($id, $this->user->usertype());
+		return $this->models->forum->acl_category($id, $this->session->usertype());
 	}
 	
-	public function get_category($id) {
-		$this->load->library('pagination');
-		
-		$topics_per_page = $this->user->setting('topics_per_page');
-		$topics_in_category = $this->forum_model->count_topics_in_category($id);
+	public function get_category($id) {		
+		$topics_per_page = $this->session->setting('topics_per_page');
+		$this->posts_per_page = $this->session->setting('forum_posts_per_page');
+		$topics_in_category = $this->models->forum->count_topics_in_category($id);
 
 		$cur_page = $this->arguments->get('page', 0);
 		
-		$topics = $this->forum_model->get_topics_in_category($id, $cur_page, $topics_per_page, $this->user->userId(), $this->user->lastlogin());
+		$this->topics = $this->models->forum->get_topics_in_category($id, $cur_page, $topics_per_page, $this->session->userId(), $this->session->lastlogin(), $this->posts_per_page);
 		
 		$this->pagination->initialize(array(
 			'base_url' => '/forum/category/'.$id.'/page:',
@@ -70,21 +65,14 @@ class Forum extends Controller {
 			'total_rows' => $topics_in_category,
 			'cur_page' => $cur_page
 		));
-		$pager = $this->pagination->create_links();
+		$this->pager = $this->pagination->create_links();
 
-		$category = $this->forum_model->get_category_by_id($id);
-		
-		$this->dwootemplate->assign('pager', $pager);
-		$this->dwootemplate->assign('topics', $topics);
-		$this->dwootemplate->assign('category', $category);
-		$this->dwootemplate->display('forum_category.tpl');
+		$this->category = $this->models->forum->get_category_by_id($id);
 	}
 	
 	public function get_new($id = 1) {
-		$categories = $this->forum_model->get_categories_for_usertype_assoc($this->user->usertype());
-		
-		$this->dwootemplate->assign('categories', $categories);
-		$this->dwootemplate->display('forum_new_topic.tpl');
+		$this->categories = $this->models->forum->get_categories_for_usertype_assoc($this->session->usertype());
+		$this->template = 'forum_new_topic.tpl';
 	}
 	
 	public function post_new() {
@@ -93,42 +81,32 @@ class Forum extends Controller {
 		$this->form_validation->set_message('required', 'Fältet "%s" måste fyllas i hörru.');
 		
 		if ($this->form_validation->run() == FALSE) {
-			$this->dwootemplate->display('forum_new_topic.tpl');
+			$this->template = 'forum_new_topic.tpl';
 		} else {
 			if(!$this->acl_category($this->input->post('category')))
 				die('Permission denied');
 			
-			$new_topic = new stdClass();
-			$new_topic->title = $this->input->post('title');
-			$new_topic->body = $this->input->post('body');
-			$new_topic->category = $this->input->post('category');
-			$new_topic->userid = $this->user->userId();
+			$new_topic = (object) $this->input->post_array(array('title', 'body', 'category'));
+			$new_topic->userid = $this->session->userId();
 			
-			$topic_id = $this->forum_model->create_topic($new_topic);
+			$topic_id = $this->models->forum->create_topic($new_topic);
 			
-			$this->load->helper('url');			
-			redirect('/forum/topic/'.$topic_id);
+			$this->redirect('/forum/topic/'.$topic_id);
 		}
 	}
 	
 	public function get_edit($post_id) {
-		$post = $this->forum_model->get_post_by_id($post_id);
-		$topic = $this->forum_model->get_topic_by_id($post->topic_id);
-		$post_is_first = $this->forum_model->post_is_first($post->id);
-		$categories = $this->forum_model->get_categories_for_usertype_assoc($this->user->usertype());
-		
-		$this->dwootemplate->assign('form_action', '/forum/edit/'.$post_id);		
-		$this->dwootemplate->assign('is_moderator', $this->user->isAdmin());		
-		$this->dwootemplate->assign('categories', $categories);		
-		$this->dwootemplate->assign('post', $post);
-		$this->dwootemplate->assign('topic', $topic);
-		$this->dwootemplate->assign('is_first_post', $post_is_first);
-		$this->dwootemplate->display('forum_edit.tpl');
+		$this->post = $this->models->forum->get_post_by_id($post_id);
+		$this->topic = $this->models->forum->get_topic_by_id($post->topic_id);
+		$this->is_first_post = $this->models->forum->post_is_first($post->id);
+		$this->categories = $this->models->forum->get_categories_for_usertype_assoc($this->session->usertype());	
+		$this->form_action = '/forum/edit/'.$post_id;				
+		$this->is_moderator = $this->session->isAdmin();
 	}
 	
 	public function post_edit($post_id) {
-		$post_is_first = $this->forum_model->post_is_first($post_id);
-		$post = $this->forum_model->get_post_by_id($post_id);
+		$post_is_first = $this->models->forum->post_is_first($post_id);
+		$post = $this->models->forum->get_post_by_id($post_id);
 		
 		if($post_is_first)
 			$this->form_validation->set_rules('title', 'Rubrik', 'trim|xss_clean|required');
@@ -138,37 +116,32 @@ class Forum extends Controller {
 		if ($this->form_validation->run() == FALSE) {
 			$this->get_edit($post_id);
 		} else {
-			if($this->user->isAdmin()) {
+			if($this->session->isAdmin()) {
 				// if(!$this->acl_category($this->input->post('category')))
 				// 				die('Permission denied');
 			}
 			
-			if($post_is_first) {
-				$this->forum_model->rename_topic($post->topic_id, $this->input->post('title'));
-			}
+			if($post_is_first)
+				$this->models->forum->rename_topic($post->topic_id, $this->input->post('title'));
 			
-			$this->forum_model->update_post($post_id, $this->input->post('body'));
+			$this->models->forum->update_post($post_id, $this->input->post('body'));
 			
-			$this->load->helper('url');			
-			redirect('/forum/topic/'.$post->topic_id);
+			$this->redirect('/forum/topic/'.$post->topic_id);
 		}
 	}
 
 	public function acl_edit($post_id) {
 		// Kolla om användaren äger posten, har extra rättigheter eller är admin
-		return $this->user->isAdmin() || $this->forum_model->post_creator($post_id) == $this->user->userId();
+		return $this->session->isAdmin() || $this->models->forum->post_creator($post_id) == $this->session->userId();
 	}
 
-	public function get_delete($post_id) {
-		
-	}
+	public function get_delete($post_id) {}
 	
 	public function post_delete($post_id) {
-		$this->load->helper('url');
-		$topic_id = $this->forum_model->topic_id_for_post($post_id);
-		$this->forum_model->delete_post($post_id);
-		$this->user->message('Inlägg raderat');
-		redirect('/forum/topic/'.$topic_id);
+		$topic_id = $this->models->forum->topic_id_for_post($post_id);
+		$this->models->forum->delete_post($post_id);
+		$this->session->message('Inlägg raderat');
+		$this->redirect('/forum/topic/'.$topic_id);
 		/*
 		if($this->forum->post_is_first($post_id)) {
 			// Radera tråd
@@ -188,12 +161,11 @@ class Forum extends Controller {
 
 	public function acl_delete($post_id) {
 		// Kolla om användaren äger posten, har extra rättigheter eller är admin
-		return $this->user->isAdmin() || $this->forum_model->post_creator($post_id) == $this->user->userId();
+		return $this->session->isAdmin() || $this->models->forum->post_creator($post_id) == $this->session->userId();
 	}
 	
 	public function get_random() {
-		$topic_id = $this->forum_model->get_random_topic($this->user->usertype());
-		$this->load->helper('url');
-		redirect('/forum/topic/'.$topic_id);
+		$topic_id = $this->models->forum->get_random_topic($this->session->usertype());
+		$this->redirect('/forum/topic/'.$topic_id);
 	}
 }

@@ -13,7 +13,7 @@ setlocale(LC_ALL, 'sv_SE.utf8');
 |	http://example.com/
 |
 */
-$config['base_url']	= "http://eldsjal.org/";
+$config['base_url']	= "/";
 
 /*
 |--------------------------------------------------------------------------

@@ -15,7 +15,7 @@
 	<tbody>
 {foreach $topics topic}
 		<tr class="{implode(' ', $topic->classes)}">
-			<td class="topic-subject">{a class="topic-link" href="/forum/topic/$topic->id"}{$topic->title}{/}{actions $topic->actions}</td>
+			<td class="topic-subject"><span class="topic-link">{a href="/forum/topic/$topic->id"}{$topic->title}{/} {pagespan $topic->pages "/forum/topic/$topic->id" $posts_per_page} {if isset($topic->classes['new'])} {a href="/forum/redirectupdated/$topic->id"}&raquo;{/a}{/if}</span> {actions $topic->actions}</td>
 			<td class="topic-lastrepy">{if $topic->replies eq 0}-{else}{$topic->updated|fuzzytime:'':' sedan'} av {userlink $topic->updater}{/if}</td>
 			<td class="topic-replies">{$topic->replies}</td>
 			<td class="topic-creator">{$topic->created|shortdate} av {userlink $topic->creator}</td>

@@ -24,7 +24,7 @@
 <div id="header-wrap">
 	<div id="header" class="container_16">
 		<div class="grid_16" id="logo">
-		<h1><a href="/main.php"><span>Eldsj&auml;l.org</span></a></h1>
+		<h1><a href="/main"><span>Eldsj&auml;l.org</span></a></h1>
 		</div>
 		<div class="grid_8" id="navbar">
 			<div id="menuItems">
@@ -38,9 +38,9 @@
 			</div>
 		</div>
 		<div class="grid_8" id="userbar">
-			{if isloggedin()}
-			{active_userlink}
-			<a class="inbox" href="/inbox">Inbox<span id="alert-counter"> {alertcounter}</span></a>
+			{if $isloggedin}
+			{$active_userlink}
+			<a class="inbox" href="/inbox">Inbox<span id="alert-counter"> {if $alert_count > 0}({$alert_count}){/if}</span></a>
 			<form id="quicksearch" action = "/members.php?mode=listMembers" method = "post"> 
 				<div>
 				{input "text" "username"} 
@@ -62,9 +62,9 @@
 		{block "submenu"}&nbsp;{/block}
 		</div>
 		<div class="grid_8" id="usersub">
-			{if isloggedin()}
+			{if $isloggedin}
 			<div id="whatsup">
-				Just nu: <span>{whatsup}</span>
+				Just nu: <span>{$whatsup}</span>
 			</div>
 			{else}
 			<a href="/forgotpassword">Glömt lösenordet?</a>
@@ -74,7 +74,7 @@
 	</div>
 </div>
 <div id="content-wrap">
-	{messages getMessages()}
+	{messages $messages}
 <div id="content" class="{block "content_class"}container_16{/block}">
 	<div class="grid_16">
 {block "body"}
@@ -89,60 +89,20 @@ Här sare va body-content jao!
 <div id="footer-wrap">
 	<div id="footer" class=" container_16">
 		<div class="grid_4">
-			<h3>Om eldsjal.org</h3>
-			<p>Eldsjal.org är en tjänst som Föreningen Eldsjäl med stolthet tillhandahåller allmänheten kostnadsfritt, oavsett medlemsskap i föreningen, för att sprida våra budskap och aktivt arbeta med våra målsättningar.</p><p><a href="/info">Läs mer om föreningen Eldsjäl &raquo;</a></p>
+			<p>Det &auml;r ej till&aring;tet att misstro, glömma eller förtränga information fr&aring;n Eldsj&auml;l.</p>
+			<p>&copy; F&ouml;reningen Eldsj&auml;l 2005 - {date('Y')} och respektive upprorsman</p>
 		</div>
-		<div class="grid_4">
-			<a href = "members.php?mode=showOnline" class = "a2" >{usersonline} eldsjälar är online</a><br/>
-			Antal inloggade idag: Jättemånga
-		</div>
-		<div class="grid_4 sitemap">
-			<h3>Översikt</h3>
-			<a href="/">Start</a>
-			<ul>
-				<li><a href="/forum">Forum</a></li>
-				<li><a href="/calendar">Kalender</a></li>
-				<li><a href="/thougts">Tankar</a></li>
-				<li><a href="/people">Folk</a></li>
-				<li>
-					<ul>
-						<li><a href="/people/map">Kartan</a></li>
-					</ul>
-				</li>
-				<li><a href="/gallery">Galleri</a></li>
-				<li><a href="/wiki">Wiki</a></li>
-				<li><a href="/info">Om</a></li>
-			</ul>
-		</div>
-		<div class="grid_4">
-			<h3>Kontakt</h3>
-			<h4>Styrelsen</h4>
-			<p><a href="mailto:styrelsen@eldsjal.org">styrelsen@eldsjal.org</a></p>
-			<h4>Arbetsgrupp för eldsjal.org</h4>
-			<p><a href="mailto:elektronika@eldsjal.org">elektronika@eldsjal.org</a></p>
-			<h4>Allt annat</h4>
-			<p><a href="mailto:info@eldsjal.org">info@eldsjal.org</a></p>
-		</div>
-		<div class="wisdom-wrap grid_16">
-		<div class="grid_8 alpha omega prefix_4 suffix_4">
+		<div class="grid_8" id="wisdom-outer">
+			<div class="wisdom-wrap">
 			<div id="wisdom"><p>
-				{wisdom()|rq}
+				{$wisdom|rq}
 			</p></div>
-		</div>
-		<div class="clear">&nbsp;</div>
-		</div>
-		<div class="grid_4">
-			Det &auml;r ej till&aring;tet att misstro, glömma eller förtränga information fr&aring;n Eldsj&auml;l.
+			</div>
 		</div>
 		<div class="grid_4">
-			&copy; F&ouml;reningen Eldsj&auml;l 2005 - {date('Y')} och respektive upprorsman
-		</div>
-		<div class="grid_4">
-			eldsjal.org drivs av f&ouml;reningen Eldsj&auml;l utan st&ouml;d fr&aring;n Ungdomsstyrelsen
-		</div>
-		<div class="grid_4">
-			Elektronika gjorde det här.<br/>
-			Bra saker tar tid.
+			<p>eldsjal.org drivs av f&ouml;reningen Eldsj&auml;l utan st&ouml;d fr&aring;n Ungdomsstyrelsen</p>
+			<p>Elektronika gjorde det här.<br/>
+			Bra saker tar tid.</p>
 		</div>
 	</div>
 	<div class="clear"> </div>
