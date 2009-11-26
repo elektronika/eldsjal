@@ -1,5 +1,5 @@
 body {
-	font-family: Lucida grande, sans-serif;
+	font-family: Lucida grande, Verdana, sans-serif;
 	font-size: 12px;
 	line-height: 20px;
 	background: #666 ;
@@ -44,7 +44,7 @@ dt {
 }
 
 #content-wrap {
-	padding-bottom: 19px;
+	padding-bottom: 20px;
 	padding-top: 20px;
 	border-bottom: 1px solid #DDDDDD;
 }
@@ -58,7 +58,6 @@ dt {
 }
 
 #footer-wrap {
-	padding-bottom: 20px;
 	padding-top: 19px;
 	border-top: 1px solid #777777;
 	color: #BBBBBB;
@@ -176,12 +175,9 @@ dt {
 	color: #777;
 }
 
-#navbar a.active {
-	/* background: transparent url('mainmenu-active.png') no-repeat center center;	*/
-}
+#navbar a.active {}
 
 #submenu, #usersub {
-	/* border-top: 1px solid #999; */
 	background: transparent url('submenu-border-top.png') no-repeat top left;
 	padding-top: 5px;
 	margin-top: 5px;
@@ -233,21 +229,18 @@ dt {
 .bubble {
 	clear: both;
 	margin-bottom: 10px;
-}
-
-.bubble .user {
-	clear: both;
-	display: block;
+	margin-top: -1px;
 }
 
 .bubble .userimage {
-	width: 90px;
+	height: 20px;
+	width: 20px;
+	float: left;
+	margin-right: 5px;
 }
 
-.bubble .bubble-content {
-	background: transparent url('tip.gif') no-repeat 0px 7px;
-	padding-left: 17px;
-	margin-left: -17px;
+.bubble .user {
+	float: left;
 }
 
 .bubble .bubble-content-wrap, .printr, #baloon {
@@ -262,19 +255,27 @@ dt {
 	border: 1px solid #C9C2C1;
 	background: #fff;
 	padding: 10px;
+	padding-bottom: 9px;
 }
 
-.bubble .bubble-content-wrap {
-	margin-left: 100px;	
-}
-
-.bubble .bubble-userdata {
+.bubble .userdata {
 	float: left;
-	margin-right: 10px;
+	margin-left: 10px;
+	margin-top: 10px;
 }
 
 .bubble-meta {
+	background: transparent url('tipbottom.gif') no-repeat 14px 0px;
+	position: relative;
+	top: -2px;
+	height: 30px;
+}
+
+.bubble-meta .meta {
 	text-align: right;
+	margin-right: 10px;
+	margin-top: 10px;
+	float: right;
 }
 
 .bubble-meta .date {
@@ -329,7 +330,7 @@ input.form-item-submit {
 }
 
 textarea#form-item-body {
-	height: 300px;
+	height: 150px;
 }
 
 .form-error-description {
@@ -519,7 +520,6 @@ thead {
 	float: left;
 	padding-left: 22px;
 	background: transparent url('icons/comments.png') no-repeat center left;
-	/* margin-right: 70px; */
 }
 
 .no-replies .topic-link {
@@ -568,9 +568,7 @@ thead {
 	background-image: url('icons/folder_add.png');
 }
 
-.category-title span {
-	/* padding-left: 22px; */
-}
+.category-title span {}
 
 .teaser-text {
 	margin-bottom: 20px;
@@ -648,9 +646,7 @@ thead {
 	text-align: center;
 }
 
-.has-events {
-	/* background: #f4e6c4; */
-}
+.has-events {}
 
 .no-events a, .no-events {
 	color: #C9C2C1;
@@ -757,12 +753,17 @@ thead {
 }
 
 .wisdom-wrap {
-	margin: 20px 0;
-	/*border: 1px solid #C9C2C1; */
+	margin-top: 20px;
+	padding-bottom: 1px;
 	background: transparent url('submenu-border-top.png') no-repeat bottom center;
 	border-left: none;
 	border-right: none;
 	clear: both;
+}
+
+#wisdom-outer {
+	background: transparent url('submenu-border-top.png') no-repeat top center;
+	margin-bottom: 20px;
 }
 
 .wisdom-wrap .grid_8 {
@@ -782,7 +783,6 @@ dl#alerts dt {
 	font-weight: bold;
 	color: #777;
 	margin-top: 10px;
-	/*border-bottom: 1px solid #C9C2C1; */
 }
 
 dl#alerts dt.first {
@@ -922,6 +922,68 @@ dt#alert-group-forum {
 	color: #333;
 }
 
-.sitemap li {
-	padding-left: 10px;
+#codeigniter_profiler {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 0 !important;
+	background-color: #eee !important;
+	opacity: 0.9;
+}
+
+#codeigniter_profiler fieldset {
+	float: left;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	background-color: transparent !important;
+}
+
+#codeigniter_profiler fieldset > * {
+	display: none;
+}
+
+#codeigniter_profiler fieldset:hover > * {
+	display: block;
+	position: absolute;
+	left: 0;
+	background-color: #eee !important;
+}
+
+#codeigniter_profiler fieldset legend {
+	display: block;
+	float: left;
+}
+
+.item {
+	border-bottom: 1px solid #eee;
+	margin-bottom: 10px;
+}
+
+.item .replies {
+	margin-top: 10px;
+	margin-left: 12px;
+}
+
+.item .replies .reply-3 {
+	opacity: 0.6;
+}
+
+.item .replies .reply-2 {
+	opacity: 0.8;
+}
+
+.item .title {
+	font-size: 12px;
+	padding-left: 22px;
+	background-position: center left;
+	background-repeat: no-repeat;
+}
+
+.forum-item .title {
+	background-image: url('icons/comments.png');
+}
+
+.thought-item .title {
+	background-image: url('icons/lightbulb.png');
 }

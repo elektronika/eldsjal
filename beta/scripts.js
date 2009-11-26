@@ -280,6 +280,29 @@ $(document).ready(function() {
 			});
 		});
 		return false;
+	});
+	
+	$('.usermenu a.action-message').live('click', function() {
+		$('#baloon').unbind('mouseleave');
+		var userid = $(this).closest('.usermenu').getClasses()[1].substring(1);
+		$(this).closest('.usermenu').children('.usermenu-inject').load('/xml/message/'+userid, function() {
+			$('#baloon #form-item-cancel').live('click', function() {
+				$('#baloon').trigger('hide');
+				return false;
+			});
+			$('#baloon #form-item-save').live('click', function() {
+				var formAction = $(this).closest('form').attr('action');
+				var message = $(this).closest('form').children('#form-item-body').val();
+				var subject = $(this).closest('form').children('#form-item-title').val();
+				$('#baloon .usermenu-inject').load(formAction, {body: message, title: subject}, function() {
+					$('#baloon').bind('mouseleave', function() {
+						$(this).trigger('hide');
+					});
+				});
+				return false;
+			});
+		});
+		return false;
 	});	
 });
 
