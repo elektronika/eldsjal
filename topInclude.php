@@ -61,7 +61,7 @@ if( isset($_SESSION['alt_style']) && $_SESSION['alt_style'] == 1 || TRUE ) {
 				<a href="gallery.php" title="Underbara bilder med anknytning till alternativkonst fr&aring;n v&aring;ra medlemmar *uppladdning kr&auml;ver medlemskap*">Galleri</a>
 				<a href="http://www.cby.se/" title="Camp Burn Yourselfs egna sida!" target="_blank">C.B.Y</a>
 				<a href="board.php" title="Information om f&ouml;reningen">F&ouml;reningen</a>
-				<a style="font-weight: bold" href="http://eldsjal.org/betainfo/" title="Beta-versionen utav nya eldsjal.org">BETA</a>
+				<a style="font-weight: bold" href="/betainfo/" title="Beta-versionen utav nya eldsjal.org">BETA</a>
 			</div>
 			<form id="quicksearch" action = "members.php?mode=listMembers" method = "post"> 
 				<div>
