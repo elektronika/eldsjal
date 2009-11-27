@@ -1,16 +1,7 @@
 <?php
 
-class Betainfo extends Controller {
-
-	function __construct()
-	{
-		parent::Controller();	
-	}
-	
-	function get_index()
-	{
-		$this->dwootemplate->display('beta.tpl');
-	}
+class Betainfo extends MY_Controller {
+	function get_index() {}
 }
 
 /* End of file welcome.php */
