@@ -39,6 +39,7 @@ class Main extends MY_Controller {
 		$this->news = $this->models->forum->get_latest_news(3);
 		$this->events = $this->models->event->get_upcoming(5);
 		$this->birthdays = $this->models->user->get_by_birthday(date('m'), date('d'));
-		$this->latest_logins = $this->models->user->get_latest_logins(count($this->birthdays));
+		$login_count = count($this->birthdays) > 5 ? count($this->birthdays) : 5;
+		$this->latest_logins = $this->models->user->get_latest_logins($login_count);
 	}
 }

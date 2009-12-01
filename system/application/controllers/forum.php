@@ -95,6 +95,10 @@ class Forum extends MY_Controller {
 		}
 	}
 	
+	public function acl_new() {
+		return $this->session->isLoggedIn();
+	}
+	
 	public function get_edit($post_id) {
 		$this->post = $this->models->forum->get_post_by_id($post_id);
 		$this->topic = $this->models->forum->get_topic_by_id($post->topic_id);
