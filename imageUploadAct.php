@@ -58,7 +58,7 @@ rename($application['originalimagepath'].$file['path'], $originalImagePath);
 $imageTransform = new ImageTransform();
 $imageTransform->sourceFile = $originalImagePath;
 // "Stor" version
-$imageTransform->targetFile = '../uploads/galleryImages/'.$imageName['imageid'].'.jpg';
+$imageTransform->targetFile = 'uploads/galleryImages/'.$imageName['imageid'].'.jpg';
 $imageTransform->resizeToHeight = 800;
 
 if(!$imageTransform->resize()) {
@@ -69,7 +69,7 @@ if(!$imageTransform->resize()) {
 // print_r($imageTransform);
 
 // Thumbnail
-$imageTransform->targetFile = '../uploads/galleryImages/tn_'.$imageName['imageid'].'.jpg';
+$imageTransform->targetFile = 'uploads/galleryImages/tn_'.$imageName['imageid'].'.jpg';
 $imageTransform->resizeToWidth = 100;
 
 if(!$imageTransform->resize()) {
