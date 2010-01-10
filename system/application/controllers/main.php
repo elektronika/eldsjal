@@ -19,7 +19,7 @@ class Main extends MY_Controller {
 			$item->time = current($topic)->messageDate;
 			foreach(array_slice($topic, 0, 3) as $post)
 				$item->items[] = (object) array(
-					'body' => character_limiter(str_replace(array('[br]', "\n"),'',$post->message), 80, '...'), 
+					'body' => character_limiter(str_replace(array('[br]', "\n"),' ',$post->message), 80, '...'), 
 					'userid' => $post->posterId, 
 					'created' => $post->messageDate, 
 					'username' => $usernames[$post->posterId]->username, 

@@ -206,7 +206,7 @@ elseif( $_GET['mode'] == "updateImage" ) {
 	// 	exit();
 	$imageTransform = new ImageTransform();
 	$imageTransform->sourceFile = $file['path'];
-	$imageTransform->targetFile = '../uploads/userImages/'.$_SESSION['userid'].'.jpg';
+	$imageTransform->targetFile = 'uploads/userImages/'.$_SESSION['userid'].'.jpg';
 	$imageTransform->resizeToWidth = 100;
 
 	if(!$imageTransform->resize()) {
@@ -215,7 +215,7 @@ elseif( $_GET['mode'] == "updateImage" ) {
 		// print 'stor version skapad';
 	}
 	
-	$imageTransform->targetFile = '../uploads/userImages/tn_'.$_SESSION['userid'].'.jpg';
+	$imageTransform->targetFile = 'uploads/userImages/tn_'.$_SESSION['userid'].'.jpg';
 	$imageTransform->resizeToHeight = 89;
 
 	if(!$imageTransform->resize()) {
