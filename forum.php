@@ -24,11 +24,6 @@ if( isset( $_GET['category'] ) ) {
 			header( "Location: "."forum.php?message=Nu gjorde du fel!" );
 		}
 	}
-	elseif( $_GET['category'] == 19 ) {
-		if( $_SESSION['boardmember'] != 1 && $_SESSION['intmember'] != 1 ) {
-			header( "Location: "."forum.php?message=Nu gjorde du fel!" );
-		}
-	}
 }
 ?>
 <!-- slut p&aring; s&auml;kerheten typ -->
