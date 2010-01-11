@@ -15,8 +15,12 @@ $onlineCount = current($conn->execute('select count(*) from users where online =
 			Antal inloggade idag: <?php echo $application['visitorcount'];?>
 		</div>
 		<div class="float-right">
-			Senast uppdaterad: En stund sedan.
-			<?php print $application['lastupdate']."<br>eldsjal.org v.".$application['version']." (".$application['versionname'].") "; ?>
+			<?php if(file_exists('revision')): ?>
+				Senast uppdaterad: <?php echo date('d/m/y, H:i', filemtime('revision')); ?><br/>
+				eldsjal.org <a href="development.php">rev. <?php require('revision');?></a>
+			<?php else: ?>
+				DEV
+			<?php endif; ?>
 		</div>
 		<div id="footer-text">
 			Det &auml;r ej till&aring;tet att kopiera, sprida eller vidaref&ouml;rmedla information fr&aring;n Eldsj&auml;l	F&ouml;reningen Eldsj&auml;l  (C) 2005 - <?php echo date('Y');?><br>
