@@ -396,7 +396,7 @@ elseif( isset( $_GET['category'] ) ) {
 		$page = intval( $_GET['page'] );
 	else 
 		$page = 1;
-	$sql = "select forumcategoryname,forumcategoryid, forumsecuritylevel from forumcategory where forumcategoryid = ".intval( $_GET['category'] );
+	$sql = "select forumcategoryname,forumcategoryid, forumsecuritylevel, forumwritelevel from forumcategory where forumcategoryid = ".intval( $_GET['category'] );
 	$categoryName = $conn->execute( $sql );
 	if( $categoryName ) {
 		if( $_SESSION['userid'] != "" ) {
@@ -433,6 +433,8 @@ elseif( isset( $_GET['category'] ) ) {
 		// print "<a class=a2 href=\"forum.php\">&laquo; tillbaka</a>&nbsp;&nbsp;&nbsp;";
 		if( $_SESSION['userid'] == "" || $_SESSION['userid'] == 0 ) {
 			print "<a class=a2 href=\"forum.php\" onClick=\"javaScript:window.alert('Den h&auml;r funktionen och 100000 andra bra f&aring;r du tillg&aring;ng\\ntill n&auml;r du registrerar dig och blir medlem, smutt va?');\"> Skapa nytt inl&auml;gg!</a>";
+		} elseif($_SESSION['usertype'] <= $categoryName['forumwritelevel']) {
+			print 'Tyv&auml;rr, du kan inte skapa nya tr&aring;dar h&auml;r.';
 		}
 		else {
 			print "<a class=a2 href=forum.php?mode=newTopic&category=".$_GET['category'].">Skapa nytt inl&auml;gg!</a>";

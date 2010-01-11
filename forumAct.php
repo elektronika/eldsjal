@@ -70,6 +70,10 @@ function rq($content)
 */
 
 if( isset( $_GET['mode'] ) && $_GET['mode'] == "addEntry" ) {
+	$category = $conn->execute('SELECT GREATEST(forumsecuritylevel, forumwritelevel) AS minimumlevel FROM forumcategory WHERE forumcategoryid = '.intval($_POST['categoryid']));
+	if($_SESSION['usertype'] <= $category['minimumlevel']) {
+		die('Nope, no can do.');
+	}
 	$message = CQ( $_POST['message'] );
 	$topic = CQ( $_POST['topic'] );
 	$sql = "insert into forumtopics (topicname, topicposterid, topicdate, latestentry, latestentryby, totalentrys, forumcategoryid, sticky) values ('".$topic."', ".$_SESSION['userid'].", getdate(), getdate(), ".$_SESSION['userid'].", 0, ".intval( $_POST['categoryid'] ).", ".intval( $_POST['sticky'] ).")";
