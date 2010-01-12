@@ -218,7 +218,7 @@ elseif( isset( $_GET['mode'] ) && $_GET['mode'] == "showOnline" ) {
 		// print_r($loginTime);
 		// $diff = time( ) - $loginTime;
 		// $loginTime = round( $diff / 60 );
-		$loginTime = timeSince($dbUser['lastLogin'], '');
+		$loginTime = timeSince(strtotime($dbUser['lastlogin']), '');
 
 		//response.Write(dbLoginTime("loginTime") & "<br>" & SQL)
 		/*    $birthDate=$formatDateTime[$dbUser['born_month']."/".$dbUser['born_date']."/".$dbUser['born_year']][$vbShortDate];
