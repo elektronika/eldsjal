@@ -9,6 +9,7 @@ function getDays( $monthNr ) {
 }
 
 function getNext( $s ) {
+	extract($GLOBALS);
 	// s = sign (eg +,-)
 	// am = aktuell m&aring;nad
 	// ay = aktuellt &aring;r
