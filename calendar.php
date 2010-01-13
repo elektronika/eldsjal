@@ -1,123 +1,14 @@
 <?php
 function getMonth( $monthNr ) {
-	extract( $GLOBALS );
-	switch( $monthNr ) {
-		case 1:
-			$manad = "Januari";
-			break;
-
-		case 2:
-			$manad = "Februari";
-			break;
-
-		case 3:
-			$manad = "Mars";
-			break;
-
-		case 4:
-			$manad = "April";
-			break;
-
-		case 5:
-			$manad = "Maj";
-			break;
-
-		case 6:
-			$manad = "Juni";
-			break;
-
-		case 7:
-			$manad = "Juli";
-			break;
-
-		case 8:
-			$manad = "Augusti";
-			break;
-
-		case 9:
-			$manad = "September";
-			break;
-
-		case 10:
-			$manad = "Oktober";
-			break;
-
-		case 11:
-			$manad = "November";
-			break;
-
-		case 12:
-			$manad = "December";
-			break;
-	}
-	$function_ret = $manad;
-	return $function_ret;
+	$months = array('Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December');
+	return $months[$monthNr - 1];
 }
 
 function getDays( $monthNr ) {
-	extract( $GLOBALS );
-	switch( $monthNr ) {
-		case 1:
-			$days = 31;
-
-			//Case 2 days = 28
-
-			break;
-
-		case 2:
-			$days = 29;
-
-			//&Oring;kad med ett f&ouml;r att st&ouml;dja skott&aring;r &aring;r 2004:
-
-			break;
-
-		case 3:
-			$days = 31;
-			break;
-
-		case 4:
-			$days = 30;
-			break;
-
-		case 5:
-			$days = 31;
-			break;
-
-		case 6:
-			$days = 30;
-			break;
-
-		case 7:
-			$days = 31;
-			break;
-
-		case 8:
-			$days = 31;
-			break;
-
-		case 9:
-			$days = 30;
-			break;
-
-		case 10:
-			$days = 31;
-			break;
-
-		case 11:
-			$days = 30;
-			break;
-
-		case 12:
-			$days = 31;
-			break;
-	}
-	$function_ret = $days;
-	return $function_ret;
+	return cal_days_in_month(CAL_GREGORIAN, $monthNr, date('Y'));
 }
 
 function getNext( $s ) {
-	extract( $GLOBALS );
-
 	// s = sign (eg +,-)
 	// am = aktuell m&aring;nad
 	// ay = aktuellt &aring;r
@@ -152,9 +43,9 @@ function getNext( $s ) {
 // Plocka fram aktuellt datum
 
 $datum = time( );
-$aManad = date( "m", $datum );
-$aDag = date( "d", $datum );
-$aAr = date( "Y", $datum );
+$aManad = date("m");
+$aDag = date("d");
+$aAr = date("Y");
 
 // Vilken m&aring;nad skall visas?
 
@@ -202,18 +93,19 @@ $skip = date( "w", mktime( 0, 0, 0, $mm, 1, $yyyy ) ) - 1;
           </td>
         </tr>
         <?php
-// $eventInfo is of type "scripting.dictionary"
-// $Rs is of type "ADODB.Recordset"
-//echo $application["eldsjalDB"];
-//echo "SELECT DISTINCT(dd) FROM calendarEvents WHERE mm = ".$mm." AND yyyy = ".$yyyy." AND private = 0 ORDER BY dd";
 
 $rs = $conn->execute( "SELECT DISTINCT(dd) FROM calendarevents WHERE mm = ".$mm." AND yyyy = ".$yyyy." AND private = 0 ORDER BY dd" );
 
 //print_r($rs);
 
 $rrs = array( );
-foreach( $rs as $r ) 
-	$rrs[$r['dd']] = $r['dd'];
+
+if(is_array($rs) && ! is_array(current($rs)))
+	$rs = array($rs);
+
+if(is_array($rs))
+	foreach( $rs as $r ) 
+		$rrs[$r['dd']] = $r['dd'];
 $rs = $rrs;
 $dag = 1 - $skip;
 $x = 0;
@@ -237,32 +129,19 @@ while( !( $x > ( getDays( $mm ) + $skip ) / 7 ) ) {
 
 				$sql = "SELECT calendarevents.title, locations.locationname FROM calendarevents INNER JOIN locations ON calendarevents.locationid = locations.locationid WHERE calendarevents.private = 0 AND dd = ".$rs[$dag]." AND mm = ".$mm." AND yyyy = ".$yyyy." ORDER BY dd";
 				$hovers = $conn->execute( $sql );
-				if( !is_array( current( $hovers ) ) ) 
-					$hovers = array(
-						$hovers,
-					);
+				if( ! is_array( current( $hovers ) ) ) 
+					$hovers = array($hovers);
 				foreach( $hovers as $hover ) {
 					$content = $content."<b>".$hover['locationname']."</b>"."- ".$hover["title"]."<br><br>";
-
-					//          //$hover->moveNext;
 				}
 
-				////RS.MoveNext
 			}
 		}
 		$today = 0;
 
-		//print $aDag.$aManad.$aAr.'=='.$dag.$mm.$yyyy;
-
 		if( $aDag.$aManad.$aAr == $dag.$mm.$yyyy ) {
 			$today = 1;
 		}
-
-		//If dag > 0 AND dag < getDays(mm)+1 Then
-		//	borderColor = "#999999" 'Om dagarna finns i m&aring;naden
-		//Else
-		//	borderColor = "#FFFFFF" 'Om dagarna finns i n&auml;sta m&aring;nad
-		//End If
 
 		print "<td>";
 		if( $dag > 0 && $dag < getDays( $mm ) + 1 ) {
@@ -275,9 +154,7 @@ while( !( $x > ( getDays( $mm ) + $skip ) / 7 ) ) {
 				if( isset( $_GET["dd"] ) && $_GET['dd'] == intval( $dag ) ) {
 					print "<div class='calendarDateBoxFilledActive'>"."<a onMouseOver=\"return overlib('".$content."<br><br>');\" onMouseOut=\"return nd();\" href='calendarView.php?dd=".$dag."&mm=".$mm."&yy=".$yyyy."'  class='calendarMarkEvent'>";
 				}
-				elseif( $today != 1
-
-				/*|| $mark==1*/ ) {
+				elseif( $today != 1 ) {
 					print "<div class='calendarDateBoxFilled'>"."<a onMouseOver=\"return overlib('".$content."<br><br>');\" onMouseOut=\"return nd();\" href='calendarView.php?dd=".$dag."&mm=".$mm."&yy=".$yyyy."'  class='calendarMarkEvent'>";
 				}
 				else {
@@ -285,8 +162,6 @@ while( !( $x > ( getDays( $mm ) + $skip ) / 7 ) ) {
 				}
 				$today = 0;
 				print $dag;
-
-				//$RS=$conn->execute($RS_query);
 
 				$skriv = "false";
 			}

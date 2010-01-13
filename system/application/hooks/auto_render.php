@@ -1,7 +1,6 @@
 <?php
 function auto_render() {
 	$CI =& get_instance();
-	// $// CI->
 	
 	foreach($CI as $var => $val)
 		if( ! in_array($var, $CI->libraries))
