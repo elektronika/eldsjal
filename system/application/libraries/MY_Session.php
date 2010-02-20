@@ -36,7 +36,7 @@ class MY_Session extends CI_Session {
     }
 
 	public function usertype() {
-		return $this->userdata('usertype', 0);
+		return $this->userdata('usertype', -1);
 	}
 
 	public function isLoggedIn() {
