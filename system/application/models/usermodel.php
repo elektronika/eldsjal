@@ -121,6 +121,6 @@ class UserModel extends AutoModel {
 	}
 	
 	public function get_latest_logins($limit = 10) {
-		return $this->db->select('userid, username, slug')->order_by('lastlogin', 'desc')->get('users', $limit)->result();
+		return $this->db->select('userid, username, slug, lastlogin')->order_by('lastlogin', 'desc')->get('users', $limit)->result();
 	}
 }

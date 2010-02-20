@@ -88,6 +88,10 @@ function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
 			return $CI->util->fuzzytime($timestamp, $prefix, $suffix);
 		}
 		
+		function fuzzytime( $timestamp, $prefix = NULL, $suffix = NULL, $hoverDateFormat = 'Y-m-d H:i' ) {
+			return get_instance()->util->fuzzytime($timestamp, $prefix, $suffix);
+		}
+		
 		function Dwoo_Plugin_nicedate( Dwoo $dwoo, $timestamp) {
 			$CI =& get_instance();
 			return $CI->util->nicedate($timestamp);
@@ -200,3 +204,233 @@ function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
 		}
 	
 	}
+
+function slugify( $string ) {
+	return get_instance()->util->slugify($string);
+}
+	
+function actions(Array $actions, $icons_only = FALSE) {
+	$icon_class = $icons_only ? ' icons-only' : '';
+	$out = '<div class="actions'.$icon_class.'">';
+	foreach($actions as $action)
+		$out .= "<a class='action action-{$action['class']}' title='{$action['title']}' href='{$action['href']}'>&nbsp;<span>{$action['title']}</span></a>";
+	$out .= '</div>';
+	return $out;
+}
+
+function userlink($user) {
+	// $slug = isset($user->slug) ? $user->slug : slugify($user->username);
+	$slug = $user->userid;
+	return '<a href="/userPresentation.php?userid='.$slug.'" class="user u'.$user->userid.'" title="'.$user->username.'">'.$user->username.'</a>';
+}
+
+function pager($pager) {
+	return '<div class="pager">'.$pager.'</div>';
+}
+
+function pagespan_link($page, $href, $items_per_page) {
+	$offset = $page * $items_per_page;
+	$page_number = $page + 1;
+	return "<a href='{$href}/page:{$offset}'>{$page_number}</a> ";
+}
+
+function pagespan($items, $href, $items_per_page) {
+	if($items > $items_per_page) {
+		$out = '<span class="pagespan">[ ';
+		if($items < $items_per_page * 6)
+			for($i = 0; $i < $items / $items_per_page; $i++)
+				$out .= pagespan_link($i, $href, $items_per_page);
+		else
+			foreach(array(0, 1, ' ... ', floor(($items / $items_per_page) - 1), floor($items / $items_per_page)) as $page)
+				$out .= is_numeric($page) ? pagespan_link($page, $href, $items_per_page) : $page;
+		$out .= ' ]</span>';
+		return $out;
+	}
+}
+
+function shortdate($timestamp) {
+	return get_instance()->util->shortdate($timestamp);
+}
+
+function userimage($user) {
+	return "<img class='userimage' src='/uploads/userImages/tn_{$user->userid}.jpg' alt='{$user->username}'/>";
+}
+
+function post($post) { ?>
+	<div class="post<?php echo nth() ? ' odd' : ' even'; ?>"><?php if($post->id): ?><a name="post-<?php echo $post->id; ?>"></a><?php endif; ?>
+		<div class="left">
+			<?php echo userimage($post); ?>
+			<?php echo userlink($post); ?>		
+		</div>
+		<div class="right">
+			<div class="body">
+				<?php echo rq($post->body); ?>
+			</div>
+			<div class="meta">
+				<?php echo fuzzytime($post->created); ?> <?php echo actions($post->actions, TRUE); ?>
+			</div>
+		</div>
+		<span class="clear"> </span>
+	</div><?php
+}
+
+function rq( $content ) {
+	if( $content != "" ) {
+		$content = str_replace( "&#59;", ";", $content );
+		$content = str_replace( "&amp;#59;", ";", $content );
+		$content = str_replace( "&#44;", ",", $content );
+		$content = str_replace( "&amp;#44;", ",", $content );			
+		$content = str_replace( "&#39;", "'", $content );
+		$content = str_replace( "&amp;#39;", "'", $content );
+		$content = str_replace( "&#34;", "\"", $content );
+		$content = str_replace( "&amp;#34;", "\"", $content );
+		// $content = str_replace( "&lt;", "<", $content );
+		// $content = str_replace( "&gt;", ">", $content );
+		$content = str_replace( "\r\n", "<br/>", $content );
+		$content = str_replace( "\n", "<br/>", $content );
+		$content = str_replace( "[br]", "<br/>", $content );
+		$content = str_replace( "[b]", "<b>", $content );
+		$content = str_replace( "[/b]", "</b>", $content );
+		$content = str_replace( "]", ">", $content );
+		$content = str_replace( "[a ", "<a ", $content );
+		$content = str_replace( "[/a>", "</a>", $content );
+		$content = str_replace( "[3", "&lt;3", $content );
+		$content = str_replace( ">.[", "&gt;.&lt;", $content );
+		$content = do_clickable($content);
+	}
+
+	return $content;
+}
+
+function nth($what = 2, $loop = 'default') {
+	static $loops = array();
+	if( ! isset($loops[$loop]))
+		$loops[$loop] = 0;
+	else
+		$loops[$loop]++;
+	return ($loops[$loop] % $what == 0);
+}
+
+function rqJS( $content ) {
+	if( $content != "" ) {
+		$content = str_replace( "&#59;", ";", $content );
+		$content = str_replace( "&#44;", ",", $content );
+		$content = str_replace( "&#39;", "\\'", $content );
+		$content = str_replace( "&#34;", "\"", $content );
+		$content = str_replace( "&lt;", "<", $content );
+		$content = str_replace( "&gt;", ">", $content );
+		$content = str_replace( "\r\n", "<br>", $content );
+		$content = str_replace( "[br]", "<br>", $content );
+		$content = str_replace( "[b]", "<b>", $content );
+		$content = str_replace( "[/b]", "</b>", $content );
+		$content = str_replace( "\"", "", $content );
+	}
+	return $content;
+}
+
+function timeSince( $timestamp, $suffix = ' sedan', $hover = TRUE, $hoverDateFormat = 'Y-m-d H:i' ) {
+	$timeDiff = time() - $timestamp;
+	
+	if( $timeDiff < 60 ) {
+		$out = 'alldeles nyss';
+		$suffix = $suffix == ' sedan' ? '' : $suffix;
+	}
+	elseif( $timeDiff < 7 * 60 )
+		$out = 'n&aring;gra minuter';
+	elseif( $timeDiff < 17 * 60 )
+		$out = 'typ en kvart';
+	elseif( $timeDiff < 27 * 60 )
+		$out = 'n&auml;stan en halvtimme';
+	elseif( $timeDiff < 40 * 60 )
+		$out = 'lite mer &auml;n en halvtimme';
+	elseif( $timeDiff < 55 * 60 )
+		$out = 'n&auml;stan en timme';
+	elseif( $timeDiff < 90 * 60 )
+		$out = 'typ en timme';
+	elseif( $timeDiff < 22 * 3600 )
+		$out = round($timeDiff / 3600).' timmar';
+	elseif( $timeDiff < 30 * 3600 )
+		$out = 'ungefär en dag';
+	elseif( $timeDiff < 6 * 24 * 3600 )
+		$out = round($timeDiff / (24 * 3600)).' dagar';
+	elseif( $timeDiff < 29 * 24 * 3600 )
+		$out = round($timeDiff / (7 * 24 * 3600)).' veckor';
+	elseif( $timeDiff < 360 * 24 * 3600 )
+		$out = round($timeDiff / (30 * 24 * 3600)).' m&aring;nader';
+	else
+		$out = round($timeDiff / (365 * 24 * 3600)).' &aring;r';
+	
+	$out .= $suffix;
+	
+	if($hover)
+		$out = '<span class="date" title="'.date($hoverDateFormat, $timestamp).'">'.$out.'</span>';
+	
+	return $out;
+}
+
+function input($type, $name, $label = '', $value = '', $error = '') {
+	$prefix = $suffix = '';
+	
+	if(empty($error) && function_exists('form_error'))
+		$error = form_error($name);
+	
+	if(function_exists('set_value'))
+		$value = set_value($name, $value);
+	
+	if( ! empty($label)) {
+		if($type == 'checkbox') {
+			$prefix = "<label id='form-label-{$name}' for='form-item-{$name}'>{$label}";
+			$suffix = '</label>';
+		} else {
+			$prefix = "<label id='form-label-{$name}' for='form-item-{$name}'>{$label}</label>";
+		}
+	}
+	
+	$classes = 'form-item-'.$type;
+	
+	if( ! empty($error)) {
+		$suffix .= "<span class='form-error-description'>{$error}</span>";
+		$classes .= ' form-item-error';
+	}
+	
+	return "{$prefix}<input type='{$type}' name='{$name}' class='{$classes}' value='{$value}' id='form-item-{$name}'/>{$suffix}";
+}
+
+function textarea($name, $label = '', $value = '', $error = '') {
+	$prefix = $suffix = '';
+	
+	if(empty($error) && function_exists('form_error'))
+		$error = form_error($name);
+	
+	if(function_exists('set_value'))
+		$value = set_value($name, $value);
+	
+	if( ! empty($label))
+		$prefix = "<label id='form-label-{$name}' for='form-item-{$name}'>{$label}</label>";
+	
+	$classes = 'form-item-textarea';
+	
+	if( ! empty($error)) {
+		$suffix .= "<span class='form-error-description'>{$error}</span>";
+		$classes .= ' form-item-error';
+	}
+	
+	return "{$prefix}<textarea name='{$name}' class='{$classes}' id='form-item-{$name}'>{$value}</textarea>{$suffix}";
+}
+
+function submit($value = 'Hit it!') {
+	return input('submit', 'submit', '', $value);
+}
+
+function rqForm( $content ) {
+	if( $content != "" ) {
+		$content = str_replace( "&#59;", ";", $content );
+		$content = str_replace( "&#44;", ",", $content );
+		$content = str_replace( "&#39;", "'", $content );
+		$content = str_replace( "&#34;", "\"", $content );
+		$content = str_replace( "&lt;", "<", $content );
+		$content = str_replace( "&gt;", ">", $content );
+		$content = str_replace( "[br]", "\r\n", $content );
+	}
+	return $content;
+}

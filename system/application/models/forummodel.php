@@ -14,7 +14,7 @@ class ForumModel extends AutoModel {
 			FROM forumcategory AS fc
 			JOIN forumtopics AS ft
 				ON fc.forumcategoryid = ft.forumcategoryid
-			LEFT JOIN forumtracks AS fts 
+			LEFT JOIN forumtracks AS fts
 				ON ft.topicid = fts.topic_id AND fts.user_id = {$user_id}
 			WHERE fc.forumsecuritylevel <= {$usertype}
 			GROUP BY ft.forumcategoryid
@@ -53,8 +53,12 @@ class ForumModel extends AutoModel {
 		return ($this->db->query("SELECT fc.forumcategoryid FROM forumcategory AS fc JOIN forumtopics AS ft ON fc.forumcategoryid = ft.forumcategoryid WHERE fc.forumsecuritylevel <= {$usertype} AND ft.topicid = ".intval($id))->num_rows > 0);
 	}
 	
-	public function acl_category($id, $usertype) {
+	public function acl_category_reply($id, $usertype) {
 		return ($this->db->query("SELECT forumcategoryid FROM forumcategory WHERE forumsecuritylevel <= {$usertype} AND forumcategoryid = ".intval($id))->num_rows > 0);
+	}
+	
+	public function acl_category_new($id, $usertype) {
+		return ($this->db->query("SELECT forumcategoryid FROM forumcategory WHERE GREATEST(forumwritelevel, forumsecuritylevel) <= {$usertype} AND forumcategoryid = ".intval($id))->num_rows > 0);
 	}	
 	
 	public function create_topic(stdClass $new_topic) {
@@ -125,15 +129,17 @@ class ForumModel extends AutoModel {
 		return $this->db->query("SELECT COUNT(*) AS count FROM forumtopics WHERE forumcategoryid = {$cat_id}")->row()->count;
 	}
 	
-	public function get_topics_in_category($cat_id, $offset, $limit, $user_id = 0, $last_visit = NULL, $posts_per_page = 20) {
+	public function get_topics_in_category($cat_id, $offset, $limit, $user_id = 0, $last_visit = NULL) {
 		$topics = $this->db->query(
 			"SELECT 
 				f.topicname AS title, 
 				f.sticky, 
 				f.locked, 
 				f.topicid AS id, 
-				f.topicdate AS created, 
+				f.topicdate AS created,
+				MIN(fm.messageid) AS first_post,
 				COUNT(fm.messageid) - 1 AS replies,
+				COUNT(fm.messageid) AS posts,
 				UNIX_TIMESTAMP(MAX(fm.messagedate)) AS updated,
 				0 AS is_news, 
 				creator.username AS creator__username, 
@@ -161,7 +167,6 @@ class ForumModel extends AutoModel {
 		
 		foreach($topics as &$topic) {
 			$this->util->ormify($topic);
-			$topic->pages = ceil(($topic->replies + 1) / $posts_per_page);
 			$topic->classes = $topic->actions = array();
 			
 			if($topic->locked)
@@ -185,16 +190,15 @@ class ForumModel extends AutoModel {
 	
 	protected function add_topic_actions(&$topic) {
 		if($this->session->isAdmin()) { // || $this->user->userId() == $topic->userid) {
-			$topic->actions[] = array('title' => 'Redigera', 'href' => '/forum/edit/'.$topic->id, 'class' => 'edit');
-			$topic->actions[] = array('title' => 'Radera tråden', 'href' => '/forum/delete/'.$topic->id, 'class' => 'delete confirm');				
+			$topic->actions[] = array('title' => 'Redigera', 'href' => '/forum/edit/'.$topic->first_post, 'class' => 'edit');
+			$topic->actions[] = array('title' => 'Radera tråden', 'href' => '/forum/delete/'.$topic->first_post, 'class' => 'delete confirm');				
 		}
-	
-		if($this->session->isAdmin()) {
-			if($topic->is_news)
-				$topic->actions[] = array('title' => 'Ta bort som nyhet', 'href' => '/forum/unmarkasnews/'.$topic->id, 'class' => 'unmakenews');								
-			else
-				$topic->actions[] = array('title' => 'Gör till nyhet', 'href' => '/forum/markasnews/'.$topic->id, 'class' => 'makenews');								
-		}
+		// if($this->session->isAdmin()) {
+		// 			if($topic->is_news)
+		// 				$topic->actions[] = array('title' => 'Ta bort som nyhet', 'href' => '/forum/unmarkasnews/'.$topic->id, 'class' => 'unmakenews');								
+		// 			else
+		// 				$topic->actions[] = array('title' => 'Gör till nyhet', 'href' => '/forum/markasnews/'.$topic->id, 'class' => 'makenews');								
+		// 		}
 	}
 	
 	public function add_track($topic_id, $user_id) {
@@ -319,5 +323,13 @@ class ForumModel extends AutoModel {
 	
 	public function get_latest_news($limit = 5) {
 		return array();
+	}
+	
+	public function set_topic_flags($topic_id, Array $flags) {
+		$this->db->update('forumtopics', $flags, array('topicid' => $topic_id));
+	}
+	
+	public function set_category($topic_id, $category_id) {
+		$this->db->update('forumtopics', array('forumcategoryid' => $category_id), array('topicid' => $topic_id));
 	}
 }
