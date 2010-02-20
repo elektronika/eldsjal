@@ -270,6 +270,8 @@ thead {
 .post .right .meta {
 	margin-top: 20px;
 	text-align: right;
+	font-style: italic;
+	color: #666;
 }
 
 .post .right .body {
@@ -302,6 +304,12 @@ ul.flat {
 
 .odd {
 	background-image: url('eeeeee_op50.png');	
+}
+
+.notice {
+	color: #666;
+	font-style: italic;
+	text-align: center;
 }
 
 
