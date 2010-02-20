@@ -5,15 +5,15 @@ class Usermenu extends Widget {
 		
 		$this->items[] = (object) array('href' => '/userPresentation.php?userid='.$this->session->userid(), 'title' => 'Hem', 'class' => 'home');
 		
-		$gb_count = $this->models->alert->count_gb();
+		$gb_count = $this->db->query("SELECT COUNT(unread) AS count FROM guestbook WHERE touserid = ".$this->session->userId()." AND unread = 1")->row()->count;
 		$this->items[] = (object) array('href' => '/guestbook.php?userid='.$this->session->userid(), 'title' => 'Gästbok'.$this->counter($gb_count), 'class' => $gb_count ? 'guestbook new' : 'guestbook');
 		
-		$msg_count = $this->models->alert->count_mess();
+		$msg_count = $this->db->query("SELECT COUNT(readmessage) AS count FROM messages WHERE userid = ".$this->session->userId()." AND readmessage = 0")->row()->count;
 		$this->items[] = (object) array('href' => '/messages.php?userid='.$this->session->userid(), 'title' => 'Meddelanden'.$this->counter($msg_count), 'class' => $msg_count ? 'messages new' : 'messages');
 		
 		$this->items[] = (object) array('href' => '/diary.php?userid='.$this->session->userid(), 'title' => 'Tankar', 'class' => 'thoughts');
 		
-		$event_count = $this->models->alert->count_event();
+		$event_count = $this->db->query("SELECT COUNT(calendarnotifyid) AS count FROM calendarnotify WHERE userid = ".$this->session->userId())->row()->count;
 		$this->items[] = (object) array('href' => '/calendarView.php?mode=userList', 'title' => 'Aktiviteter'.$this->counter($event_count), 'class' => $event_count ? 'events new' : 'events');
 
 		if($this->session->hasPrivilege('useradmin')) {

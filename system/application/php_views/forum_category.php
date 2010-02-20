@@ -12,7 +12,7 @@
 	</thead>
 	<tbody>
 <?php foreach($topics as $topic): ?>
-		<tr class="<?php echo implode(' ', $topic->classes); ?>">
+		<tr class="<?php echo implode(' ', $topic->classes); ?><?php echo nth(2) ? ' odd' : ' even'; ?>">
 			<td class="topic-subject"><span class="topic-link"><a href="/forum/topic/<?php echo $topic->id; ?>"><?php echo $topic->title; ?></a> 
 			<?php echo pagespan($topic->posts, "/forum/topic/$topic->id", $posts_per_page); ?> 
 			<?php if(isset($topic->classes['new'])): ?> <a href="/forum/redirectupdated/<?php echo $topic->id; ?>"; ?>&raquo;</a><?php endif; ?></span> <?php echo actions($topic->actions, TRUE); ?></td>

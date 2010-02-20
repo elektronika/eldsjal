@@ -92,7 +92,7 @@ class MY_Session extends CI_Session {
 	}
 
 	public function lastlogin() {
-		return $this->userdata('lastlogin', 0);
+		return $this->userdata('lastlogin', time());
 	}
 
 	public function isAdmin() {
