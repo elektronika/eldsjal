@@ -7,12 +7,14 @@
 <?php echo pager($pager); ?>
 
 <?php if($user_can_reply): ?>
-<?php 
-echo form_open("/forum/topic/$topic->id"); 
-echo textarea('body', 'Inlägg');
-echo submit('Hit it!');
-?>
-</form>
+	<?php if($is_last_page): ?>
+		<?php echo form_open("/forum/topic/$topic->id").textarea('body', 'Inlägg').submit(); ?>
+		</form>
+	<?php else: ?>
+<p class="notice">Sugen på att peta in en pinne till i brasan? Bläddra till sista sidan om du vill skriva ett inlägg!</p>
+	<?php endif; ?>
+<?php else: ?>
+<p class="notice">Visst vore det kul att vara med och tjöta? Bli medlem vetja!</p>	
 <?php endif; ?>
 
 <?php end_region(); ?>

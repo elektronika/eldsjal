@@ -11,11 +11,11 @@ class Forum extends MY_Controller {
 	public function get_topic($id) {
 		$this->load->library('pagination');
 		$posts_per_page = $this->util->setting('forum_posts_per_page');
-		$cur_page = $this->arguments->get('page', 0);
+		$cur_page = (int) $this->arguments->get('page', 0);
 
-		$topic = $this->models->forum->get_topic_by_id($id);
+		$topic = $this->models->forum->get_topic_by_id((int) $id);
 		$this->view->topic = $topic;
-		$this->view->posts = $this->models->forum->get_posts_for_topic($id, $cur_page, $posts_per_page);
+		$this->view->posts = $this->models->forum->get_posts_for_topic((int) $id, $cur_page, $posts_per_page);
 		
 		if($this->session->isLoggedIn())
 			$this->models->forum->add_track($id, $this->session->userId());
@@ -28,6 +28,7 @@ class Forum extends MY_Controller {
 		));
 		$this->view->pager = $this->pagination->create_links();
 		
+		$this->view->is_last_page = (bool) ($topic->replies + 1 - $cur_page < $posts_per_page);
 		$this->view->user_can_reply = ($topic->locked != 1) && $this->acl_reply($id);
 	}
 	
