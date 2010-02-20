@@ -9,6 +9,7 @@
 | For more info visit:  http://www.php.net/error_reporting
 |
 */
+	ini_set('display_errors', TRUE);
 	error_reporting(E_ALL);
 
 /*

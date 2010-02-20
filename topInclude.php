@@ -55,15 +55,14 @@ if( isset($_SESSION['alt_style']) && $_SESSION['alt_style'] == 1 || TRUE ) {
 		<h1><span>Eldsj&auml;l.org</span></h1>
 		<div id="navbar">
 			<div id="menuItems">
-				<a href="main.php" title="Tillbaka till startsida med nyheter och statistik">Start</a>
-				<a href="forum.php" title="Diskutera, fundera och spekulera fritt med andra eldsj&auml;lar *inl&auml;gg kr&auml;ver medlemskap*">Forum</a>
-				<a href="members.php" title="H&auml;r finns alla v&aring;ra medlemmar!">Medlemmar</a>
-				<a href="gallery.php" title="Underbara bilder med anknytning till alternativkonst fr&aring;n v&aring;ra medlemmar *uppladdning kr&auml;ver medlemskap*">Galleri</a>
+				<a href="/main.php" title="Tillbaka till startsida med nyheter och statistik">Start</a>
+				<a href="/forum" title="Diskutera, fundera och spekulera fritt med andra eldsj&auml;lar *inl&auml;gg kr&auml;ver medlemskap*">Forum</a>
+				<a href="/members.php" title="H&auml;r finns alla v&aring;ra medlemmar!">Medlemmar</a>
+				<a href="/gallery.php" title="Underbara bilder med anknytning till alternativkonst fr&aring;n v&aring;ra medlemmar *uppladdning kr&auml;ver medlemskap*">Galleri</a>
 				<a href="http://www.cby.se/" title="Camp Burn Yourselfs egna sida!" target="_blank">C.B.Y</a>
-				<a href="board.php" title="Information om f&ouml;reningen">F&ouml;reningen</a>
-				<a style="font-weight: bold" href="/betainfo/" title="Beta-versionen utav nya eldsjal.org">BETA</a>
+				<a href="/board.php" title="Information om f&ouml;reningen">F&ouml;reningen</a>
 			</div>
-			<form id="quicksearch" action = "members.php?mode=listMembers" method = "post"> 
+			<form id="quicksearch" action = "/members.php?mode=listMembers" method = "post"> 
 				<div>
 				<input type = "text" class = "formButton" name = "username" id = "quicksearch-username"/> 
 				<input type = "image" src = "images/icons/arrows.gif" name = "search" id = "search" class = "proceed"/> 
