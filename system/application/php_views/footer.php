@@ -6,7 +6,7 @@
 		</div>
 		<div class="float-right">
 				Senast uppdaterad: <?php echo $revision_date; ?><br/>
-				eldsjal.org <a href="development.php"><?php echo $revision_name; ?></a>
+				eldsjal.org <a href="/development"><?php echo $revision_name; ?></a>
 		</div>
 		<div id="footer-text">
 			Det &auml;r ej till&aring;tet att kopiera, sprida eller vidaref&ouml;rmedla information fr&aring;n Eldsj&auml;l	F&ouml;reningen Eldsj&auml;l  (C) 2005 - <?php echo date('Y');?><br>

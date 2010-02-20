@@ -11,8 +11,8 @@ Class view {
 		$this->data[$name] = $value;
 	}
 	
-	public function display($template) {
+	public function display() {
 		extract($this->data);
-		require($this->template_folder.$template.'.php');
+		require($this->template_folder.$this->data['template'].'.php');
 	}
 }
