@@ -28,10 +28,16 @@ class Forum extends MY_Controller {
 		));
 		$this->view->pager = $this->pagination->create_links();
 		
-		$this->view->user_can_reply = ($topic->locked != 1);
+		$this->view->user_can_reply = ($topic->locked != 1) && $this->acl_reply($id);
 	}
 	
+	public function acl_reply($id) {
+		return $this->session->isloggedin() && $this->models->forum->acl_topic($id, $this->session->usertype());
+	}
+
 	public function post_topic($id) {
+		if( ! $this->session->isloggedin())
+			die('Permission denied');
 		$this->form_validation->set_rules('body', 'Inlägg', 'trim|xss_clean|required');
 		$this->form_validation->set_message('required', 'Men du, är det så bra med tomma inlägg, egentligen?');
 		
@@ -67,7 +73,7 @@ class Forum extends MY_Controller {
 		$this->view->pager = $this->pagination->create_links();
 		$this->view->posts_per_page = $this->session->setting('forum_posts_per_page');
 		$this->view->category = $this->models->forum->get_category_by_id($id);
-		$this->view->user_can_post = $this->models->forum->acl_category_new($id, $this->session->usertype());
+		$this->view->user_can_post = $this->acl_new($id);
 	}
 	
 	public function get_new($id) {
@@ -94,7 +100,7 @@ class Forum extends MY_Controller {
 	}
 	
 	public function acl_new($id) {
-		return $this->models->forum->acl_category_new($id, $this->session->usertype());
+		return $this->session->isloggedin() && $this->models->forum->acl_category_new($id, $this->session->usertype());
 	}
 	
 	public function get_edit($post_id) {

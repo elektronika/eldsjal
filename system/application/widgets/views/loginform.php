@@ -1,17 +1,13 @@
 <h3>Hoppa In</h3>
-<form id="login" action="login.php" method="post">
+<form id="login" action="/login.php" method="post">
 	Användarnamn<br/>
-	<input type="text" tabindex="1" name="username" value="<?php echo $username; ?>" id="username">
+	<input type="text" class="form-item-text" tabindex="1" name="username" value="<?php echo $username; ?>" id="username">
 	Lösenord:<br/>
-	<input type="password" tabindex="2" name="password" id="password">
-	<img src="images/icons/kort.gif"/>
-	<input type="submit" value="LOGGA IN" name="submit" id="submit">
-	</div>
+	<input type="password" class="form-item-text" tabindex="2" name="password" id="password">
+	<input class="form-item-submit" type="submit" value="JA!" name="submit" id="submit">	
 	
-	<div align="right" class="small">kom ihåg mig
-	<input type="checkbox" checked="checked" value="1" name="cookie">
+	<label for="cookie"><input type="checkbox" checked="checked" value="1" name="cookie">kom ihåg mig</label>
 	<br/>
 	<a href="register.php">Bli medlem &raquo;</a><br>
 	<a href="retrievePassword.php">Tappat lösen? &raquo;</a>
-	</div>
 </form>

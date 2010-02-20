@@ -32,7 +32,7 @@ class MY_Controller extends Controller {
 			// $this->view->whatsup = $this->models->whatsup->get();
 			$this->view->widgets = array('left' => array('usermenu', 'rightnow', 'calendar', 'randomwisdom', 'latestthoughts', 'latestlogins', 'latestimages'));
 		} else {
-			$this->view->widgets = array('left' => array('loginform'));
+			$this->view->widgets = array('left' => array('loginform', 'calendar', 'randomwisdom', 'latestthoughts', 'latestlogins', 'latestimages'));
 		}
 	}
 	/**
