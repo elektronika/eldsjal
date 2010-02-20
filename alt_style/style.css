@@ -544,6 +544,10 @@ label {
 	width: 440px;
 }
 
+#login .form-item-text {
+	width: 115px;
+}
+
 input:hover, textarea:hover {
 	background: #eee;
 }
