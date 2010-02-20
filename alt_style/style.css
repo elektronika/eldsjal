@@ -234,6 +234,11 @@ thead {
 	background-image: url('icons/folder_add.png');
 }
 
+.category-title span {
+	font-weight: normal;
+	color: #333;
+}
+
 .category-updated {
 	white-space: nowrap;
 }
