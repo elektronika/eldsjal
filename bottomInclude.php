@@ -17,7 +17,7 @@ $onlineCount = current($conn->execute('select count(*) from users where online =
 		<div class="float-right">
 			<?php if(file_exists('revision')): ?>
 				Senast uppdaterad: <?php echo date('d/m/y, H:i', filemtime('revision')); ?><br/>
-				eldsjal.org <a href="development.php">rev. <?php require('revision');?></a>
+				eldsjal.org <a href="/development">rev. <?php require('revision');?></a>
 			<?php else: ?>
 				DEV
 			<?php endif; ?>
