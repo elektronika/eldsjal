@@ -226,4 +226,9 @@ class CI_Util {
 	public function assureTimestamp($timestamp) {
 		return (is_numeric($timestamp) ? $timestamp : strtotime($timestamp));
 	}
+	
+	public function trail($text, $security = 0) {
+		if($this->CI->session->isloggedin())
+			$this->CI->models->whatsup->set($this->CI->session->username().' '.$text, $this->CI->session->userid(), 'random', $security);
+	}
 }

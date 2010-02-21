@@ -1,6 +1,7 @@
 <?php
 class Forum extends MY_Controller {	
 	public function get_index() {
+		$this->util->trail('spanar över forumkategorierna');
 		$this->view->categories = $this->models->forum->get_categories_for_usertype($this->session->usertype(), $this->session->userId(), $this->session->lastlogin());
 	}
 	
@@ -14,6 +15,7 @@ class Forum extends MY_Controller {
 		$cur_page = (int) $this->arguments->get('page', 0);
 
 		$topic = $this->models->forum->get_topic_by_id((int) $id);
+		$this->util->trail('läser tråden '.$topic->title, $topic->forumSecurityLevel);
 		$this->view->topic = $topic;
 		$this->view->posts = $this->models->forum->get_posts_for_topic((int) $id, $cur_page, $posts_per_page);
 		
@@ -73,13 +75,16 @@ class Forum extends MY_Controller {
 		));
 		$this->view->pager = $this->pagination->create_links();
 		$this->view->posts_per_page = $this->session->setting('forum_posts_per_page');
-		$this->view->category = $this->models->forum->get_category_by_id($id);
+		$category = $this->models->forum->get_category_by_id($id);
+		$this->view->category = $category;
+		$this->util->trail('kikar runt i forumkategorin '.$category->forumCategoryName, $category->forumSecurityLevel);
 		$this->view->user_can_post = $this->acl_new($id);
 	}
 	
 	public function get_new($id) {
 		$this->view->category = $this->models->forum->get_category_by_id($id);
 		$this->view->template = 'forum_new_topic';
+		$this->util->trail('är på gång att starta en ny tråd. Håll i dig!');
 	}
 	
 	public function post_new($id) {
@@ -112,6 +117,7 @@ class Forum extends MY_Controller {
 		$this->view->categories = $this->models->forum->get_categories_for_usertype_assoc($this->session->usertype());	
 		$this->view->form_action = '/forum/edit/'.$post_id;				
 		$this->view->is_moderator = $this->session->isAdmin();
+		$this->util->trail('ångrar sig, och redigerar ett inlägg');
 	}
 	
 	public function post_edit($post_id) {
@@ -152,6 +158,7 @@ class Forum extends MY_Controller {
 		$this->view->template = 'confirm';
 		$this->view->message = 'Är du säker på att du vill ta bort inlägget?';
 		$this->view->post_id = $post_id;
+		$this->util->trail('funderar på att ta bort något! :-o');
 	}
 	
 	public function post_delete($post_id) {
