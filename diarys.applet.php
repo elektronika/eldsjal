@@ -19,7 +19,7 @@ foreach( $diaryApplets as $diaryApplet ) {
 			$image = "uploads/userImages/tn_".$diaryApplet['userid'].".jpg";
 		}
 
-		print "<a class=\"a2\" onMouseOver=\"return overlib('<div class=miniPicture><img src=".$image." height=45></div><div class=miniPictureText>".rqJS( $diaryApplet['diarytopic'] )."<br>Skrivet av: ".rqJS( $diaryApplet['username'] )."<br>".timeSince(strtotime($diaryApplet['diarydate']), ' sedan', FALSE)."</div>');\" onMouseOut=\"return nd();\" href=\"diary.php?mode=readDiary&userid=".$diaryApplet['userid']."&diaryid=".$diaryApplet['diaryid']."\">".$topic."</a><br>";
+		print "<a class=\"a2\" onMouseOver=\"return overlib('<div class=miniPicture><img src=".$image." height=45></div><div class=miniPictureText>".rqJS( $diaryApplet['diarytopic'] )."<br>Skrivet av: ".rqJS( $diaryApplet['username'] )."<br>".timeSince(strtotime($diaryApplet['diarydate']), ' sedan', FALSE)."</div>');\" onMouseOut=\"return nd();\" href=\"/thoughts/view/".$diaryApplet['diaryid']."\">".$topic."</a><br>";
 	}
 	else {
 		print "<a class=\"a2\" href=\"javaScript:window.alert('Den h&auml;r funktionen f&aring;r du tillg&aring;ng\\ntill n&auml;r du registrerar dig och blir medlem, smutt va?');\">".$topic."</a><br>";

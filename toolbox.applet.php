@@ -101,7 +101,7 @@ if( $_SESSION['userid'] != 0 || $_SESSION['userid'] != "" ) {
 		 <a class="a2" href="guestbook.php?userid=<?php   echo $_SESSION['userid'];?>"><img src="<?php   echo $guestBookImage;?>" border="0" height="10" width="13"> G&auml;stbok <?php   echo $entrys;?>&nbsp;&nbsp;</a><br>
 		 <a class="a2" href="messages.php?userid=<?php   echo $_SESSION['userid'];?>"><img src="<?php   echo $MessageImage;?>" border="0"> Meddelanden <?php   echo $messageentrys;?></a><br>
 		 <a class="a2" href="friends.php?userid=<?php   echo $_SESSION['userid'];?>"><img src="<?php   echo $friendsImage;?>" border="0" height="10" width="13"> Slattar</a><br>
-		 <a class="a2" href="diary.php?userid=<?php   echo $_SESSION['userid'];?>"><img src="images/icons/diary.gif" border="0" height="10" width="13"> Tankar</a><br>
+		 <a class="a2" href="/thoughts"><img src="images/icons/diary.gif" border="0" height="10" width="13"> Tankar</a><br>
 		 <a class="a2" href="calendarView.php?mode=userList"><img src="<?php   echo $notifyImage;?>" border="0" height="10" width="13"> Aktiviteter <?php
 	/*echo $notifications;*/?></a><br>
 		<?php 

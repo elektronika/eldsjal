@@ -21,8 +21,14 @@ th {
 	font-size: 10px;
 }
 
-h3 {
+h3, h2 {
 	margin-bottom: 0;
+}
+
+h2 {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 3px;
+	padding-left: 3px;
 }
 
 #wrap {
@@ -267,7 +273,7 @@ thead {
 }
 
 .post .right {
-	width: 468px;
+	width: 463px;
 	float: right;
 	position: relative;
 	left: -1px;
@@ -325,6 +331,31 @@ ul.flat {
 	text-align: center;
 }
 
+.teaser h3 {
+	margin-top: 0;
+}
+
+.sublinks {
+	margin: 0;
+	margin-top: 3px;
+	margin-bottom: 10px;
+	padding: 0;
+	padding-left: 3px;
+}
+
+.sublinks li {
+	display: inline;
+	padding-right: 10px;
+}
+
+.sublinks a {
+	color: #555;
+	font-weight: normal;
+}
+
+.list-page .teaser {
+	padding: 10px;
+}
 
 /* Actions, med ikoner */
 

@@ -106,7 +106,7 @@ if(( $user_year == 0 ) ) {
 //end if
 //response.Redirect("userPresentation.php?userid=" & session("userid"))
 
-header( "Location: "."main.php" );
+header( "Location: "."/main" );
 $conn->close( );
 ?>
 	</body>

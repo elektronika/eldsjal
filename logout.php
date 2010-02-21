@@ -37,7 +37,7 @@ print "Loggar ut!!!";
 	session_destroy( );
 // }
 if( $_GET['redirect'] == "" ) {
-	header( "Location: "."main.php?message=Utloggad och klar!" );
+	header( "Location: "."/main?message=Utloggad och klar!" );
 }
 else {
 	header( "Location: ".$_GET['redirect'] );

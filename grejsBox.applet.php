@@ -36,7 +36,7 @@ if( $hasDiary ) {
 	}
 	else {
 		?>
-		<a class="a2" href="diary.php?userid=<?php     echo $_GET['userid'];?>"><IMG SRC="images/icons/ruta.gif" border="0"> Tankar</a><br> 
+		<a class="a2" href="/thoughts/user/<?php     echo $_GET['userid'];?>"><IMG SRC="images/icons/ruta.gif" border="0"> Tankar</a><br> 
 		<?php
 	}
 }
