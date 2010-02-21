@@ -143,15 +143,15 @@ class Forum extends MY_Controller {
 			if($post_is_first) {
 				$this->models->forum->rename_topic($post->topic_id, $this->input->post('title'));
 				if($this->session->isAdmin()) {
-					$this->models->forum->set_category($post->topic_id, $this->input->post('category'));
+					$this->models->forum->set_category($post->topic_id,(int) $this->input->post('category'));
 					$this->models->forum->set_topic_flags($post->topic_id, array(
 						'sticky' => (int) $this->input->post('sticky'),
 						'locked' => (int) $this->input->post('locked')
 					));
 				}
 			}
-			
-			$this->models->forum->update_post($post_id, $this->input->post('body'));
+			if($post->body != $this->input->post('body'))
+				$this->models->forum->update_post($post_id, $this->input->post('body'));
 			
 			$this->redirect('/forum/topic/'.$post->topic_id);
 		}
@@ -171,8 +171,8 @@ class Forum extends MY_Controller {
 	}
 	
 	public function post_delete($post_id) {
-		$topic_id = $this->models->forum->topic_id_for_post($post_id);
-		$this->models->forum->delete_post($post_id);
+		$topic_id = $this->models->forum->topic_id_for_post((int) $post_id);
+		$this->models->forum->delete_post((int) $post_id);
 		$this->session->message('Inlägg raderat');
 		$this->redirect('/forum/topic/'.$topic_id);
 		/*
