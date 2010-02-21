@@ -4,7 +4,7 @@ class Main extends MY_Controller {
 		if($this->session->isloggedin())
 			$this->view->widgets = array('left' => array('usermenu', 'rightnow', 'latestlogins', 'latestthoughts', 'latestimages'));
 		else
-			$this->view->widgets = array('left' => array('login', 'latestlogins', 'latestthoughts', 'latestimages'));
+			$this->view->widgets = array('left' => array('loginform', 'latestlogins', 'latestthoughts', 'latestimages'));
 		
 		$this->view->widgets['right'] = array('stats', 'infobox', 'calendar', 'randomwisdom');
 		$this->view->frontimage = $this->db->query("select imageid,filetype, imagename, width, height from images where private = 0 and approved = 1 order by rand() limit 1")->row();
