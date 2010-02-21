@@ -3,7 +3,7 @@
 <html>
 <head>
 	<title>eldsjäl - <?php echo isset($page_title) ? $page_title : 'communityn för värme och alternativkonst'; ?></title>
-	<link rel="stylesheet" href="/alt_style/style.css?4" type="text/css"/>
+	<link rel="stylesheet" href="/alt_style/style.css?<?php echo filemtime('alt_style/style.css');?>" type="text/css"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="Expires" content="<?php echo time();?>"/>
 	<meta http-equiv="Pragma" content="no-cache"/>
