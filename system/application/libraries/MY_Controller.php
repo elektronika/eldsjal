@@ -24,7 +24,9 @@ class MY_Controller extends Controller {
 		$this->view->usersonline = $this->util->onlineCount();
 		if($this->session->isLoggedIn()) {
 			$this->view->isloggedin = TRUE;
-			$this->view->widgets = array('left' => array('usermenu', 'rightnow', 'calendar', 'randomwisdom', 'latestthoughts', 'latestlogins', 'latestimages'));
+			$this->view->widgets = array(
+				'left' => array('usermenu', 'rightnow', 'calendar', 'randomwisdom', 'latestthoughts', 'latestlogins', 'latestimages'),
+				'right' => array());
 		} else {
 			$this->view->widgets = array('left' => array('loginform', 'calendar', 'randomwisdom', 'latestthoughts', 'latestlogins', 'latestimages'));
 		}

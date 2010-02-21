@@ -11,6 +11,10 @@ Class view {
 		$this->data[$name] = $value;
 	}
 	
+	public function &__get($name) {
+		return $this->data[$name];
+	}
+	
 	public function display() {
 		extract($this->data);
 		require($this->template_folder.$this->data['template'].'.php');

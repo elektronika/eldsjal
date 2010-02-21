@@ -4,12 +4,12 @@
 <head>
 	<title>eldsj&auml;l - communityn f&ouml;r v&auml;rme och alternativkonst</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<meta http-equiv="Refresh" content="10;url=main.php" />
+	<meta http-equiv="Refresh" content="10;url=/main" />
 	<meta name="verify-v1" content="XbqXT+XFPnPA96AFg1m4i1AdFaAu21STr6ZqnMHXHrA=" />
 </head>
 <body topmargin="0" leftmargin="0" marginwidth="0" marginheight="0" bgcolor="#1A0601" >
    	<div align="center">
-   		<a href="main.php"><img src="eldsjal2.jpg" width="800" height="600" border="0"/></a>
+   		<a href="/main"><img src="eldsjal2.jpg" width="800" height="600" border="0"/></a>
    	</div>
    	<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
    	<script type="text/javascript">
