@@ -2,7 +2,7 @@
 <div id="footer-wrap">
 	<div id="footer">
 		<div class="float-left">
-			<a href = "members.php?mode=showOnline" class = "a2" ><?php echo $usersonline; ?> eldsjälar är online</a><br/>
+			<a href = "/members.php?mode=showOnline" class = "a2" ><?php echo $usersonline; ?> eldsjälar är online</a><br/>
 		</div>
 		<div class="float-right">
 				Senast uppdaterad: <?php echo $revision_date; ?><br/>

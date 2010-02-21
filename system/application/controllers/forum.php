@@ -3,6 +3,7 @@ class Forum extends MY_Controller {
 	public function get_index() {
 		$this->util->trail('spanar över forumkategorierna');
 		$this->view->categories = $this->models->forum->get_categories_for_usertype($this->session->usertype(), $this->session->userId(), $this->session->lastlogin());
+		$this->view->page_title = 'Forum';
 	}
 	
 	public function acl_topic($id) {
@@ -28,6 +29,7 @@ class Forum extends MY_Controller {
 			'total_rows' => $topic->replies + 1,
 			'cur_page' => $cur_page
 		));
+		$this->view->page_title = $topic->title;
 		$this->view->pager = $this->pagination->create_links();
 		$this->view->cur_page = $cur_page;
 		$this->view->is_last_page = (bool) ($topic->replies + 1 - $cur_page < $posts_per_page);
@@ -78,13 +80,15 @@ class Forum extends MY_Controller {
 		$category = $this->models->forum->get_category_by_id($id);
 		$this->view->category = $category;
 		$this->util->trail('kikar runt i forumkategorin '.$category->forumCategoryName, $category->forumSecurityLevel);
+		$this->view->page_title = $category->forumCategoryName;
 		$this->view->user_can_post = $this->acl_new($id);
 	}
 	
 	public function get_new($id) {
 		$this->view->category = $this->models->forum->get_category_by_id($id);
 		$this->view->template = 'forum_new_topic';
-		$this->util->trail('är på gång att starta en ny tråd. Håll i dig!');
+		$this->util->trail('är på gång att starta en ny tråd i forumet. Håll i dig!');
+		$this->view->page_title = 'Ny forumtråd';
 	}
 	
 	public function post_new($id) {
@@ -118,6 +122,7 @@ class Forum extends MY_Controller {
 		$this->view->form_action = '/forum/edit/'.$post_id;				
 		$this->view->is_moderator = $this->session->isAdmin();
 		$this->util->trail('ångrar sig, och redigerar ett inlägg');
+		$this->view->page_title = 'Redigera inlägg';
 	}
 	
 	public function post_edit($post_id) {
@@ -159,6 +164,7 @@ class Forum extends MY_Controller {
 		$this->view->message = 'Är du säker på att du vill ta bort inlägget?';
 		$this->view->post_id = $post_id;
 		$this->util->trail('funderar på att ta bort något! :-o');
+		$this->view->page_title = 'Radera inlägg';
 	}
 	
 	public function post_delete($post_id) {
