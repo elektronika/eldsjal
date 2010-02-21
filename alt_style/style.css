@@ -532,6 +532,10 @@ ul.flat {
 	background-image: url('icons/world.png');
 }
 
+.usermenu .admin-settings {
+	background-image: url('icons/application_form_edit.png');
+}
+
 /* Extramarginalen för att separera delar av menyn */
 .usermenu .settings, .usermenu .fadder, .usermenu .wisdom {
 	margin-top: 18px;
@@ -645,4 +649,17 @@ textarea#form-item-body {
 
 .form-item-error {
 	border: 1px solid red;
+}
+
+/* Admin-delen */
+.admin-settings-user_id {
+	width: 30px;
+}
+
+.admin-settings-key {
+	width: 150px;
+}
+
+.admin-settings-value {
+	width: 380px;
 }

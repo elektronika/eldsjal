@@ -20,13 +20,13 @@ if( $_SESSION['userid'] != 0 || $_SESSION['userid'] != "" ) {
 		////	guestBook.moveNext
 		//	wend
 
-		$sql = "select newsid from newsnotify where userid = ".$_SESSION['userid'];
-		$newNews = $conn->execute( $sql );
+		// $sql = "select newsid from newsnotify where userid = ".$_SESSION['userid'];
+		// 		$newNews = $conn->execute( $sql );
 		$newsImage = "";
-		if( count( $newNews ) > 0 ) {
-			$newsImage = $newNews['newsid'];
-		}
-		$newNews = null;
+		// if( count( $newNews ) > 0 ) {
+		// 		$newsImage = $newNews['newsid'];
+		// 	}
+		// $newNews = null;
 		$sql = "select accepted from friends where user_id = ".$_SESSION['userid']." and accepted = 0";
 		$newFriends = $conn->execute( $sql );
 		$friendsImage = "images/icons/friends.gif";
