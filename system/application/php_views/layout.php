@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title>eldsjäl - <?php echo isset($page_title) ? $page_title : 'communityn för värme och alternativkonst'; ?></title>
+	<title>eldsjäl - <?php echo isset($page_title) ? $page_title : $slogan; ?></title>
 	<link rel="stylesheet" href="/alt_style/style.css?<?php echo filemtime('alt_style/style.css');?>" type="text/css"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="Expires" content="<?php echo time();?>"/>

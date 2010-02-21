@@ -6,22 +6,6 @@ class CI_Util {
 	public function __construct() {
 		$this->CI =& get_instance();
 		log_message('debug', "Util Class Initialized");
-		
-		// Den här borde laddas från databasen tycker jag. Eller iaf inte ligga i den här klassen. *morr*
-		$this->settings = array(
-			'topics_per_page' => 20,
-			'images_per_page' => 40,
-			'thoughts_per_page' => 20,
-			'guestbook_posts_per_page' => 20,
-			'gallery_folder' => './uploads/galleryImages/',
-			'original_image_folder' => './original_images/',
-			'gallery_url' => '/uploads/galleryImages/',
-			'default_image_extension' => 'jpg',
-			'event_image_folder' => './uploads/eventImages/',
-			'user_image_folder' => './uploads/userImages/',
-			'original_user_image_folder' => './original_images/users/',
-			'forum_posts_per_page' => 20
-		);
 	}
 	
 	public function timestamp_start($year, $month = 1, $day = 1) {
@@ -70,7 +54,7 @@ class CI_Util {
 	 * @author Johnny Karhinen
 	 */
 	public function setting($key) {
-		return $this->settings[$key];
+		return $this->CI->settings->get($key);
 	}
 	
 	/**

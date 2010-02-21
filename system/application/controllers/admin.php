@@ -1,12 +1,7 @@
 <?php
-class Admin extends Controller {
-	public function __construct() {
-		parent::Controller();
-		$this->output->enable_profiler(TRUE);
-	}
-
+class Admin extends MY_Controller {
 	public function acl_controller() {
-		return $this->user->isAdmin();
+		return $this->session->isAdmin();
 	}
 	
 	public function get_generate() {
@@ -55,5 +50,17 @@ class Admin extends Controller {
 		print '<pre>';
 		print_r($this->db->query('SHOW FIELDS FROM '.$table)->result());
 		print '</pre>';
+	}
+	
+	public function get_settings() {
+		$this->view->settings = $this->settings->get_all();
+	}
+	
+	public function post_settings() {
+		$this->settings->delete_all();
+		foreach($_POST['settings'] as $setting)
+			if( ! empty($setting['key']))
+				$this->settings->set($setting['key'], $setting['value'], $setting['user_id']);
+		$this->redirect('/admin/settings');
 	}
 }

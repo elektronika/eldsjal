@@ -10,6 +10,7 @@ class MY_Controller extends Controller {
 			$this->show_profiler = TRUE;
 			
 		$this->view->template = $this->router->fetch_class().'_'.str_replace(array('get_', 'post_'), '', $this->router->fetch_method());
+		$this->view->slogan = $this->settings->get('slogan');
 		
 		// Borde egentligen vara en widget
 		if(file_exists('revision')) {
