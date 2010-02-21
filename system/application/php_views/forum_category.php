@@ -1,6 +1,6 @@
 <?php region('content'); ?>
-<h2><span class="float-left"><a href="/forum">Forum</a> &raquo; <?php echo $category->forumCategoryName; ?></span> <?php if($user_can_post): ?><span class="float-right"><a href="/forum/new/<?php echo $category->forumCategoryId; ?>">Ny tråd</a></span><?php endif; ?></h2>
-<span class="clear">&nbsp;</span><br/>
+<h2><a href="/forum">Forum</a> &raquo; <?php echo $category->forumCategoryName; ?></h2>
+<?php if(isset($sublinks)) echo sublinks($sublinks); ?>
 <table id="forum-topics">
 	<thead>
 		<tr>

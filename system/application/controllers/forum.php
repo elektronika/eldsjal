@@ -81,7 +81,10 @@ class Forum extends MY_Controller {
 		$this->view->category = $category;
 		$this->util->trail('kikar runt i forumkategorin '.$category->forumCategoryName, $category->forumSecurityLevel);
 		$this->view->page_title = $category->forumCategoryName;
-		$this->view->user_can_post = $this->acl_new($id);
+		if($this->acl_new($id))
+			$this->view->sublinks = array(
+				array('href' => '/forum/new/'.$category->forumCategoryId, 'title' => 'Ny tråd')
+			);
 	}
 	
 	public function get_new($id) {
