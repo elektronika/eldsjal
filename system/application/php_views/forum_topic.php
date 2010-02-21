@@ -8,7 +8,7 @@
 
 <?php if($user_can_reply): ?>
 	<?php if($is_last_page): ?>
-		<?php echo form_open("/forum/topic/$topic->id").textarea('body', 'Inlägg').submit(); ?>
+		<?php echo form_open("/forum/topic/$topic->id/page:$cur_page").textarea('body', 'Inlägg').submit(); ?>
 		</form>
 	<?php else: ?>
 <p class="notice">Sugen på att peta in en pinne till i brasan? Bläddra till sista sidan om du vill skriva ett inlägg!</p>

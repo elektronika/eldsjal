@@ -116,13 +116,17 @@ class ForumModel extends AutoModel {
 	
 	// Ska byggas bort!
 	public function reindex_thread($id, $reindex_category = TRUE) {
-		$post_count = $this->db->query("SELECT COUNT(*) AS count FROM forummessages WHERE topicid = {$id}")->row()->count;
+		$post_count = $this->count_posts_in_topic($id);
 		$latest_post = $this->db->query("SELECT messagedate FROM forummessages WHERE topicid = {$id} ORDER BY messagedate DESC LIMIT 1")->row()->messagedate;
 		$latest_poster = $this->db->query("SELECT posterid FROM forummessages WHERE topicid = {$id} ORDER BY messagedate DESC LIMIT 1")->row()->posterid;
 		$this->db->update('forumtopics', array('totalentrys' => $post_count, 'latestentry' => $latest_post, 'latestentryby' => $latest_poster), array('topicid' => $id));
 		$category_id = $this->db->query("SELECT forumCategoryID AS id FROM forumtopics WHERE topicid = {$id}")->row()->id;
 		if($reindex_category)
 			$this->reindex_category($category_id);
+	}
+	
+	public function count_posts_in_topic($topic_id) {
+		return $this->db->query("SELECT COUNT(*) AS count FROM forummessages WHERE topicid = {$topic_id}")->row()->count;
 	}
 	
 	public function count_topics_in_category($cat_id) {
@@ -193,12 +197,6 @@ class ForumModel extends AutoModel {
 			$topic->actions[] = array('title' => 'Redigera', 'href' => '/forum/edit/'.$topic->first_post, 'class' => 'edit');
 			$topic->actions[] = array('title' => 'Radera tråden', 'href' => '/forum/delete/'.$topic->first_post, 'class' => 'delete confirm');				
 		}
-		// if($this->session->isAdmin()) {
-		// 			if($topic->is_news)
-		// 				$topic->actions[] = array('title' => 'Ta bort som nyhet', 'href' => '/forum/unmarkasnews/'.$topic->id, 'class' => 'unmakenews');								
-		// 			else
-		// 				$topic->actions[] = array('title' => 'Gör till nyhet', 'href' => '/forum/markasnews/'.$topic->id, 'class' => 'makenews');								
-		// 		}
 	}
 	
 	public function add_track($topic_id, $user_id) {
