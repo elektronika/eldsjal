@@ -13,25 +13,29 @@ class ThoughtModel extends AutoModel {
 	}
 	
 	public function get_todays_thought($userid) {
-		return $this->db
-			->select('diarytopic AS title, diary AS body')
+		$thought = $this->db
+			->select('diarytopic AS title, diary AS body, diaryid AS id')
 			->where('date(diarydate) = date(now())', NULL, FALSE)
 			->where('userid', $this->session->userId())
 			->get('diary')
 			->row();
+		return $thought;
 	}
 	
 	public function set_todays_thought(stdClass $new_thought, $userid) {
 		$thought_exists = $this->get_todays_thought($this->session->userId());
 		
-		$new_thought->userid = $userid;
-		$new_thought->diarydate = $this->util->mysql_date();
+		$thought = new stdClass();
+		$thought->diaryTopic = $new_thought->title;
+		$thought->diary = $new_thought->body;
+		$thought->userid = $userid;
+		$thought->diarydate = $this->util->mysql_date();
 			
 		if($thought_exists) {
-			$this->db->update('diary', $new_thought, array('diaryid' => $thought_exists->diaryId));
-			$thought_id = $thought_exists->diaryId;
+			$this->db->update('diary', $thought, array('diaryid' => $thought_exists->id));
+			$thought_id = $thought_exists->id;
 		} else {
-			$this->db->insert('diary', $new_thought);
+			$this->db->insert('diary', $thought);
 			$thought_id = $this->db->insert_id();
 		}
 		

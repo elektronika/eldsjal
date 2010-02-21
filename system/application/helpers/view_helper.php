@@ -61,7 +61,7 @@ function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
 		return '<a href="'.$full_url.'">'.$link.'</a>';
 	}
 
-	function Dwoo_Plugin_remove_tags( Dwoo $dwoo, $content ) {
+	function remove_tags( $content ) {
 			if( $content != "" ) {
 				$content = str_replace( "&#59;", ";", $content );
 				$content = str_replace( "&#44;", ",", $content );
@@ -102,7 +102,7 @@ function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
 			return $CI->util->shortdate($timestamp);
 		}
 		
-		function Dwoo_Plugin_truncate(Dwoo $dwoo, $value, $length=80, $etc='...', $break=false, $middle=false)
+		function truncate( $value, $length=80, $etc='...', $break=false, $middle=false)
 		{
 			if ($length == 0) {
 				return '';
@@ -209,13 +209,15 @@ function slugify( $string ) {
 	return get_instance()->util->slugify($string);
 }
 	
-function actions(Array $actions, $icons_only = FALSE) {
-	$icon_class = $icons_only ? ' icons-only' : '';
-	$out = '<div class="actions'.$icon_class.'">';
-	foreach($actions as $action)
-		$out .= "<a class='action action-{$action['class']}' title='{$action['title']}' href='{$action['href']}'>&nbsp;<span>{$action['title']}</span></a>";
-	$out .= '</div>';
-	return $out;
+function actions($actions = NULL, $icons_only = FALSE) {
+	if( ! is_null($actions) && is_array($actions)) {
+		$icon_class = $icons_only ? ' icons-only' : '';
+		$out = '<div class="actions'.$icon_class.'">';
+		foreach($actions as $action)
+			$out .= "<a class='action action-{$action['class']}' title='{$action['title']}' href='{$action['href']}'>&nbsp;<span>{$action['title']}</span></a>";
+		$out .= '</div>';
+		return $out;
+	}
 }
 
 function userlink($user) {
@@ -256,7 +258,10 @@ function userimage($user) {
 	return "<img class='userimage' src='/uploads/userImages/tn_{$user->userid}.jpg' alt='{$user->username}'/>";
 }
 
-function post($post) { ?>
+function post($post) { 
+	foreach(array('id', 'actions') as $element)
+		isset_fallback($post, $element, 0);
+	?>
 	<div class="post<?php echo nth() ? ' odd' : ' even'; ?>"><?php if($post->id): ?><a name="post-<?php echo $post->id; ?>"></a><?php endif; ?>
 		<div class="left">
 			<?php echo userimage($post); ?>
@@ -433,4 +438,52 @@ function rqForm( $content ) {
 		$content = str_replace( "[br]", "\r\n", $content );
 	}
 	return $content;
+}
+
+function isset_fallback(&$object, $element, $fallback) {
+	if( ! isset($object->$element))
+		$object->$element = $fallback;
+}
+
+function teaser($data, $truncate = TRUE) { 
+	foreach(array('updated', 'creator', 'created', 'subtitle', 'userid') as $element)
+		isset_fallback($data, $element, 0);
+	isset_fallback($data, 'actions', array());
+	?>
+	<div class="teaser">
+	<?php if(isset($data->title)): ?>
+		<h3 class="title"><?php if($data->href): ?><a href="<?php echo $data->href; ?>"><?php echo $data->title; ?></a><?php else: ?><?php echo $data->title; ?><?php endif; ?>
+			<?php if($data->userid || $data->created || $data->poster || $data->updated): ?>
+				<span>
+					<?php if($data->created >= $data->updated): ?> skapades <?php echo fuzzytime($data->created); ?><?php if($data->creator): ?> av <?php echo userlink($data->creator); ?><?php endif; ?>
+					<?php elseif($data->updated > $data->created): ?> uppdaterades <?php echo fuzzytime($data->updated); ?> <?php if($data->updater): ?> av <?php echo userlink($data->updater); ?><?php endif; ?><?php endif; ?>
+					<?php if($data->userid): ?> av <?php echo userlink($data); ?><?php endif; ?>
+				</span>
+			<?php endif; ?>
+		</h3>
+		<?php if($data->subtitle): ?>
+			<h4 class="subtitle"><?php echo $data->subtitle; ?></h4>
+		<?php endif; ?>
+		<?php if($data->body): ?>
+			<div class="teaser-text body">
+			<?php if($truncate): ?>
+				<?php echo truncate(remove_tags($data->body), 100); ?>
+			<?php else: ?>
+				<?php echo rq($data->body); ?>
+			<?php endif; ?>
+			<?php echo actions($data->actions); ?>
+			</div>
+		<?php endif; ?>
+	<?php endif; ?>
+	</div>
+<?php }
+
+function sublinks(Array $links = array()) {
+	if( ! empty($links)) {
+		$out = '<ul class="sublinks">';
+		foreach($links as $link)
+			$out .= "<li><a href='{$link['href']}'>{$link['title']}</a></li>";
+		$out .= '</ul>';
+		return $out;
+	}
 }

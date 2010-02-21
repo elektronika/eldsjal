@@ -11,7 +11,7 @@ class Usermenu extends Widget {
 		$msg_count = $this->db->query("SELECT COUNT(readmessage) AS count FROM messages WHERE userid = ".$this->session->userId()." AND readmessage = 0")->row()->count;
 		$this->items[] = (object) array('href' => '/messages.php?userid='.$this->session->userid(), 'title' => 'Meddelanden'.$this->counter($msg_count), 'class' => $msg_count ? 'messages new' : 'messages');
 		
-		$this->items[] = (object) array('href' => '/diary.php?userid='.$this->session->userid(), 'title' => 'Tankar', 'class' => 'thoughts');
+		$this->items[] = (object) array('href' => '/thoughts', 'title' => 'Tankar', 'class' => 'thoughts');
 		
 		$event_count = $this->db->query("SELECT COUNT(calendarnotifyid) AS count FROM calendarnotify WHERE userid = ".$this->session->userId())->row()->count;
 		$this->items[] = (object) array('href' => '/calendarView.php?mode=userList', 'title' => 'Aktiviteter'.$this->counter($event_count), 'class' => $event_count ? 'events new' : 'events');

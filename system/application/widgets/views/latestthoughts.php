@@ -15,7 +15,7 @@ foreach($thoughts as &$thought) {
 <ul id="latestthoughts" class="flat">
 <?php foreach( $thoughts as $thought ): ?>
 	<?php if($this->session->isloggedin()): ?>
-		<li><a onMouseOver="return overlib('<div class=miniPicture><img src=<?php echo $thought->image; ?> height=45></div><div class=miniPictureText><?php echo $thought->diarytopic; ?><br>Skrivet av: <?php echo $thought->username; ?><br/><?php echo $thought->timesince; ?></div>');" onMouseOut="return nd();" href="diary.php?mode=readDiary&userid=<?php echo $thought->userid; ?>&diaryid=<?php echo $thought->diaryid; ?>"><?php echo $thought->topic; ?></a></li>
+		<li><a onMouseOver="return overlib('<div class=miniPicture><img src=<?php echo $thought->image; ?> height=45></div><div class=miniPictureText><?php echo $thought->diarytopic; ?><br>Skrivet av: <?php echo $thought->username; ?><br/><?php echo $thought->timesince; ?></div>');" onMouseOut="return nd();" href="/thoughts/view/<?php echo $thought->diaryid; ?>"><?php echo $thought->topic; ?></a></li>
 	<?php else: ?>
 		<li><a href="javaScript:window.alert('Den här funktionen får du tillgång till när du registrerar dig och blir medlem, smutt va?');"><?php echo $thought->topic; ?></a></li>
 	<?php endif?>
