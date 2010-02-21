@@ -52,19 +52,26 @@ h3 {
 
 #sidebar-left {
 	float: left;
+	width: 135px;
 }
 
 #sidebar-left .widget {
-	margin-right: 5px;
+	margin-right: 10px;
 }
 
 #sidebar-right {
 	float: right;
 }
 
-#region-content {
+.sidebar-left #region-content, .sidebar-right #region-content {
 	float: left;
-	width: 600px;
+	width: 595px;
+}
+
+.two-sidebars #region-content {
+	width: 455px;
+	float: left;
+	margin-right: 5px;
 }
 
 #header h1 {
@@ -291,10 +298,16 @@ ul.flat {
 	list-style-type: none;
 }
 
+.widget {
+	margin-bottom: 10px;
+}
+
 .widget h3 {
 	color: black;
 	border-bottom: 3px solid rgb(158, 121, 55);
 	padding: 3px;
+	padding-top: 0;
+	margin-top: 0;
 }
 
 .widget p, .widget ul {

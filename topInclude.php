@@ -40,7 +40,7 @@ if( isset($_SESSION['alt_style']) && $_SESSION['alt_style'] == 1 || TRUE ) {
 <head>
 	<title>eldsj&auml;l - communityn f&ouml;r v&auml;rme och alternativkonst</title>
 	<link rel="stylesheet" href="/style.css" type="text/css"/>
-	<link rel="stylesheet" href="/alt_style/style.css?3" type="text/css"/>
+	<link rel="stylesheet" href="/alt_style/style.css?4" type="text/css"/>
 	<link rel="stylesheet" href="/calendar.css" type="text/css"/>
 <?php /*	<link rel="shortcut icon" href="images/icons/favicon.ico"/>
 	<link rel="icon" type="image/ico" href="images/icons/favicon.ico"/> */ ?>
@@ -55,7 +55,7 @@ if( isset($_SESSION['alt_style']) && $_SESSION['alt_style'] == 1 || TRUE ) {
 		<h1><span>Eldsj&auml;l.org</span></h1>
 		<div id="navbar">
 			<div id="menuItems">
-				<a href="/main.php" title="Tillbaka till startsida med nyheter och statistik">Start</a>
+				<a href="/main" title="Tillbaka till startsida med nyheter och statistik">Start</a>
 				<a href="/forum" title="Diskutera, fundera och spekulera fritt med andra eldsj&auml;lar *inl&auml;gg kr&auml;ver medlemskap*">Forum</a>
 				<a href="/members.php" title="H&auml;r finns alla v&aring;ra medlemmar!">Medlemmar</a>
 				<a href="/gallery.php" title="Underbara bilder med anknytning till alternativkonst fr&aring;n v&aring;ra medlemmar *uppladdning kr&auml;ver medlemskap*">Galleri</a>
