@@ -39,7 +39,7 @@ h2 {
 }
 
 #header, #footer, #content {
-	width: 732px;
+	max-width: 732px;
 	margin: 0 auto;
 	text-align: left;
 }
@@ -70,14 +70,12 @@ h2 {
 }
 
 .sidebar-left #region-content, .sidebar-right #region-content {
-	float: left;
-	width: 595px;
+	margin-left: 135px;
 }
 
 .two-sidebars #region-content {
 	width: 455px;
 	float: left;
-	margin-right: 5px;
 }
 
 #header h1 {
@@ -273,10 +271,7 @@ thead {
 }
 
 .post .right {
-	width: 463px;
-	float: right;
-	position: relative;
-	left: -1px;
+	margin-left: 110px;
 	border-left: 1px solid #ddd;
 }
 
@@ -536,6 +531,14 @@ ul.flat {
 	background-image: url('icons/application_form_edit.png');
 }
 
+.usermenu .admin-permissions {
+	background-image: url('icons/lock.png');
+}
+
+.usermenu .admin-log {
+	background-image: url('icons/error.png');
+}
+
 /* Extramarginalen för att separera delar av menyn */
 .usermenu .settings, .usermenu .fadder, .usermenu .wisdom {
 	margin-top: 18px;
@@ -583,11 +586,11 @@ h4.boxContent{color:#333}
 .presentationSub{margin-bottom:8px}
 
 /* Profilern, onödigt med en separat fil även om den används av väldigt få */
-#codeigniter_profiler{position:absolute;top:0;left:0;background-color:#eee!important;opacity:0.9;padding:0!important}
+/*#codeigniter_profiler{position:absolute;top:0;left:0;background-color:#eee!important;opacity:0.9;padding:0!important}
 #codeigniter_profiler fieldset{float:left;border:none!important;background-color:transparent!important;margin:0!important;padding:0!important}
 #codeigniter_profiler fieldset > *{display:none}
 #codeigniter_profiler fieldset:hover > *{display:block;position:absolute;left:0;background-color:#eee!important}
-#codeigniter_profiler fieldset legend{display:block;float:left}
+#codeigniter_profiler fieldset legend{display:block;float:left}*/
 
 /* Formulärmekk */
 label {

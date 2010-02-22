@@ -1,0 +1,45 @@
+.widget h3 {
+	border-bottom: 1px solid rgb(204, 204, 204);
+}
+
+h2 {
+	margin-top: 0;
+	font-size: 2em;
+}
+
+#wrap {
+/*	background: white;*/
+	padding-top: 20px;
+}
+
+#sidebar-left {
+	width: 205px;
+}
+
+#header, #footer, #content {
+	max-width: 802px;
+}
+
+.sidebar-left #region-content, .sidebar-right #region-content {
+	margin-left: 205px;
+}
+
+#widget-logo h1 span {
+	display: none;
+}
+
+#widget-logo h1 {
+	background: transparent url('new_logo.png') no-repeat center center;
+	width: 270px;
+	height: 248px;
+	position: absolute;
+	top: -100px;
+	left: -35px;
+}
+
+#widget-logo a {
+	position: relative;
+	display: block;
+	height: 120px;
+	margin-top: 30px;
+}
