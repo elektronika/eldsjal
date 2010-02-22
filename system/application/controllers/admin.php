@@ -4,11 +4,6 @@ class Admin extends MY_Controller {
 		return $this->session->isAdmin();
 	}
 	
-	public function get_generate() {
-		// Doctrine::generateModelsFromDb(APPPATH . DIRECTORY_SEPARATOR . 'models');
-		print 'models generated';
-	}
-	
 	public function get_artslug() {
 		$artlist = $this->db->get('artlist')->result();
 		foreach($artlist as $art) {
@@ -53,14 +48,45 @@ class Admin extends MY_Controller {
 	}
 	
 	public function get_settings() {
-		$this->view->settings = $this->settings->get_all();
+		$this->view->items = $this->settings->get_all();
+		$this->view->page_title = 'Inställningar';
+		$this->view->template = 'inputgrid';
+		$this->view->form_action = '/admin/settings';
 	}
 	
 	public function post_settings() {
 		$this->settings->delete_all();
-		foreach($_POST['settings'] as $setting)
+		foreach($_POST['items'] as $setting)
 			if( ! empty($setting['key']))
 				$this->settings->set($setting['key'], $setting['value'], $setting['user_id']);
+		$this->session->message('Jaru, nu är inställningarna ändrade med.');
 		$this->redirect('/admin/settings');
+	}
+	
+	public function get_board() {
+		$this->view->items = $this->db->select('userid, rights, title, sort')->order_by('rights', 'desc')->get('board')->result();
+		$this->view->page_title = 'Rättigheter';
+		$this->view->template = 'inputgrid';
+		$this->view->form_action = '/admin/board';
+	}
+	
+	public function post_board() {
+		$this->db->empty_table('board');
+		foreach($_POST['items'] as $item)
+			if( ! empty($item['rights']))
+				$this->db->insert('board', $item);
+		$this->session->message('Sweet, rättigheterna uppdaterades!');
+		$this->redirect('/admin/board');
+	}
+	
+	public function get_log() {
+		$this->view->log = $this->db->order_by('date', 'desc')->get('log');
+		$this->view->page_title = 'Logg';
+	}
+	
+	public function post_log() {
+		$this->db->empty_table('log');
+		$this->session->message('Loggen är rensad! *poff* liksom!');
+		$this->redirect('/admin/log');
 	}
 }

@@ -11,18 +11,21 @@ class MY_Controller extends Controller {
 			
 		$this->view->template = $this->router->fetch_class().'_'.str_replace(array('get_', 'post_'), '', $this->router->fetch_method());
 		$this->view->slogan = $this->settings->get('slogan');
+		$this->view->site_name = $this->settings->get('site_name');
+		$this->view->css = explode(',', $this->settings->get('css'));
 		
-		// Borde egentligen vara en widget
+		// Borde egentligen vara widgets
 		if(file_exists('revision')) {
 			$this->view->revision_date = date('d/m/y, H:i', filemtime('revision'));
 			$this->view->revision_name = 'rev. '.file_get_contents('revision');
 		} else {
 			$this->view->revision_date = 'DEV';
 			$this->view->revision_name = 'DEV';
-		}
-		
+		}		
 		$this->view->messages = $this->session->getMessages();
 		$this->view->usersonline = $this->util->onlineCount();
+		
+		
 		if($this->session->isLoggedIn()) {
 			$this->view->isloggedin = TRUE;
 			$this->view->widgets = array(
@@ -35,15 +38,10 @@ class MY_Controller extends Controller {
 				'right' => $this->settings->get('widgets_right_guest') == '' ? array() : explode(',', $this->settings->get('widgets_right_guest'))
 			);
 		}
+		$this->view->widgets['header'] = $this->settings->get('widgets_header') == '' ? array() :explode(',', $this->settings->get('widgets_header'));
+		$this->view->widgets['main'] = explode(',', $this->settings->get('widgets_main'));
+		$this->view->widgets['footer'] = explode(',', $this->settings->get('widgets_footer'));
 	}
-	/**
-	 * Automatic loading of libraries, yay!
-	 *//*
-	public function __get($name) {
-		if( ! isset($this->$name) && in_array($name, $this->libraries) && $name != 'load')
-			$this->load->library($name);
-		return $this->$name;
-	}*/
 	
 	protected function redirect($url) {
 		$this->redirect = TRUE;

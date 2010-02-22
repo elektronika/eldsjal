@@ -1,10 +1,11 @@
 <?php
 class Guestbook extends MY_Controller {		
 	public function get_view($user_slug) {
+		$this->load->library('pagination');
 		$offset = $this->arguments->get('page', 0);
-		$posts_per_page = $this->session->setting('guestbook_posts_per_page');
-		$this->user = $this->models->user->get_by_slug($user_slug);		
-		$number_of_posts = $this->models->guestbook->count_posts_for_user($this->user->userid);
+		$posts_per_page = $this->settings->get('guestbook_posts_per_page');
+		$user = $this->models->user->get_by_slug($user_slug);		
+		$number_of_posts = $this->models->guestbook->count_posts_for_user($user->userid);
 		
 		$this->pagination->initialize(array(
 			'base_url' => '/user/'.$user_slug.'/guestbook/page:',
@@ -13,8 +14,16 @@ class Guestbook extends MY_Controller {
 			'cur_page' => $offset
 		));
 		
-		$this->pager = $this->pagination->create_links();		
-		$this->posts = $this->models->guestbook->to_user($this->user->userid, $offset, $posts_per_page);
+		$this->view->pager = $this->pagination->create_links();		
+		$this->view->items = $this->models->guestbook->to_user($user->userid, $offset, $posts_per_page);
+		$this->view->page_title = $user->username.'s gästbok';
+		$this->view->item_function = 'post';
+		$this->view->template = 'list';
+		$this->view->sublinks = array(
+			array('href' => '/user/'.$user_slug, 'title' => 'Presentation'),
+			array('href' => '/thoughts/user/'.$user_slug, 'title' => 'Tankar'),
+			array('href' => '/gallery/user/'.$user_slug, 'title' => 'Bilder'),
+		);
 	}
 	
 	public function get_edit($post_id) {

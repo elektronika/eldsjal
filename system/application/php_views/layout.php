@@ -2,8 +2,10 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title>eldsjäl - <?php echo isset($page_title) ? $page_title : $slogan; ?></title>
-	<link rel="stylesheet" href="/alt_style/style.css?<?php echo filemtime('alt_style/style.css');?>" type="text/css"/>
+	<title><?php echo $site_name; ?> - <?php echo isset($page_title) ? $page_title : $slogan; ?></title>
+	<?php foreach($css as $stylesheet): ?>
+	<link rel="stylesheet" href="/<?php echo $stylesheet.'?'.filemtime($stylesheet); ?>" type="text/css"/>
+	<?php endforeach; ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="Expires" content="<?php echo time();?>"/>
 	<meta http-equiv="Pragma" content="no-cache"/>
@@ -12,24 +14,11 @@
 	<div id="wrap">
 <div id="header-wrap">
 	<div id="header">
-		<h1><span>Eldsjäl.org</span></h1>
-		<div id="navbar">
-			<div id="menuItems">
-				<a href="/main" title="Tillbaka till startsida med nyheter och statistik">Start</a>
-				<a href="/forum" title="Diskutera, fundera och spekulera fritt med andra eldsjälar *inlägg kräver medlemskap*">Forum</a>
-				<a href="/members.php" title="Här finns alla våra medlemmar!">Medlemmar</a>
-				<a href="/gallery.php" title="Underbara bilder med anknytning till alternativkonst från våra medlemmar *uppladdning kräver medlemskap*">Galleri</a>
-				<a href="http://www.cby.se/" title="Camp Burn Yourselfs egna sida!" target="_blank">C.B.Y</a>
-				<a href="/board.php" title="Information om föreningen">Föreningen</a>
+		<?php foreach($widgets['header'] as $widget): ?>
+			<div class="widget" id="widget-<?php echo $widget; ?>">
+				<?php widget::run($widget); ?>
 			</div>
-			<form id="quicksearch" action = "/members.php?mode=listMembers" method = "post"> 
-				<div>
-				<input type = "text" name = "username" id = "quicksearch-username"/> 
-				<input type = "image" src = "/images/icons/arrows.gif" name = "search" id = "search" class = "proceed"/> 
-				</div>
-			</form>	
-			<div class="clear"> </div>
-		</div>
+		<?php endforeach; ?>
 	</div>
 </div>
 <?php

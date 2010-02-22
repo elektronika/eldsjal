@@ -1,0 +1,1 @@
+<h1><span><?php echo $site_name; ?></span></h1>

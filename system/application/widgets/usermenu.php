@@ -28,8 +28,12 @@ class Usermenu extends Widget {
 		
 		if($this->session->hasPrivilege('wisdomadmin'))
 			$this->items[] = (object) array('href' => '/insertWisdom.php', 'title' => 'Visheter', 'class' => 'wisdom');
-		if($this->session->isAdmin())
+		if($this->session->isAdmin()) {
 			$this->items[] = (object) array('href' => '/admin/settings', 'title' => 'Inställningar', 'class' => 'admin-settings');
+			$this->items[] = (object) array('href' => '/admin/board', 'title' => 'Rättigheter', 'class' => 'admin-permissions');
+			$logs = $this->db->query('SELECT COUNT(*) AS count FROM log')->row()->count;
+			$this->items[] = (object) array('href' => '/admin/log', 'title' => 'Logg'.$this->counter($logs), 'class' => 'admin-log');			
+		}
 			
 		$this->items[] = (object) array('href' => '/userEdit.php?mode=editAccount&userid='.$this->session->userid(), 'title' => 'Inställningar', 'class' => 'settings');
 		$this->items[] = (object) array('href' => '/logout', 'title' => 'Logga ut', 'class' => 'logout');
