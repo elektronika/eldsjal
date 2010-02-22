@@ -1,7 +1,9 @@
 <?php region('content'); ?>
 <h2><a href="/forum">Forum</a> &raquo; <a href="/forum/category/<?php echo $topic->forumCategoryID; ?>"><?php echo $topic->forumCategoryName; ?></a> &raquo; <?php echo $topic->title; ?></h2>
 <?php foreach($posts as $post): ?>
-	<?php post($post); ?>
+	<div class="<?php echo nth(2) ? 'odd' : 'even'; ?>">
+		<?php post($post); ?>
+	</div>
 <?php endforeach; ?>
 
 <?php echo pager($pager); ?>

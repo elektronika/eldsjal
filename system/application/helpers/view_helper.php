@@ -262,7 +262,7 @@ function post($post) {
 	foreach(array('id', 'actions') as $element)
 		isset_fallback($post, $element, 0);
 	?>
-	<div class="post<?php echo nth() ? ' odd' : ' even'; ?>"><?php if($post->id): ?><a name="post-<?php echo $post->id; ?>"></a><?php endif; ?>
+	<div class="post"><?php if($post->id): ?><a name="post-<?php echo $post->id; ?>"></a><?php endif; ?>
 		<div class="left">
 			<?php echo userimage($post); ?>
 			<?php echo userlink($post); ?>		
@@ -275,7 +275,7 @@ function post($post) {
 				<?php echo fuzzytime($post->created); ?> <?php echo actions($post->actions, TRUE); ?>
 			</div>
 		</div>
-		<span class="clear"> </span>
+		<span class="clear">&nbsp;</span>
 	</div><?php
 }
 

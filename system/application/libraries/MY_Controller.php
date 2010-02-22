@@ -6,7 +6,7 @@ class MY_Controller extends Controller {
 	public function __construct() {		
 		parent::Controller();
 	
-		if($this->session->isAdmin())
+		if($this->settings->get('enable_profiler'))
 			$this->show_profiler = TRUE;
 			
 		$this->view->template = $this->router->fetch_class().'_'.str_replace(array('get_', 'post_'), '', $this->router->fetch_method());
