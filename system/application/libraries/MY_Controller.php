@@ -26,10 +26,14 @@ class MY_Controller extends Controller {
 		if($this->session->isLoggedIn()) {
 			$this->view->isloggedin = TRUE;
 			$this->view->widgets = array(
-				'left' => array('usermenu', 'rightnow', 'calendar', 'randomwisdom', 'latestthoughts', 'latestlogins', 'latestimages'),
-				'right' => array());
+				'left' => explode(',', $this->settings->get('widgets_left')),
+				'right' => $this->settings->get('widgets_right') == '' ? array() : explode(',', $this->settings->get('widgets_right'))
+			);
 		} else {
-			$this->view->widgets = array('left' => array('loginform', 'calendar', 'randomwisdom', 'latestthoughts', 'latestlogins', 'latestimages'));
+			$this->view->widgets = array(
+				'left' => explode(',', $this->settings->get('widgets_left_guest')),
+				'right' => $this->settings->get('widgets_right_guest') == '' ? array() : explode(',', $this->settings->get('widgets_right_guest'))
+			);
 		}
 	}
 	/**
