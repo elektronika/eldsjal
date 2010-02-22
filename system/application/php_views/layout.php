@@ -10,7 +10,7 @@
 	<meta name="Expires" content="<?php echo time();?>"/>
 	<meta http-equiv="Pragma" content="no-cache"/>
 </head>
-<body>
+<body class="<?php echo $body_class; ?>">
 	<div id="wrap">
 <div id="header-wrap">
 	<div id="header">

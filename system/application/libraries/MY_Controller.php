@@ -13,6 +13,7 @@ class MY_Controller extends Controller {
 		$this->view->slogan = $this->settings->get('slogan');
 		$this->view->site_name = $this->settings->get('site_name');
 		$this->view->css = explode(',', $this->settings->get('css'));
+		$this->view->body_class = $this->settings->get('body_class');
 		
 		// Borde egentligen vara widgets
 		if(file_exists('revision')) {
