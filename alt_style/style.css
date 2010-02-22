@@ -505,6 +505,18 @@ ul.flat {
 	background-image: url('icons/calendar.png');
 }
 
+.usermenu .forum {
+	background-image: url('icons/comments.png');
+}
+
+.usermenu .gallery {
+	background-image: url('icons/images.png');
+}
+
+.usermenu .people {
+	background-image: url('icons/group.png');
+}
+
 .usermenu .events.new {
 	background-image: url('icons/calendar_add.png');
 }
@@ -526,7 +538,7 @@ ul.flat {
 }
 
 .usermenu .fadderbarn {
-	background-image: url('icons/world.png');
+	background-image: url('icons/group.png');
 }
 
 .usermenu .admin-settings {
@@ -667,4 +679,25 @@ textarea#form-item-body {
 
 .admin-settings-value {
 	width: 380px;
+}
+
+/* Timelinen */
+#widget-timeline li {
+	padding-left: 22px;
+	background: transparent url('icons/bullet_black.png') no-repeat center left;
+	margin-bottom: 4px;
+}
+
+#widget-timeline a span {
+	display: block;
+	color: #666;
+	font-weight: normal;
+}
+
+#widget-timeline .item-thought {
+	background-image: url('icons/lightbulb.png');
+}
+
+#widget-timeline .item-forum {
+	background-image: url('icons/comment.png');
 }

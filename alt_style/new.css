@@ -35,6 +35,7 @@ h2 {
 #widget-logo a {
 	position: relative;
 	display: block;
-	height: 120px;
+	height: 70px;
 	margin-top: 30px;
+	margin-bottom: 70px;
 }
