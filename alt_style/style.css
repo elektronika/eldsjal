@@ -39,7 +39,7 @@ h2 {
 }
 
 #header, #footer, #content {
-	max-width: 732px;
+	width: 732px;
 	margin: 0 auto;
 	text-align: left;
 }
@@ -70,7 +70,9 @@ h2 {
 }
 
 .sidebar-left #region-content, .sidebar-right #region-content {
-	margin-left: 135px;
+/*	margin-left: 135px;*/
+	float: right;
+	width: 597px;
 }
 
 .two-sidebars #region-content {
