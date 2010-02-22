@@ -208,4 +208,12 @@ class Forum extends MY_Controller {
 		$page = floor($latest->previous / $per_page) * $per_page;
 		$this->redirect('/forum/topic/'.$topic_id.'/page:'.$page.'#post-'.$latest->max);
 	}
+	
+	public function get_redirecttopost($post_id) {
+		$post = $this->models->forum->get_post_by_id((int) $post_id);
+		$previous = $this->db->query("SELECT COUNT(*) AS previous FROM forummessages WHERE topicid = {$post->topic_id} AND messageid < {$post->id}")->row()->previous;
+		$per_page = $this->session->setting('forum_posts_per_page');
+		$page = floor($previous / $per_page) * $per_page;
+		$this->redirect("/forum/topic/{$post->topic_id}/page:{$page}#post-{$post->id}");
+	}
 }
