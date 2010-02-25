@@ -21,7 +21,7 @@ th {
 	font-size: 10px;
 }
 
-h3, h2 {
+h4, h3, h2 {
 	margin-bottom: 0;
 }
 
@@ -123,6 +123,10 @@ h2 {
 	margin-bottom: -1px;
 }
 
+.break {
+	clear: both;
+}
+
 #footer {
 	color: #333;
 	margin-top: 10px;
@@ -156,9 +160,10 @@ label {
 	display: block;
 }
 
-.pager {
+.pager, .datepager {
 	text-align: center;
 	margin: 10px;
+	clear: both;
 }
 
 #quicksearch-username {
@@ -229,6 +234,14 @@ thead {
 
 .sticky.new .topic-subject {
 	background-image: url('icons/error_add.png');
+}
+
+.is_event .topic-subject {
+	background-image: url('icons/date.png');
+}
+
+.is_event.new .topic-subject {
+	background-image: url('icons/date_add.png');
 }
 
 .topic-replies, .category-threads {
@@ -342,16 +355,31 @@ ul.flat {
 
 .sublinks li {
 	display: inline;
-	padding-right: 10px;
+	padding-right: 20px;
 }
 
 .sublinks a {
-	color: #555;
+	color: #111;
 	font-weight: normal;
+	font-size: 12px;
 }
 
 .list-page .teaser {
 	padding: 10px;
+}
+
+.userlist {
+	padding: 10px;
+}
+
+.userlist .userimage {
+	float: left;
+	margin-right: 10px;
+	height: 30px;
+}
+
+.userlist span {
+	display: block;
 }
 
 /* Actions, med ikoner */
@@ -609,9 +637,14 @@ h4.boxContent{color:#333}
 /* Formulärmekk */
 label {
 	color: #666;
-	clear: both;
+/*	clear: both;*/
 	display: block;
-	margin-top: 20px;
+/*	margin-top: 20px;*/
+}
+
+fieldset {
+	border: 1px solid rgb(204, 204, 204);
+	margin-bottom: 10px;
 }
 
 /*input, textarea*/
@@ -641,7 +674,7 @@ input[type=text], input[type=password] {
 }
 
 input[type=checkbox] {
-	float: left;
+/*	float: left;*/
 	width: auto;
 	margin-right: 5px;
 }
@@ -700,4 +733,74 @@ textarea#form-item-body {
 
 #widget-timeline .item-forum {
 	background-image: url('icons/comment.png');
+}
+
+#widget-timeline .item-event {
+	background-image: url('icons/date.png');
+}
+
+/* Kalendern */
+.day {
+	border: 1px solid #C9C2C1;
+	margin: 2px;
+	padding: 5px;
+	width: 66px;
+	height: 66px;
+	vertical-align: top;
+}
+
+.week {
+	color: #888;
+	width: 20px;
+	text-align: center;
+}
+
+.events {
+	margin: 0;
+}
+
+.has-events {}
+
+.no-events a, .no-events {
+	color: #C9C2C1;
+}
+
+.calendar-year .events {
+	display: none;
+}
+
+.calendar-year .has-events:hover .events {
+	display: block;
+	position: absolute;
+	background: #fff;
+	border: 1px solid #C9C2C1;
+	padding: 10px;
+	text-align: left;
+	z-index: 100;
+	width: 200px;
+	-moz-border-radius-bottomleft: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;	
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+}
+
+.calendar-year .day {
+	width: 16px;
+	height: 16px;
+	padding: 2px;
+	text-align: center;
+	position: relative;
+	vertical-align: middle;
+}
+
+.calendar-year h4 {
+	text-align: center;
+}
+
+.calendar-year .month {
+	float: left;
 }

@@ -29,6 +29,6 @@ if( $_SESSION['userid'] == "" ) {
 	print "<br><div align=right><a class=\"a2\" href=\"javaScript:window.alert('Den h&auml;r funktionen f&aring;r du tillg&aring;ng\\ntill n&auml;r du registrerar dig och blir medlem, smutt va?');\">Visa alla >></a></div>";
 }
 else {
-	print "<br><div align=right><a class=\"a2\" href=\"diary.php?mode=list\">Visa senaste >></a></div>";
+	print "<br><div align=right><a class=\"a2\" href=\"/thoughts\">Visa senaste >></a></div>";
 }
 ?>

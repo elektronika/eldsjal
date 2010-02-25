@@ -1,4 +1,5 @@
 <?php
+/*
 function getMonth( $monthNr ) {
 	$months = array('Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December');
 	return $months[$monthNr - 1];
@@ -211,3 +212,5 @@ print "<a href=calendarView.php?mm=".getNext( "+" )."&dd=".$dd."><img src='right
           </td>
         </tr>
       </table>
+*/ ?>
+Poff botta!
