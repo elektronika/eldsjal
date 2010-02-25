@@ -8,11 +8,19 @@ class CI_Util {
 		log_message('debug', "Util Class Initialized");
 	}
 	
-	public function timestamp_start($year, $month = 1, $day = 1) {
+	public function timestamp_start($year, $month = NULL, $day = NULL) {
+		if(is_null($month))
+			$month = 1;
+		if(is_null($day))
+			$day = 1;
 		return mktime(0, 0, 0, $month, $day, $year);
 	}
 	
-	public function timestamp_end($year, $month = 12, $day = 0) {
+	public function timestamp_end($year, $month = NULL, $day = NULL) {
+		if(is_null($month))
+			$month = 12;
+		if(is_null($day))
+			$day = 0;
 		return mktime(23, 59, 59, $month, ($day == 0 ? $this->days_in_month($month) : $day), $year);
 	}
 	

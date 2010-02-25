@@ -24,7 +24,7 @@ foreach($thoughts as &$thought) {
 
 <p>
 <?php if( $this->session->isloggedin()): ?>
-	<a href="diary.php?mode=list">Visa senaste >></a>
+	<a href="/thoughts">Visa senaste >></a>
 <?php else: ?>
 	<a href="javaScript:window.alert('Den här funktionen får du tillgång till när du registrerar dig och blir medlem, smutt va?');\">Visa alla >></a>
 <?php endif; ?>

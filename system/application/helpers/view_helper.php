@@ -487,3 +487,131 @@ function sublinks(Array $links = array()) {
 		return $out;
 	}
 }
+
+function datepicker($name = 'date', $years_ahead = 3, $years_back = 3, $value = NULL) {
+	if(is_null($value) || $value == 0)
+		$value = time();
+	
+	$year = date('Y', $value);
+	$month = date('m', $value);
+	$day = date('d', $value);
+		
+	$years = array_combine(range(date('Y') - $years_back, date('Y') + $years_ahead), range(date('Y') - $years_back, date('Y') + $years_ahead));
+	$months = array_combine(range(1, 12), range(1, 12));
+	$days = array_combine(range(1, 31), range(1, 31));
+	
+	return form_dropdown($name.'[year]', $years, $year).'/'.form_dropdown($name.'[month]', $months, $month).'/'.form_dropdown($name.'[day]', $days, $day);
+}
+
+function datepicker_timestamp($name) {
+	return mktime(0, 0, 0, (int) $_POST[$name]['month'], (int) $_POST[$name]['day'], (int) $_POST[$name]['year']);
+}
+
+function datespan($start, $end) {
+	if($end < $start)
+		return date('Y/m/d', $start);
+		
+	$start_year = date('Y', $start);
+	$end_year = date('Y', $end);
+	$start_month = date('n', $start);
+	$end_month = date('n', $end);
+	$start_day = date('j', $start);
+	$end_day = date('j', $end);
+
+	if($start_year == $end_year) {
+		if($start_month == $end_month) {
+			if($start_day == $end_day) {
+				return "{$start_day}/{$start_month}/{$start_year}";
+			} else {
+				return "{$start_day} - {$end_day}/{$end_month} {$start_year}";
+			}
+		} else {
+			return "{$start_day}/{$start_month} - {$end_day}/{$end_month} {$start_year}";
+		}
+	} else {
+		return "{$start_day}/{$start_month}/{$start_year} - {$end_day}/{$end_month}/{$end_year}";
+	}
+}
+
+function calendar($events, $month, $year) {
+	$timestamp_start = mktime(0, 0, 0, $month, 1, $year);
+	$days_in_month = date('t', $timestamp_start);
+	$days_to_skip = date('N', $timestamp_start);
+	$days_to_skip = $days_to_skip - 1;
+	$first_week = date('W', $timestamp_start);
+	$first_week = $first_week - 1;
+
+	$number_of_cells = $days_in_month + $days_to_skip;
+	$number_of_rows_kinda = $number_of_cells / 7;
+	$rows_in_calendar = ceil($number_of_rows_kinda);
+	
+	$day_of_month = 0; ?>
+<table class="calendar">
+<?php for($row = 1; $row <= $rows_in_calendar; $row++): ?>
+	<tr>
+		<td class="week">
+			<?php if($month == 1) {
+				$timestamp_start = mktime(0, 0, 0, $month, $day_of_month + 1, $year);
+				$first_week = date('W', $timestamp_start);
+				$first_week = $first_week - 1;
+				} ?>
+			<?php echo $first_week + $row; ?>
+			</td>
+		<?php if($row == 1): ?>
+			<?php if($days_to_skip > 0): ?>
+				<?php for($j = 1; $j <= $days_to_skip; $j++): ?>
+					<td class="day empty skip"> </td>
+				<?php endfor; ?>
+			<?php endif; ?>
+			<?php for($j = $days_to_skip; $j <= 6; $j++): ?>
+				<?php $day_of_month++; ?>
+				<?php $day_class = isset($events[$day_of_month]) ? ' has-events' : ' no-events'; ?>
+				<td class="day<?php echo $day_class; ?>"><a href="/calendar/browse/<?php echo $year; ?>/<?php echo $month; ?>/<?php echo $day_of_month; ?>"><?php echo $day_of_month; ?></a>
+					<ul class="events flat">
+					<?php if(isset($events[$day_of_month])) foreach($events[$day_of_month] as  $event): ?>
+					<li><a href="<?php echo $event->href; ?>"><?php echo $event->title; ?></a></li>
+					<?php endforeach; ?>
+					</ul>
+				</td>
+			<?php endfor; ?>
+		<?php else: ?>
+			<?php for($j = 1; $j <= 7; $j++): ?>
+				<?php $day_of_month++; ?>
+				<?php if($day_of_month > $days_in_month): ?>
+					<td class="day empty skip"> </td>
+				<?php else: ?>
+				<?php $day_class = isset($events[$day_of_month]) ? ' has-events' : ' no-events'; ?>
+				<td class="day<?php echo $day_class; ?>"><a href="/calendar/browse/<?php echo $year; ?>/<?php echo $month; ?>/<?php echo $day_of_month; ?>"><?php echo $day_of_month; ?></a>
+					<ul class="events flat">
+						<?php if(isset($events[$day_of_month])) foreach($events[$day_of_month] as $event): ?>
+						<li><a href="<?php echo $event->href; ?>"><?php echo $event->title; ?></a></li>
+						<?php endforeach; ?>
+					</ul>
+					</td>
+				<?php endif; ?>
+			<?php endfor; ?>
+		<?php endif; ?>
+	</tr>
+<?php endfor; ?>
+</table><?php
+}
+
+function datepager($prefix, $year, $month = NULL, $day = NULL) { ?>
+	<div class="datepager pager">
+	<?php if( ! is_null($day)) { ?>
+		<a href="<?php echo $prefix.date('Y/m/d',mktime(0,0,0,$month, $day - 1, $year)); ?>" class="previous"><?php echo strftime('%e %B',mktime(0,0,0,$month, $day - 1, $year)); ?> &laquo;</a> 
+		<span class="current"><?php echo ucfirst(strftime('%A %e',mktime(0,0,0,$month, $day, $year))); ?> <a href="<?php echo $prefix.$year.'/'.$month; ?>"><?php echo strftime('%B',mktime(0,0,0,$month, $day, $year)); ?></a> <a href="<?php echo $prefix.$year; ?>"><?php echo $year; ?></a></span> 
+		<a href="<?php echo $prefix.date('Y/m/d',mktime(0,0,0,$month, $day + 1, $year)); ?>" class="previous">&raquo; <?php echo strftime('%e %B',mktime(0,0,0,$month, $day + 1, $year)); ?></a>
+	<?php } elseif( ! is_null($month)) { ?>
+			<a href="<?php echo $prefix.date('Y/m',mktime(0,0,0,$month - 1, 1, $year)); ?>" class="previous"><?php echo strftime('%B',mktime(0,0,0,$month - 1)); ?> &laquo;</a> 
+			<span class="current"><?php echo strftime('%B',mktime(0,0,0,$month)); ?> <a href="<?php echo $prefix.$year; ?>"><?php echo $year; ?></a></span> 
+			<a href="<?php echo $prefix.date('Y/m',mktime(0,0,0,$month + 1, 1, $year)); ?>" class="previous">&raquo; <?php echo strftime('%B',mktime(0,0,0,$month + 1)); ?></a>
+	<?php } else { ?>
+			<a href="<?php echo $prefix.($year - 1); ?>" class="previous"><?php echo $year - 1; ?> &laquo;</a> <span class="current"><?php echo $year; ?></span> <a href="<?php echo $prefix.($year + 1); ?>" class="previous">&raquo; <?php echo $year + 1; ?></a>
+		<?php } ?>
+	</div>
+<?php }
+
+function userlist_item($user) {
+	return '<div class="userlist">'.userimage($user).userlink($user).(isset($user->body) ? '<span>'.$user->body.'</span>' : '').'<span class="clear">&nbsp;</span></div>';
+}

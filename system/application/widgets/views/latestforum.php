@@ -6,7 +6,7 @@ print "<span class=plainTHead>Senaste foruminl&auml;gg:</span><br>";
 	foreach( $messagess as $messages ) {
 		$messageFormat = str_replace( "<br>", " ", $messages['message'] );
 		$messageFormat = str_replace( "[br]", " ", $messages['message'] );
-		$message = substr( $messageFormat, 0, 150 )."...";
+		$message = mb_substr( $messageFormat, 0, 150 )."...";
 		$message = rq($message);
 		print "<tr><td colspan=\"2\">&raquo;&nbsp;<a href=\"/forum/redirecttopost/".$messages['messageid']."\" class=\"a2\">".$messages['topicname']."</td></tr><tr><td CLASS='plaintext'><B>&nbsp;</B></td><td CLASS='plaintext'>".$message."</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr>";
 	}

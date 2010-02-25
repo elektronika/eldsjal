@@ -1,8 +1,6 @@
 <?php region('content'); ?>
-<h2>Forum</h2>
-<ul class="sublinks">
-	<li><a href="/forum/random">Slumpad tråd</a></li>
-</ul>
+<h2><?php echo $page_title; ?></h2>
+<?php echo sublinks($sublinks); ?>
 <table id="forum-categories">
 	<thead>
 		<tr>

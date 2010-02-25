@@ -1,13 +1,15 @@
 <?php
 class EventModel extends AutoModel {
-	public function get_upcoming($limit = NULL) {
+	public function get_upcoming($limit = NULL, $userlevel = 0) {
 		$events =  $this->db
-			->select("e.title, e.eventid AS id, e.fulldate AS date, e.text AS body, e.regdate AS created, e.*, l.*, u.userid, u.username, CONCAT('/calendar/view/', e.eventid) AS href", FALSE)
-			->from('calendarevents AS e')
-			->join('users AS u', 'u.userid = e.userid')
-			->join('locations AS l', 'e.locationid = l.locationid')
-			->where('e.fulldate >=', $this->util->mysql_date())
-			->order_by('e.fulldate ASC');
+			->select("ft.topicname AS title, ft.topicid AS id, ft.date_from, ft.topicdate AS created, DATE(FROM_UNIXTIME(ft.date_from)) AS body, u.userid, u.username, CONCAT('/forum/topic/', ft.topicid) AS href", FALSE)
+			->from('forumtopics AS ft')
+			->join('users AS u', 'u.userid = ft.topicposterid')
+			->join('forumcategory AS fc', 'ft.forumcategoryid = fc.forumcategoryid')
+			// ->join('locations AS l', 'e.locationid = l.locationid')
+			->where('ft.date_from >=', time())
+			->where('fc.forumsecuritylevel <=', $userlevel)
+			->order_by('ft.date_from ASC');
 		
 		if( ! is_null($limit))
 			$events->limit($limit);
@@ -17,123 +19,61 @@ class EventModel extends AutoModel {
 	
 	public function get_upcoming_by_attendance($user_id) {
 		return $this->db
-			->select('e.title, e.eventid AS id')
-			->from('calendarevents AS e')
-			->join('joinactivity AS j', 'e.eventid = j.eventid')
-			->where('j.userid', $user_id)
-			->where('e.fulldate >=', $this->util->mysql_date())
-			->order_by('e.fulldate ASC')
+			->select("ft.topicname AS title, ft.topicid AS id, ft.topicdate AS created, CONCAT('/forum/topic/', ft.topicid) AS href, u.userid, u.username, DATE(FROM_UNIXTIME(ft.date_from)) AS body", FALSE)
+			->from('forumtopics AS ft')
+			->join('forumjoin AS j', 'ft.topicid = j.topic_id')
+			->join('users AS u', 'u.userid = ft.topicposterid')
+			->where('j.user_id', $user_id)
+			->where('ft.date_from >=', time())
+			->order_by('ft.date_from ASC')
 			->get()->result();
 	}
 	
-	public function get_interval($timestamp_start, $timestamp_end) {
-		$date_start = $this->util->mysql_date($timestamp_start);
-		$date_end = $this->util->mysql_date($timestamp_end);
-		
-		$events = $this->db
-			->select("e.title, e.eventid AS id, e.fulldate AS date, e.text AS body, e.regdate AS created, e.*, l.*, u.userid, u.username, CONCAT('/calendar/view/', e.eventid) AS href", FALSE)
-			->from('calendarevents AS e')
-			->join('users AS u', 'e.userid = u.userid')
-			->join('locations AS l', 'e.locationid = l.locationid')
-			->where('fulldate >= ', $date_start)
-			->where('fulldate <=', $date_end)
-			->order_by('fulldate')
+	public function get_interval($timestamp_start, $timestamp_end, $userlevel = 0) {
+		return $this->db
+			->select("ft.topicname AS title, ft.topicid AS id, ft.date_from, ft.date_to, ft.topicdate AS created, u.userid, u.username, DATE(FROM_UNIXTIME(ft.date_from)) AS body, CONCAT('/forum/topic/', ft.topicid) AS href", FALSE)
+			->from('forumtopics AS ft')
+			->join('users AS u', 'ft.topicposterid = u.userid')
+			->join('forumcategory AS fc', 'ft.forumcategoryid = fc.forumcategoryid')
+			// ->join('locations AS l', 'e.locationid = l.locationid')
+			->where('date_from >= ', $timestamp_start)
+			->where('date_from <=', $timestamp_end)
+			->where('fc.forumsecuritylevel <=', $userlevel)
+			->order_by('date_from', 'asc')
+			->order_by('date_to', 'asc')
 			->get()
 			->result();
-
-		// foreach($events as &$event)
-		// 	$this->ormify($event);
-		
-		return $events;
-	}
-	
-	public function get_by_id($event_id) {
-		$event = $this->db
-			->select("e.title, e.eventid AS id, e.fulldate AS date, e.text AS body, e.regdate AS created, e.*, l.*, u.userid AS creator, u.userid, u.username, CONCAT('/calendar/view/', e.eventid) AS href", FALSE)
-			->from('calendarevents AS e')
-			->join('users AS u', 'e.userid = u.userid')
-			->join('locations AS l', 'e.locationid = l.locationid')			// ->join_related('users', 'e.userid = creator.userid', 'creator', array('userid', 'username'))
-			->where('eventid', $event_id)
-			->get()->row();
-		$event->subtitle = $event->date;
-		$event = $this->add_actions($event);
-		return $event;
-		// return $this->ormify($event);
 	}
 	
 	public function signup($event_id, $user_id) {
-		$this->db->insert('joinactivity', array('userid' => $user_id, 'eventid' => $event_id));
+		$this->db->insert('forumjoin', array('user_id' => $user_id, 'topic_id' => $event_id));
 	}
 	
 	public function signoff($event_id, $user_id) {
-		$this->db->delete('joinactivity', array('userid' => $user_id, 'eventid' => $event_id));
+		$this->db->delete('forumjoin', array('user_id' => $user_id, 'topic_id' => $event_id));
 	}
 	
-	public function get_attendees($event_id) {
-		return $this->db->select('users.username, users.userid')->join('users', 'users.userid = joinactivity.userid')->where('joinactivity.eventid', $event_id)->get('joinactivity')->result();
+	public function get_attendees($topic_id) {
+		return $this->db->select('users.username, users.userid, forumjoin.comment AS body')->join('users', 'users.userid = forumjoin.user_id')->where('forumjoin.topic_id', $topic_id)->get('forumjoin')->result();
 	}
 	
 	public function group_by_day($events, $out = array()) {
 		foreach($events as $event)
-			$out[$event->dd][] = $event;
+			$out[date('j', $event->date_from)][] = $event;
 		return $out;
 	}
 	
 	public function group_by_month($events, $out = array()) {
 		foreach($events as $event)
-			$out[$event->mm][] = $event;
+			$out[date('n', $event->date_from)][] = $event;
 		return $out;
 	}
 	
 	public function user_has_signed_up($userid, $eventid) {
-		return ($this->db->where('userid', $userid)->where('eventid', $eventid)->get('joinactivity')->num_rows() > 0);
+		return ($this->db->where('user_id', $userid)->where('topic_id', $eventid)->get('forumjoin')->num_rows() > 0);
 	}
 	
-	public function save(stdClass $event) {
-		$new_event = new stdClass();
-		$new_event->title = $event->title;
-		$new_event->text = $event->body;
-		$new_event->fulldate = $this->util->mysql_date($event->date);
-		$new_event->userid = $event->creator;
-		$new_event->locationid = $event->location;
-		$new_event->dd = date('d', $event->date);
-		$new_event->mm = date('m', $event->date);
-		$new_event->yyyy = date('Y', $event->date);
-		$new_event->regdate = $this->util->mysql_date();
-		
-		if(isset($event->id)) {
-			$this->db->update('calendarevents', $new_event, array('eventid' => $event->id));
-			$event_id = $event->id;
-		} else {
-			$this->db->insert('calendarevents', $new_event);
-			$event_id =  $this->db->insert_id();			
-		}
-		
-		return $event_id;
-	}
-	
-	public function flag_as_having_image($event_id) {
-		$this->db->update('calendarevents', array('eventimage' => $event_id.'.'.$this->util->setting('default_image_extension')), array('eventid' => $event_id));
-	}
-	
-	protected function add_actions($event) {
-		if($this->session->isAdmin() || $event->creator == $this->session->userId()) {
-			$event->actions[] = array('href' => '/calendar/delete/'.$event->id, 'title' => 'Radera', 'class' => 'delete');
-			$event->actions[] = array('href' => '/calendar/edit/'.$event->id, 'title' => 'Redigera', 'class' => 'edit');
-		}
-		
-		if($this->session->isAdmin()) {
-			$event->actions[] = array('href' => '/calendar/alert/'.$event->id, 'title' => 'Påminn', 'class' => 'alert');
-			$event->actions[] = array('href' => '/calendar/deleteimage/'.$event->id, 'title' => 'Radera bild', 'class' => 'deleteimage');
-		}
-		
-		return $event;
-	}
-	
-	public function set_topic_id($event_id, $topic_id) {
-		$this->db->update('calendarevents', array('topic_id' => $topic_id), array('eventid' => $event_id));
-	}
-	
+	// Borde vara del av alerts-modellen
 	public function delete_notifications($event_id, $user_id) {
 		$this->db->delete('calendarnotify', array('eventid' => $event_id, 'userid' => $user_id));
 	}

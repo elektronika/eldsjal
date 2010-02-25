@@ -4,6 +4,12 @@ class Forum extends MY_Controller {
 		$this->util->trail('spanar över forumkategorierna');
 		$this->view->categories = $this->models->forum->get_categories_for_usertype($this->session->usertype(), $this->session->userId(), $this->session->lastlogin());
 		$this->view->page_title = 'Forum';
+		$this->view->sublinks = array(
+			array('href' => '/forum/random', 'title' => 'Slumpad tråd')
+		);
+		
+		if($this->session->isAdmin())
+			$this->view->sublinks[] = array('href' => '/forum/admin', 'title' => 'Hantera kategorier');
 	}
 	
 	public function acl_topic($id) {
@@ -34,6 +40,18 @@ class Forum extends MY_Controller {
 		$this->view->cur_page = $cur_page;
 		$this->view->is_last_page = (bool) ($topic->replies - $cur_page < $posts_per_page);
 		$this->view->user_can_reply = ($topic->locked != 1) && $this->acl_reply($id);
+		
+		if($topic->is_event) {
+			$this->view->sublinks[] = array('href' => '/calendar/browse/'.date('Y', $topic->date_from).'/'.date('m', $topic->date_from), 'title' => datespan($topic->date_from, $topic->date_to));
+			if($this->models->event->user_has_signed_up($this->session->userId(), $id))
+				$this->view->sublinks[] = array('href' => '/calendar/signoff/'.$id, 'title' => 'Njae, jag ska nog inte med. :/');
+			else
+				$this->view->sublinks[] = array('href' => '/calendar/signup/'.$id, 'title' => 'Sign me up scotty!');
+			$attendees = $this->models->event->get_attendees($id);
+			if(count($attendees) > 0)
+				$this->view->sublinks[] = array('href' => '/calendar/attendees/'.$id, 'title' => 'Deltagarlistan ('.count($attendees).' ska med)');
+		}
+
 	}
 	
 	public function acl_reply($id) {
@@ -126,6 +144,8 @@ class Forum extends MY_Controller {
 		$this->view->is_moderator = $this->session->isAdmin();
 		$this->util->trail('ångrar sig, och redigerar ett inlägg');
 		$this->view->page_title = 'Redigera inlägg';
+		$this->view->years_ahead = $this->settings->get('calendar_years_ahead');
+		$this->view->years_back = 0;
 	}
 	
 	public function post_edit($post_id) {
@@ -142,13 +162,18 @@ class Forum extends MY_Controller {
 		} else {
 			if($post_is_first) {
 				$this->models->forum->rename_topic($post->topic_id, $this->input->post('title'));
-				if($this->session->isAdmin()) {
-					$this->models->forum->set_category($post->topic_id,(int) $this->input->post('category'));
-					$this->models->forum->set_topic_flags($post->topic_id, array(
+				if($this->session->isAdmin())
+					$this->models->forum->set_topic_fields($post->topic_id, array(
 						'sticky' => (int) $this->input->post('sticky'),
-						'locked' => (int) $this->input->post('locked')
+						'locked' => (int) $this->input->post('locked'),
+						'forumcategoryid' => (int) $this->input->post('category')
 					));
-				}
+				$this->models->forum->set_topic_fields($post->topic_id, array(
+					'topicname' => $this->input->post('title'),
+					'is_event' => (int) $this->input->post('is_event'),
+					'date_from' => datepicker_timestamp('date_from'),
+					'date_to' => datepicker_timestamp('date_to')
+				));
 			}
 			if($post->body != $this->input->post('body'))
 				$this->models->forum->update_post($post_id, $this->input->post('body'));
@@ -215,5 +240,25 @@ class Forum extends MY_Controller {
 		$per_page = $this->session->setting('forum_posts_per_page');
 		$page = floor($previous / $per_page) * $per_page;
 		$this->redirect("/forum/topic/{$post->topic_id}/page:{$page}#post-{$post->id}");
+	}
+	
+	public function get_admin() {
+		$this->view->items = $this->db->order_by('forumCategorySortOrder', 'asc')->get('forumcategory')->result();
+		$this->view->page_title = 'Forumskategorier';
+		$this->view->template = 'inputgrid';
+		$this->view->form_action = '/forum/admin';
+	}
+	
+	public function post_admin() {
+		// $this->db->empty_table('board');
+		// 		foreach($_POST['items'] as $item)
+		// 			if( ! empty($item['rights']))
+		// 				$this->db->insert('board', $item);
+		// 		$this->session->message('Sweet, rättigheterna uppdaterades!');
+		$this->redirect('/forum/admin');
+	}
+	
+	public function acl_admin() {
+		return $this->session->isAdmin();
 	}
 }

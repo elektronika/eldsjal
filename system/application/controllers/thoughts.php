@@ -1,13 +1,5 @@
 <?php
-class Thoughts extends MY_Controller {	
-	// public function _remap($method) {
-	// 	if(method_exists($this, $method)) {
-	// 		call_user_func_array(array($this, $method), array_slice($this->uri->segment_array(), 2));
-	// 	} else {
-	// 		$this->get_index();
-	// 	}
-	// }
-	
+class Thoughts extends MY_Controller {		
 	public function acl_controller() {
 		return $this->session->isLoggedIn();
 	}
@@ -25,7 +17,7 @@ class Thoughts extends MY_Controller {
 		));
 		$this->view->pager = $this->pagination->create_links();
 		$this->view->sublinks = array(
-			array('href' => '/thoughts/today', 'title' => 'Dagens tanke'),
+			array('href' => '/thoughts/today', 'title' => 'Skriv dagens tanke'),
 			array('href' => '/thoughts/mine', 'title' => 'Mina tankar')
 		);
 		$this->view->template = 'list';

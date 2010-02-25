@@ -16,7 +16,7 @@ class Usermenu extends Widget {
 		$this->items[] = (object) array('href' => '/thoughts', 'title' => 'Tankar', 'class' => 'thoughts');
 		
 		$event_count = $this->db->query("SELECT COUNT(calendarnotifyid) AS count FROM calendarnotify WHERE userid = ".$this->session->userId())->row()->count;
-		$this->items[] = (object) array('href' => '/calendarView.php?mode=userList', 'title' => 'Kalender'.$this->counter($event_count), 'class' => $event_count ? 'events new' : 'events');
+		$this->items[] = (object) array('href' => '/calendar', 'title' => 'Kalender'.$this->counter($event_count), 'class' => $event_count ? 'events new' : 'events');
 
 		if($this->session->hasPrivilege('useradmin')) {
 			$pending = $this->db->query("select count(userid) as users from users where usertype = 0 and email <> '' and userid not in (select userid from pendingdelete)")->row()->users;

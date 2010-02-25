@@ -89,4 +89,58 @@ class Admin extends MY_Controller {
 		$this->session->message('Loggen är rensad! *poff* liksom!');
 		$this->redirect('/admin/log');
 	}
+	
+	public function get_convertevents() {
+		$events = $this->upcoming_events();
+		$forum_category = 22;
+		foreach($events as $event) {
+			$topic = new stdClass();
+			$topic->category = $forum_category;
+			$topic->title = $event->title;
+			$topic->userid = $event->userid;
+			$topic->topicdate = $event->created;
+			$topic->body = $event->body;
+			
+			$topic_id = $this->models->forum->create_topic($topic);
+			$fields = array(
+				'is_event' => 1,
+				'date_from' => $this->util->assureTimestamp($event->date),
+				'latestentry' => $event->created,
+				'topicdate' => $event->created
+			);
+			$this->models->forum->set_topic_fields($topic_id, $fields);
+			
+			$message_id = current($this->models->forum->get_posts_for_topic($topic_id))->id;
+			$fields = array(
+				'messagedate' => $event->created
+			);
+			$this->models->forum->set_message_fields($message_id, $fields);
+			
+			$attendees = $this->attendees($event->id);
+			foreach($attendees as $user)
+				$this->models->event->signup($topic_id, $user->userid);
+		}
+		$this->view->template = 'item';
+		$this->session->message('Kalendern konverterad!');
+		// $this->redirect('/main');
+	}
+	
+	public function upcoming_events($limit = NULL) {
+		$events =  $this->db
+			->select("e.title, e.eventid AS id, e.fulldate AS date, e.text AS body, e.regdate AS created, e.*, l.*, u.userid, u.username, CONCAT('/calendar/view/', e.eventid) AS href", FALSE)
+			->from('calendarevents AS e')
+			->join('users AS u', 'u.userid = e.userid')
+			->join('locations AS l', 'e.locationid = l.locationid')
+			->where('e.fulldate >=', $this->util->mysql_date())
+			->order_by('e.fulldate ASC');
+		
+		if( ! is_null($limit))
+			$events->limit($limit);
+			
+		return $events->get()->result();
+	}
+	
+	public function attendees($event_id) {
+		return $this->db->select('users.username, users.userid')->join('users', 'users.userid = joinactivity.userid')->where('joinactivity.eventid', $event_id)->get('joinactivity')->result();
+	}
 }

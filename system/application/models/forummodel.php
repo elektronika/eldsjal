@@ -12,7 +12,7 @@ class ForumModel extends AutoModel {
 				fc.forumCategoryId AS id,
 				MAX(fts.time) AS track_latest
 			FROM forumcategory AS fc
-			JOIN forumtopics AS ft
+			LEFT JOIN forumtopics AS ft
 				ON fc.forumcategoryid = ft.forumcategoryid
 			LEFT JOIN forumtracks AS fts
 				ON ft.topicid = fts.topic_id AND fts.user_id = {$user_id}
@@ -139,6 +139,7 @@ class ForumModel extends AutoModel {
 				f.topicname AS title, 
 				f.sticky, 
 				f.locked, 
+				f.is_event,
 				f.topicid AS id, 
 				f.topicdate AS created,
 				MIN(fm.messageid) AS first_post,
@@ -177,6 +178,8 @@ class ForumModel extends AutoModel {
 				$topic->classes['locked'] = 'locked';
 			if($topic->sticky)
 				$topic->classes['sticky'] = 'sticky';
+			if($topic->is_event)
+				$topic->classes['is_event'] = 'is_event';
 			if($topic->replies == 0)
 				$topic->classes['no-replies'] = 'no-replies';
             
@@ -308,7 +311,8 @@ class ForumModel extends AutoModel {
 				fm.posterid AS userid, 
 				fm.topicid AS topicid, 
 				UNIX_TIMESTAMP(fm.messagedate) AS timestamp, 
-				ft.topicname, 
+				ft.topicname,
+				ft.is_event,
 				fc.forumcategoryname,
 				fc.forumcategoryid
 			FROM forummessages AS fm
@@ -323,8 +327,12 @@ class ForumModel extends AutoModel {
 		return array();
 	}
 	
-	public function set_topic_flags($topic_id, Array $flags) {
-		$this->db->update('forumtopics', $flags, array('topicid' => $topic_id));
+	public function set_topic_fields($topic_id, Array $fields) {
+		$this->db->update('forumtopics', $fields, array('topicid' => $topic_id));
+	}
+	
+	public function set_message_fields($message_id, Array $fields) {
+		$this->db->update('forummessages', $fields, array('messageid' => $message_id));
 	}
 	
 	public function set_category($topic_id, $category_id) {

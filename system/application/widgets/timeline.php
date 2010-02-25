@@ -6,6 +6,8 @@ class Timeline extends Widget {
 		foreach($this->models->forum->get_latest_posts($this->session->usertype(), 20) as $post) {
 			$user_ids[$post->posterId] = $post->posterId;
 			$item = (object) array('type' => 'forum', 'topic_id' => $post->topicId);
+			if($post->is_event)
+				$item->type = 'event';
 			$item->title = $post->topicname;
 			$item->href = '/forum/redirecttopost/'.$post->messageId;
 			$item->body = mb_substr($post->message, 0, 30).'...';
