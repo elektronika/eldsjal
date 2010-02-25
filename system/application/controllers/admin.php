@@ -92,7 +92,7 @@ class Admin extends MY_Controller {
 	
 	public function get_convertevents() {
 		$events = $this->upcoming_events();
-		$forum_category = 22;
+		$forum_category = 2;
 		foreach($events as $event) {
 			$topic = new stdClass();
 			$topic->category = $forum_category;
