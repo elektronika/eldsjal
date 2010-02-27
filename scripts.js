@@ -1,4 +1,4 @@
-window.setInterval("jQuery.get('/keepalive.php?'+Math.random())", 5 * 60 * 1000);
+window.setInterval("jQuery.get('/json/keepalive?'+Math.random())", 5 * 60 * 1000);
 
 function openWindow(windowName,url) {
 	window.open(url, windowName, 'fullscreen=no, toolbar=no, status=no, menubar=no, scrollbars=auto, resizable=yes, directories=no,location=no, left=0, top=0, width=800, height=600');
@@ -11,10 +11,10 @@ function openImage(url,x,y,qs){
 function confirmSubmit(message){
 	var agree=confirm(message);
 	if (agree)
-		return true;
+	return true;
 	else
-		return false ;
-	}
+	return false ;
+}
 
 function openImage(url,x,y,qs){
 	window.open(url, 'galleryImage', 'fullscreen=no,toolbar=no,status=no,menubar=no,scrollbars=yes,resizable=yes,directories=no,location=no,left=80,top=30,width=' + x + ',height=' + y);
@@ -41,108 +41,86 @@ function checkPersonnr(nr) {
 
 function ValidateAccountRegister() {
 	if (document.register.username.value.length<2){
-	alert("Ditt anv&auml;ndarnamn m&aring;ste inneh&aring;lla fler &auml;n 2 tecken.\n\nPr&ouml;va igen!");
-	document.register.username.focus();
-	return;
+		alert("Ditt anv&auml;ndarnamn m&aring;ste inneh&aring;lla fler &auml;n 2 tecken.\n\nPr&ouml;va igen!");
+		document.register.username.focus();
+		return;
 	}
 	if (document.register.password.value.length<3){
-	alert("Ditt l&ouml;senord m&aring;ste inneh&aring;lla fler &auml;n 3 tecken.\n\nPr&ouml;va igen!");
-	document.register.password.focus();
-	return;
+		alert("Ditt l&ouml;senord m&aring;ste inneh&aring;lla fler &auml;n 3 tecken.\n\nPr&ouml;va igen!");
+		document.register.password.focus();
+		return;
 	}
 	if (!document.register.toa.checked) {
-	alert("Du m&aring;ste godk&auml;nna avtalet om PUL!");
-	return;
+		alert("Du m&aring;ste godk&auml;nna avtalet om PUL!");
+		return;
 	}
 	if (!document.register.member.checked) {
-	alert("Du m&aring;ste godk&auml;nna medlemsskap i f&ouml;reningen eldsj&auml;l!");
-	return;
+		alert("Du m&aring;ste godk&auml;nna medlemsskap i f&ouml;reningen eldsj&auml;l!");
+		return;
 	}
 	if (!document.register.cookies.checked) {
-	alert("Du m&aring;ste godk&auml;nna att cookies anv&auml;nds!");
-	return;
+		alert("Du m&aring;ste godk&auml;nna att cookies anv&auml;nds!");
+		return;
 	}
 	if (document.register.region.value == 0){
 		alert("Du m&aring;ste v&auml;lja region!");
-	return;
+		return;
 	}
 	document.register.submit();
 }
 
 function ValidateInfo() {
 	personnr =
-		document.forms['register2'].elements['born_year'][document.forms['register2'].elements['born_year'].selectedIndex].value.substr(2) + 
-		document.forms['register2'].elements['born_month'][document.forms['register2'].elements['born_month'].selectedIndex].value + 
-		document.forms['register2'].elements['born_date'][document.forms['register2'].elements['born_date'].selectedIndex].value +
-		"-" +
-		document.forms['register2'].elements['fourlast'].value;
+	document.forms['register2'].elements['born_year'][document.forms['register2'].elements['born_year'].selectedIndex].value.substr(2) + 
+	document.forms['register2'].elements['born_month'][document.forms['register2'].elements['born_month'].selectedIndex].value + 
+	document.forms['register2'].elements['born_date'][document.forms['register2'].elements['born_date'].selectedIndex].value +
+	"-" +
+	document.forms['register2'].elements['fourlast'].value;
 
 	if (!checkPersonnr(personnr)){
-	alert("Du m&aring;ste ange ett korrekt personnummer.\n\nPr&ouml;va igen!");
-	return false;
+		alert("Du m&aring;ste ange ett korrekt personnummer.\n\nPr&ouml;va igen!");
+		return false;
 	}
 
 	if (document.register2.first_name.value.length<2){
-	alert("Du m&aring;ste ange ditt f&ouml;rnamn.\n\nPr&ouml;va igen!");
-	document.register2.first_name.focus();
-	return false;
+		alert("Du m&aring;ste ange ditt f&ouml;rnamn.\n\nPr&ouml;va igen!");
+		document.register2.first_name.focus();
+		return false;
 	}
 	if (document.register2.last_name.value.length<2){
-	alert("Du m&aring;ste ange ditt efternamn.\n\nPr&ouml;va igen!");
-	document.register2.last_name.focus();
-	return false;
+		alert("Du m&aring;ste ange ditt efternamn.\n\nPr&ouml;va igen!");
+		document.register2.last_name.focus();
+		return false;
 	}
 	if (document.register2.email.value == ''){
-	alert("Du m&aring;ste ange din email\n\Pr&ouml;va igen!");
-	document.register2.email.focus();
-	return false;
+		alert("Du m&aring;ste ange din email\n\Pr&ouml;va igen!");
+		document.register2.email.focus();
+		return false;
 	}
 	if (document.register2.howInform.value == ''){
-	alert("Du m&aring;ste ange hur du kom i kontakt med Eldsj&auml;l!");
-	document.register2.howInform.focus();
-	return false;
+		alert("Du m&aring;ste ange hur du kom i kontakt med Eldsj&auml;l!");
+		document.register2.howInform.focus();
+		return false;
 	}			
 	document.register2.submit();
 }
 
 function ValidatePresentation() {
 	if (document.collect3.presentation.value.length<50){
-	alert("En längre presentation än så kan du skriva, försök igen!");
-	document.collect3.presentation.focus();
-	return false;
+		alert("En längre presentation än så kan du skriva, försök igen!");
+		document.collect3.presentation.focus();
+		return false;
 	}
 	document.collect3.submit();
 }
 
 function isNumeric(str,message) {
+	if (str == str.replace(/[^\d]*/gi,"")) {
+	}
+	else {
+		alert(message);
+		document.register2.icq.value = "";
 
-if (str == str.replace(/[^\d]*/gi,"")) {
+	}
+	return;
 }
-else {
-alert(message);
-document.register2.icq.value = "";
-
-}
-return;
-}
-
-$(document).ready(function(){
-	$("#pageflip").hover(function() { //On hover...
-		$("#pageflip img , .msg_block").stop()
-			.animate({ //Animate and expand the image and the msg_block (Width + height)
-				width: '265px',
-				height: '275px'
-			}, 500);
-		} , function() {
-		$("#pageflip img").stop() //On hover out, go back to original size 50x52
-			.animate({
-				width: '50px',
-				height: '52px'
-			}, 220);
-		$(".msg_block").stop() //On hover out, go back to original size 50x50
-			.animate({
-				width: '50px',
-				height: '50px'
-			}, 200); //Note this one retracts a bit faster (to prevent glitching in IE)
-	});
-});

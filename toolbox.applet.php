@@ -43,19 +43,19 @@ if( $_SESSION['userid'] != 0 || $_SESSION['userid'] != "" ) {
 			$messageentrys = " (".$newMessage['newmessages'].")";
 		}
 		$newMessage = null;
-		$sql = "select count(calendarnotifyid) as notifications from calendarnotify where userid = ".$_SESSION['userid'];
-		$notify = $conn->execute( $sql );
+		// $sql = "select count(calendarnotifyid) as notifications from calendarnotify where userid = ".$_SESSION['userid'];
+		// $notify = $conn->execute( $sql );
 		$notifyImage = "images/icons/juggler.gif";
 
 		//response.Write(notify("notifications") & "<br>")
 
-		if( intval( $notify['notifications'] ) > 0 ) {
-			$notifyImage = "images/icons/juggleranim.gif";
+		// if( intval( $notify['notifications'] ) > 0 ) {
+			// $notifyImage = "images/icons/juggleranim.gif";
 
 			//notifications = "1"
 			//notifications = "(" & notify("notifications") & ")"
-		}
-		$notify = null;
+		// }
+		// $notify = null;
 		// $trivias = "";
 		// if( $_SESSION['usertype'] >= $application['triviaadmin'] ) {
 		// 	$sql = "select count(*) as trivia from trivia where approvedby = 0";
