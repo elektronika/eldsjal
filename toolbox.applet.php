@@ -118,9 +118,9 @@ if( $_SESSION['userid'] != 0 || $_SESSION['userid'] != "" ) {
 		 <?php
 	// Admin interface
 
-	if( $_SESSION['boardmember'] == 1 ) {
-		print "<a class=\"a2\" href=\"sendBoardMessage.php\"><img src=\"images/icons/mess.gif\" border=\"0\">&nbsp;Styrelsepost</a><br><br>";
-	}
+	// if( $_SESSION['boardmember'] == 1 ) {
+	// 	print "<a class=\"a2\" href=\"sendBoardMessage.php\"><img src=\"images/icons/mess.gif\" border=\"0\">&nbsp;Styrelsepost</a><br><br>";
+	// }
 	// if( $_SESSION['usertype'] >= 1 && false ) {
 	// 	print "<a class=\"a2\" href=\"triviaAdmin.php\"><img src=\"images/icons/vishetsadministration.gif\" border=\"0\">&nbsp;Trivia ".$trivias."</a><br>";
 	// }
@@ -158,7 +158,7 @@ if( $_SESSION['userid'] != 0 || $_SESSION['userid'] != "" ) {
 		 <br>
 		 <br>
 		 <a class="a2" href="userEdit.php?mode=editAccount&userid=<?php   echo $_SESSION['userid'];?>"><img src="images/icons/skiftnyckel.gif" border="0"> Inst&auml;llningar</a><br>
-		 <a class="a2" href="logout.php"><img src="images/buttons/xbutton.gif" border="0"> Logga ut</a>
+		 <a class="a2" href="/logout"><img src="images/buttons/xbutton.gif" border="0"> Logga ut</a>
 		</h4>
 		
 	

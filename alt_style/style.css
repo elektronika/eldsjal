@@ -382,6 +382,21 @@ ul.flat {
 	display: block;
 }
 
+#messages .notice, #messages .warning {
+	background: #CDEB8B;
+	color: #111;
+	padding: 10px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	font-style: normal;
+}
+
+#messages .warning {
+	background: #F9F7ED;
+	color: #CC0000;
+	border: none;
+}
+
 /* Actions, med ikoner */
 
 .actions {
@@ -648,14 +663,14 @@ fieldset {
 }
 
 /*input, textarea*/
-.form-item-text, .form-item-textarea, .form-item-submit {
+.form-item-text, .form-item-password, .form-item-textarea, .form-item-submit {
 	padding: 2px;
 	background: #ddd;
 	border: 1px solid #ccc;
 	width: 440px;
 }
 
-#login .form-item-text {
+#login .form-item-text, #login .form-item-password {
 	width: 115px;
 }
 
