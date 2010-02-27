@@ -1,6 +1,4 @@
 <?php region('content'); ?>
-<h2><a href="/forum">Forum</a> &raquo; <?php echo $category->forumCategoryName; ?></h2>
-<?php if(isset($sublinks)) echo sublinks($sublinks); ?>
 <table id="forum-topics">
 	<thead>
 		<tr>

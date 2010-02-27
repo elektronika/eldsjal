@@ -1,5 +1,4 @@
 <?php region('content'); ?>
-<h2><a href="/forum">Forum</a> &raquo; <a href="/forum/category/<?php echo $topic->forumCategoryID; ?>"><?php echo $topic->forumCategoryName; ?></a> &raquo; Redigera</h2>
 
 <?php 
 echo form_open($form_action); 

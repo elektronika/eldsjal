@@ -1,7 +1,5 @@
 <?php region('content'); ?>
 <?php if( ! isset($item_function)) $item_function = 'teaser'; ?>
-<h2><?php echo $page_title?></h2>
-<?php if(isset($sublinks)) echo sublinks($sublinks); ?>
 <?php if( ! empty($attending)): ?>
 <h3>Dessa är du anmäld till!</h3>
 <div class="list-page">

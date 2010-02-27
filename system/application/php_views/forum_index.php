@@ -1,6 +1,4 @@
 <?php region('content'); ?>
-<h2><?php echo $page_title; ?></h2>
-<?php echo sublinks($sublinks); ?>
 <table id="forum-categories">
 	<thead>
 		<tr>

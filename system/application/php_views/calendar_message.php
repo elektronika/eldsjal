@@ -1,7 +1,4 @@
 <?php region('content'); ?>
-<h2><?php echo $page_title; ?></h2>
-<?php echo sublinks($sublinks); ?>
-
 <?php 
 echo form_open($form_action); 
 echo input('text', 'title', 'Rubrik', $prefilled_title);

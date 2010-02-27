@@ -1,6 +1,4 @@
 <?php region('content'); ?>
-<h2><?php echo $page_title?></h2>
-<?php if(isset($sublinks)) echo sublinks($sublinks); ?>
 <div class="calendar-year">
 <div class="break">
 <?php for($month_number = 1; $month_number <= 12; $month_number++): ?>

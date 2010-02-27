@@ -615,3 +615,20 @@ function datepager($prefix, $year, $month = NULL, $day = NULL) { ?>
 function userlist_item($user) {
 	return '<div class="userlist">'.userimage($user).userlink($user).(isset($user->body) ? '<span>'.$user->body.'</span>' : '').'<span class="clear">&nbsp;</span></div>';
 }
+
+function messages(Array $messages) { 
+	if( ! empty($messages)): ?>
+	<div id="messages">
+		<?php foreach($messages as $type => $message): if( ! empty($message)): ?>
+			<div class="<?php echo $type; ?>"><?php echo $message; ?></div>
+		<?php endif; endforeach; ?>
+	</div>
+<?php endif; }
+
+function breadcrumbs(Array $breadcrumbs) { ?>
+	<span class="breadcrumb">
+		<?php foreach($breadcrumbs as $crumb): ?>
+			<a href="<?php echo $crumb['href']; ?>"><?php echo $crumb['title']; ?></a> &raquo; 
+		<?php endforeach; ?>
+	</span>
+<?php }

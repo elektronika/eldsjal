@@ -15,8 +15,10 @@ class MY_Controller extends Controller {
 		$this->view->css = explode(',', $this->settings->get('css'));
 		$this->view->body_class = $this->settings->get('body_class');
 		$this->view->sublinks = array();
+		$this->view->breadcrumbs = array();
+		$this->view->messages = $this->session->getMessages();
 		
-		// Borde egentligen vara widgets
+		// Borde egentligen vara widgets {
 		if(file_exists('revision')) {
 			$this->view->revision_date = date('d/m/y, H:i', filemtime('revision'));
 			$this->view->revision_name = 'rev. '.file_get_contents('revision');
@@ -26,7 +28,7 @@ class MY_Controller extends Controller {
 		}		
 		$this->view->messages = $this->session->getMessages();
 		$this->view->usersonline = $this->util->onlineCount();
-		
+		// }
 		
 		if($this->session->isLoggedIn()) {
 			$this->view->isloggedin = TRUE;

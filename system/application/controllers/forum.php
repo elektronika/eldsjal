@@ -40,6 +40,8 @@ class Forum extends MY_Controller {
 		$this->view->cur_page = $cur_page;
 		$this->view->is_last_page = (bool) ($topic->replies - $cur_page < $posts_per_page);
 		$this->view->user_can_reply = ($topic->locked != 1) && $this->acl_reply($id);
+		$this->view->breadcrumbs[] = array('href' => '/forum', 'title' => 'Forum');
+		$this->view->breadcrumbs[] = array('href' => '/forum/category/'.$topic->forumCategoryID, 'title' => $topic->forumCategoryName);
 		
 		if($topic->is_event) {
 			$this->view->sublinks[] = array('href' => '/calendar/browse/'.date('Y', $topic->date_from).'/'.date('m', $topic->date_from), 'title' => datespan($topic->date_from, $topic->date_to));
@@ -73,6 +75,7 @@ class Forum extends MY_Controller {
 			
 			$post_id = $this->models->forum->create_post($new_reply);
 			$page = floor($this->models->forum->count_posts_in_topic($id) / $this->util->setting('forum_posts_per_page')) * $this->util->setting('forum_posts_per_page');
+			$this->session->message('Inlägg sparat!');
 			$this->redirect('/forum/topic/'.$id.'/page:'.$page.'#post-'.$post_id);
 		}
 	}
@@ -99,6 +102,7 @@ class Forum extends MY_Controller {
 		$this->view->category = $category;
 		$this->util->trail('kikar runt i forumkategorin '.$category->forumCategoryName, $category->forumSecurityLevel);
 		$this->view->page_title = $category->forumCategoryName;
+		$this->view->breadcrumbs[] = array('href' => '/forum', 'title' => 'Forum');
 		if($this->acl_new($id))
 			$this->view->sublinks = array(
 				array('href' => '/forum/new/'.$category->forumCategoryId, 'title' => 'Ny tråd')
@@ -125,7 +129,7 @@ class Forum extends MY_Controller {
 			$new_topic->userid = $this->session->userId();
 			
 			$topic_id = $this->models->forum->create_topic($new_topic);
-			
+			$this->session->message('Japp, nu är tråden skapad!');
 			$this->redirect('/forum/topic/'.$topic_id);
 		}
 	}
@@ -137,7 +141,8 @@ class Forum extends MY_Controller {
 	public function get_edit($post_id) {
 		$post = $this->models->forum->get_post_by_id($post_id);
 		$this->view->post = $post;
-		$this->view->topic = $this->models->forum->get_topic_by_id($post->topic_id);
+		$topic = $this->models->forum->get_topic_by_id($post->topic_id);
+		$this->view->topic = $topic;
 		$this->view->is_first_post = $this->models->forum->post_is_first($post->id);
 		$this->view->categories = $this->models->forum->get_categories_for_usertype_assoc($this->session->usertype());	
 		$this->view->form_action = '/forum/edit/'.$post_id;				
@@ -146,6 +151,8 @@ class Forum extends MY_Controller {
 		$this->view->page_title = 'Redigera inlägg';
 		$this->view->years_ahead = $this->settings->get('calendar_years_ahead');
 		$this->view->years_back = 0;
+		$this->view->breadcrumbs[] = array('href' => '/forum', 'title' => 'Forum');
+		$this->view->breadcrumbs[] = array('href' => '/forum/category/'.$topic->forumCategoryID, 'title' => $topic->forumCategoryName);		
 	}
 	
 	public function post_edit($post_id) {
@@ -177,7 +184,7 @@ class Forum extends MY_Controller {
 			}
 			if($post->body != $this->input->post('body'))
 				$this->models->forum->update_post($post_id, $this->input->post('body'));
-			
+			$this->session->message('Inlägget uppdaterat!');
 			$this->redirect('/forum/topic/'.$post->topic_id);
 		}
 	}
@@ -254,7 +261,7 @@ class Forum extends MY_Controller {
 		// 		foreach($_POST['items'] as $item)
 		// 			if( ! empty($item['rights']))
 		// 				$this->db->insert('board', $item);
-		// 		$this->session->message('Sweet, rättigheterna uppdaterades!');
+		$this->session->message('Sådärja!');
 		$this->redirect('/forum/admin');
 	}
 	

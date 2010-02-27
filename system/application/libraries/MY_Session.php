@@ -166,8 +166,8 @@ class MY_Session extends CI_Session {
 	}
 
 	public function logout() {
-		$this->destroy();
 		$this->object->db->update('users', array('online' => 0), array('userid' => $this->userid()));
+		$this->destroy();
 	}
 
 	public function setting($key, $default = NULL) {

@@ -42,6 +42,9 @@ else
 <?php endforeach; ?>
 </div>
 <div class="region" id="region-content">
+<?php if(isset($page_title)): ?><h2><?php if( ! empty($breadcrumbs)) echo breadcrumbs($breadcrumbs); ?><?php echo $page_title; ?></h2><?php endif; ?>
+<?php if( ! empty($sublinks)) echo sublinks($sublinks); ?>
+<?php echo messages($messages); ?>
 <?php echo region_contents('content'); ?>
 </div>
 <?php if(isset($widgets['right']) && ! empty($widgets['right'])): ?>

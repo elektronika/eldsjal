@@ -8,17 +8,25 @@ class Auth extends MY_Controller {
 		if($this->form_validation->run() == FALSE) {
 			$this->session->message('Men du, du måste fylla i både användarnamn och lösenord. Annars funkar det ju inte.');
 		} else {
-			if($this->session->authenticate($this->input->post('username'), $this->input->post('password')))
+			if($this->session->authenticate($this->input->post('username'), $this->input->post('password'))) {
 				$this->session->message('Inloggad och klar!');
-			else
-				$this->session->message('Något gick fel när du försökte logga in. Det är bara att försöka igen!', 'warning');
-			$this->redirect('/main');
+				
+				if($this->input->post('cookie'))
+					setcookie("username", $this->input->post('username'), time()+60*60*24*30);
+				else
+					setcookie("username",'', time()-3600);
+			} else {
+				$this->session->message('Något gick fel när du försökte logga in. Det är bara att försöka igen!', 'warning');				
+			}
 		}
+		$this->redirect('/main');
+		
 	}
 	
 	function get_logout() {
 		// Gör auth-grejen baklänges
 		$this->session->logout();
+		$this->session->message('Utloggad och klar!');
 		$this->redirect('/main');
 	}
 	

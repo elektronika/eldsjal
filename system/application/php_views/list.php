@@ -1,8 +1,5 @@
 <?php region('content'); ?>
 <?php if( ! isset($item_function)) $item_function = 'teaser'; ?>
-<h2><?php echo $page_title?></h2>
-<?php if(isset($sublinks)) echo sublinks($sublinks); ?>
-
 <div class="list-page">
 <?php foreach($items as $item): ?>
 	<div class="<?php echo nth(2) ? 'odd' : 'even'; ?>">

@@ -1,7 +1,4 @@
 <?php region('content'); ?>
-<h2><?php echo $page_title?></h2>
-<?php if(isset($sublinks)) echo sublinks($sublinks); ?>
-
 <div class="inputgrid">
 <?php echo form_open($form_action); ?>
 <?php $i = 0; ?>
