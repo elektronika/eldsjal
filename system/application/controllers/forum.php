@@ -112,6 +112,9 @@ class Forum extends MY_Controller {
 		$this->view->page_title = 'Ny forumtråd';
 		$this->view->breadcrumbs[] = array('href' => '/forum', 'title' => 'Forum');
 		$this->view->breadcrumbs[] = array('href' => '/forum/category/'.$this->view->category->forumCategoryId, 'title' => $this->view->category->forumCategoryName);		
+		$this->view->is_event = $this->input->get('event');
+		$this->view->years_ahead = $this->settings->get('calendar_years_ahead');
+		$this->view->years_back = 0;
 	}
 	
 	public function post_new($id) {
@@ -127,6 +130,13 @@ class Forum extends MY_Controller {
 			$new_topic->userid = $this->session->userId();
 			
 			$topic_id = $this->models->forum->create_topic($new_topic);
+			
+			$this->models->forum->set_topic_fields($topic_id, array(
+				'is_event' => (int) $this->input->post('is_event'),
+				'date_from' => datepicker_timestamp('date_from'),
+				'date_to' => datepicker_timestamp('date_to')
+			));
+			
 			$this->session->message('Japp, nu är tråden skapad!');
 			$this->redirect('/forum/topic/'.$topic_id);
 		}

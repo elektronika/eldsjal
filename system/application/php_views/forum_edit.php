@@ -14,12 +14,14 @@ if($is_moderator) {
 	echo form_dropdown('category', $categories, $topic->forumCategoryID);
 	echo form_fieldset_close();
 }
-echo form_fieldset('Kalenderlattjolajban');
-echo form_label('Visa i kalendern', 'is_event');
-echo form_checkbox('is_event', '1', $topic->is_event);
-echo form_label('Datum', 'date');
-echo datepicker('date_from', $years_ahead, $years_back, $topic->date_from).' - '.datepicker('date_to', $years_ahead, $years_back, $topic->date_to);
-echo form_fieldset_close();
+if($is_first_post) {
+	echo form_fieldset('Kalenderlattjolajban');
+	echo form_label('Visa i kalendern', 'is_event');
+	echo form_checkbox('is_event', '1', $topic->is_event);
+	echo form_label('Datum', 'date');
+	echo datepicker('date_from', $years_ahead, $years_back, $topic->date_from).' - '.datepicker('date_to', $years_ahead, $years_back, $topic->date_to);
+	echo form_fieldset_close();
+}
 echo submit('Spara!');
 ?>
 </form>

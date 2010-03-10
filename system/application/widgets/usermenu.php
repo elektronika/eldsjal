@@ -10,7 +10,7 @@ class Usermenu extends Widget {
 		
 		$msg_count = $this->db->query("SELECT COUNT(readmessage) AS count FROM messages WHERE userid = ".$this->session->userId()." AND readmessage = 0")->row()->count;
 		$this->items[] = (object) array('href' => '/messages.php?userid='.$this->session->userid(), 'title' => 'Meddelanden'.$this->counter($msg_count), 'class' => $msg_count ? 'messages new' : 'messages');
-		$this->items[] = (object) array('href' => '/forum', 'title' => 'Diskussioner', 'class' => 'forum');		
+		$this->items[] = (object) array('href' => '/forum', 'title' => 'Forum', 'class' => 'forum');		
 		$this->items[] = (object) array('href' => '/gallery.php', 'title' => 'Bilder', 'class' => 'gallery');		
 		$this->items[] = (object) array('href' => '/people', 'title' => 'Folk', 'class' => 'people');
 		$this->items[] = (object) array('href' => '/thoughts', 'title' => 'Tankar', 'class' => 'thoughts');
