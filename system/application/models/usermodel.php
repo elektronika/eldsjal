@@ -20,7 +20,7 @@ class UserModel extends AutoModel {
 			->select('users.*, locations.*, fadder.userid AS fadder_id, fadder.username AS fadder_name')
 			->where('users.userid', intval($user_id))
 			->join('locations', 'city = locationid')
-			->join('users AS fadder', 'fadder.userid = users.approvedby')
+			->join('users AS fadder', 'fadder.userid = users.approvedby', 'left')
 			->get('users')->row();
 		unset($user->password);
 		$user->birthday = mktime(0, 0, 0, $user->born_month, $user->born_date, $user->born_year);
