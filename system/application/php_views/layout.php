@@ -42,8 +42,10 @@ else
 <?php endforeach; ?>
 </div>
 <div class="region" id="region-content">
+<?php if($display_header):?>
 <?php if(isset($page_title)): ?><h2><?php if( ! empty($breadcrumbs)) echo breadcrumbs($breadcrumbs); ?><?php echo $page_title; ?></h2><?php endif; ?>
 <?php if( ! empty($sublinks)) echo sublinks($sublinks); ?>
+<?php endif; ?>
 <?php echo messages($messages); ?>
 <?php echo region_contents('content'); ?>
 </div>
@@ -62,7 +64,7 @@ else
 <div id="footer-wrap">
 	<div id="footer">
 		<div class="float-left">
-			<a href = "/members.php?mode=showOnline" class = "a2" ><?php echo $usersonline; ?> eldsjälar är online</a><br/>
+			<a href="/people/search?online=1"><?php echo $usersonline; ?> eldsjälar är online</a><br/>
 		</div>
 		<div class="float-right">
 				Senast uppdaterad: <?php echo $revision_date; ?><br/>

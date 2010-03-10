@@ -18,7 +18,7 @@ class Thoughts extends MY_Controller {
 		$this->view->pager = $this->pagination->create_links();
 		$this->view->sublinks = array(
 			array('href' => '/thoughts/today', 'title' => 'Skriv dagens tanke'),
-			array('href' => '/thoughts/mine', 'title' => 'Mina tankar')
+			array('href' => '/thoughts/user/'.$this->session->userId(), 'title' => 'Mina tankar')
 		);
 		$this->view->template = 'list';
     }
@@ -39,10 +39,8 @@ class Thoughts extends MY_Controller {
 			$this->get_today();
 		} else {
 			$new_thought = (object) $this->input->post_array(array('title', 'body'));
-			$thought_id = $this->models->thought->set_todays_thought($new_thought, $this->session->userId());
-			$this->get_today();
-			
-			// $this->redirect('/thoughts/view/'.$thought_id);
+			$thought_id = $this->models->thought->set_todays_thought($new_thought, $this->session->userId());			
+			$this->redirect('/thoughts/view/'.$thought_id);
 		}
 	}
 	
@@ -57,17 +55,11 @@ class Thoughts extends MY_Controller {
 		$this->view->template = 'item';
 	}
 	
-	public function get_mine() {
-		$this->get_user($this->session->userid());
-	}
-	
 	public function get_user($user_id) {		
 		$user = $this->models->user->get_by_id((int) $user_id);
 		$this->view->items = $this->models->thought->get_by_user($user->userid);
 		$this->view->page_title = $user->username.'s tankar';
-		$this->view->sublinks = array(
-			array('href' => '/userPresentation.php?userid='.$user->userid, 'title' => $user->username.'s presentation')
-		);
+		$this->view->sublinks = $this->models->user->sublinks((int) $user_id, 'thoughts');
 		$this->view->template = 'list';
 	}
 }

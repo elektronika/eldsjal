@@ -39,6 +39,7 @@ class EventModel extends AutoModel {
 			->where('date_from >= ', $timestamp_start)
 			->where('date_from <=', $timestamp_end)
 			->where('fc.forumsecuritylevel <=', $userlevel)
+			->where('is_event', 1)
 			->order_by('date_from', 'asc')
 			->order_by('date_to', 'asc')
 			->get()
@@ -76,5 +77,9 @@ class EventModel extends AutoModel {
 	// Borde vara del av alerts-modellen
 	public function delete_notifications($event_id, $user_id) {
 		$this->db->delete('calendarnotify', array('eventid' => $event_id, 'userid' => $user_id));
+	}
+	
+	public function get_comment($topic_id, $user_id) {
+		return $this->db->where('topic_id', $topic_id)->where('user_id', $user_id)->get('forumjoin')->row()->comment;
 	}
 }

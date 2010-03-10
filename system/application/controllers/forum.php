@@ -4,9 +4,7 @@ class Forum extends MY_Controller {
 		$this->util->trail('spanar över forumkategorierna');
 		$this->view->categories = $this->models->forum->get_categories_for_usertype($this->session->usertype(), $this->session->userId(), $this->session->lastlogin());
 		$this->view->page_title = 'Forum';
-		$this->view->sublinks = array(
-			array('href' => '/forum/random', 'title' => 'Slumpad tråd')
-		);
+		$this->view->sublinks[] = array('href' => '/forum/random', 'title' => 'Slumpad tråd');
 		
 		if($this->session->isAdmin())
 			$this->view->sublinks[] = array('href' => '/forum/admin', 'title' => 'Hantera kategorier');
@@ -104,9 +102,7 @@ class Forum extends MY_Controller {
 		$this->view->page_title = $category->forumCategoryName;
 		$this->view->breadcrumbs[] = array('href' => '/forum', 'title' => 'Forum');
 		if($this->acl_new($id))
-			$this->view->sublinks = array(
-				array('href' => '/forum/new/'.$category->forumCategoryId, 'title' => 'Ny tråd')
-			);
+			$this->view->sublinks[] = array('href' => '/forum/new/'.$category->forumCategoryId, 'title' => 'Ny tråd');
 	}
 	
 	public function get_new($id) {
@@ -114,6 +110,8 @@ class Forum extends MY_Controller {
 		$this->view->template = 'forum_new_topic';
 		$this->util->trail('är på gång att starta en ny tråd i forumet. Håll i dig!');
 		$this->view->page_title = 'Ny forumtråd';
+		$this->view->breadcrumbs[] = array('href' => '/forum', 'title' => 'Forum');
+		$this->view->breadcrumbs[] = array('href' => '/forum/category/'.$this->view->category->forumCategoryId, 'title' => $this->view->category->forumCategoryName);		
 	}
 	
 	public function post_new($id) {
@@ -197,7 +195,7 @@ class Forum extends MY_Controller {
 	public function get_delete($post_id) {
 		$this->view->template = 'confirm';
 		$this->view->message = 'Är du säker på att du vill ta bort inlägget?';
-		$this->view->post_id = $post_id;
+		$this->view->form_action = '/forum/delete/'.$post_id;
 		$this->util->trail('funderar på att ta bort något! :-o');
 		$this->view->page_title = 'Radera inlägg';
 	}

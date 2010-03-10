@@ -198,7 +198,7 @@ class ForumModel extends AutoModel {
 	protected function add_topic_actions(&$topic) {
 		if($this->session->isAdmin()) { // || $this->user->userId() == $topic->userid) {
 			$topic->actions[] = array('title' => 'Redigera', 'href' => '/forum/edit/'.$topic->first_post, 'class' => 'edit');
-			$topic->actions[] = array('title' => 'Radera tråden', 'href' => '/forum/delete/'.$topic->first_post, 'class' => 'delete confirm');				
+			$topic->actions[] = array('title' => 'Radera', 'href' => '/forum/delete/'.$topic->first_post, 'class' => 'delete confirm');				
 		}
 	}
 	
@@ -230,7 +230,7 @@ class ForumModel extends AutoModel {
 			$post->actions = array();
 			if($this->session->isAdmin() || $this->session->userId() == $post->userid) {
 				$post->actions[] = array('title' => 'Redigera', 'href' => '/forum/edit/'.$post->id, 'class' => 'edit');
-				$post->actions[] = array('title' => 'Radera inlägget', 'href' => '/forum/delete/'.$post->id, 'class' => 'delete confirm');				
+				$post->actions[] = array('title' => 'Radera', 'href' => '/forum/delete/'.$post->id, 'class' => 'delete confirm');				
 			}
 		}
 	}

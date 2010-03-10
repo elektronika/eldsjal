@@ -1,9 +1,5 @@
 <?php
 class LocationModel extends AutoModel {
-	public function __construct() {
-		parent::Model();
-	}
-	
 	public function get_all() {
 		return $this->db->select('locationid AS id, locationname AS title')->order_by('sortorder')->get('locations')->result();
 	}

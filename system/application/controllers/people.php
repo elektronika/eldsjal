@@ -1,21 +1,87 @@
 <?php
 class People extends MY_Controller {
-    function get_index() {	
-		$this->people = $this->db
-			->select("username, userid, CONCAT(SUBSTRING(presentation, 1, 250), '...') AS body", FALSE)
-			->where('usertype >', 0)
-			->order_by('register_date DESC')
-			->get('users', 20)
-			->result();
-    }
-
 	public function acl_controller() {
 		return $this->session->isLoggedIn();
 	}
 	
-	public function get_map() {}
-	
-	public function acl_map() {
-		return $this->session->isAdmin();
+	public function _remap() {
+		$this->get_search();
 	}
+	
+    public function get_search() {
+		$sort_options = array(
+			'lastlogin' => 'Senast inloggad',
+			'registerdate' => 'Registreringsdatum',
+			'username' => 'Användarnamn'
+		);
+		
+		$sort_order = array(
+			'lastlogin' => 'desc',
+			'registerdate' => 'desc',
+			'username' => 'asc'
+		);
+		
+		$items = $this->db
+			->select("username, last_name, first_name, online, users.userid, born_month, born_year, born_date, presentation AS body, locationname AS location", FALSE)
+			->join('locations', 'city = locationid');
+			
+		if($this->input->get('faddrade'))
+			$items->where('usertype >', 0);
+		
+		if($this->input->get('online'))
+			$items->where('online', 1);
+		
+		if($city = $this->input->get('city'))
+			if($city != 'all')
+				$items->where('city', (int) $city);
+					
+		if($does = $this->input->get('does'))
+			if($does != 'anything')
+				$items->join('userartlist', 'users.userid = userartlist.userid')->where('artid', (int) $does);
+		
+		if($sort_by = $this->input->get('sort_by')) {
+			if(in_array($sort_by, array_keys($sort_options)))
+				$items->order_by($sort_by, $sort_order[$sort_by]);
+			else
+				$items->order_by('lastlogin DESC');				
+		} else {
+			$items->order_by('lastlogin DESC');
+		}
+		
+		if($query = $this->input->get('query'))
+			$items->like('username', $query)->or_like('first_name', $query)->or_like('last_name', $query);
+			
+		$items = $items->get('users', 20)->result();
+		
+		// Om man bara hittar en person så kan man lika gärna visa den. Lika bra, fast bättre.
+		if(count($items) == 1)
+			$this->redirect('/user/'.current($items)->userid);
+			
+		foreach($items as &$item) {
+			$item->body = truncate(remove_tags($item->body), 110);
+			$item->birthday = mktime(0, 0, 0, $item->born_month, $item->born_date, $item->born_year);
+			$item->username = $item->first_name.' "'.$item->username.'" '.$item->last_name;
+		}
+		
+		$locations = $this->models->location->get_all_assoc();
+		$tags = $this->models->tag->get_all_assoc();
+		
+		$this->view->before = form_open('/people/search', array('method' => 'get'))
+			.input('text', 'query', 'Namn/användarnamn', $this->input->get('query'))
+			.form_label('Stad', 'city')
+			.form_dropdown('city', array('all' => 'Alla') + $locations, $this->input->get('city'))
+			.form_label('Sysslar med', 'does')
+			.form_dropdown('does', array('anything' => 'Vad som helst') + $tags, $this->input->get('does'))
+			.form_label('Sortera efter', 'sort_by')
+			.form_dropdown('sort_by', $sort_options, $this->input->get('sort_by'))
+			.form_label(form_checkbox('online', 1, $this->input->get('online')).'Visa bara folk som är online', 'does')
+			.form_label(form_checkbox('faddrade', 1, $this->input->get('faddrade')).'Visa bara folk som har en fadder', 'faddrade')
+			.submit('GE MIG DOM!')
+			.form_close();
+					
+		$this->view->template = 'list';
+		$this->view->page_title = 'Folk';
+		$this->view->item_function = 'userlist_item';
+		$this->view->items = $items;
+    }
 }

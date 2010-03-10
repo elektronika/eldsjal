@@ -13,10 +13,11 @@ class MY_Controller extends Controller {
 		$this->view->slogan = $this->settings->get('slogan');
 		$this->view->site_name = $this->settings->get('site_name');
 		$this->view->css = explode(',', $this->settings->get('css'));
-		$this->view->body_class = $this->settings->get('body_class');
+		$this->view->body_class = $this->view->template.' '.$this->settings->get('body_class');
 		$this->view->sublinks = array();
 		$this->view->breadcrumbs = array();
 		$this->view->messages = $this->session->getMessages();
+		$this->view->display_header = TRUE;
 		
 		// Borde egentligen vara widgets {
 		if(file_exists('revision')) {

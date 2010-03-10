@@ -1,31 +1,31 @@
 <?php
-function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
-		if( $content != "" ) {
-			$content = str_replace( "&#59;", ";", $content );
-			$content = str_replace( "&amp;#59;", ";", $content );
-			$content = str_replace( "&#44;", ",", $content );
-			$content = str_replace( "&amp;#44;", ",", $content );			
-			$content = str_replace( "&#39;", "'", $content );
-			$content = str_replace( "&amp;#39;", "'", $content );
-			$content = str_replace( "&#34;", "\"", $content );
-			$content = str_replace( "&amp;#34;", "\"", $content );
-			// $content = str_replace( "&lt;", "<", $content );
-			// $content = str_replace( "&gt;", ">", $content );
-			$content = str_replace( "\r\n", "<br/>", $content );
-			$content = str_replace( "\n", "<br/>", $content );
-			$content = str_replace( "[br]", "<br/>", $content );
-			$content = str_replace( "[b]", "<b>", $content );
-			$content = str_replace( "[/b]", "</b>", $content );
-			$content = str_replace( "]", ">", $content );
-			$content = str_replace( "[a ", "<a ", $content );
-			$content = str_replace( "[/a>", "</a>", $content );
-			$content = str_replace( "[3", "&lt;3", $content );
-			$content = str_replace( ">.[", "&gt;.&lt;", $content );
-			$content = do_clickable($content);
-		}
-		
-		return $content;
-	}
+// function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
+// 		if( $content != "" ) {
+// 			$content = str_replace( "&#59;", ";", $content );
+// 			$content = str_replace( "&amp;#59;", ";", $content );
+// 			$content = str_replace( "&#44;", ",", $content );
+// 			$content = str_replace( "&amp;#44;", ",", $content );			
+// 			$content = str_replace( "&#39;", "'", $content );
+// 			$content = str_replace( "&amp;#39;", "'", $content );
+// 			$content = str_replace( "&#34;", "\"", $content );
+// 			$content = str_replace( "&amp;#34;", "\"", $content );
+// 			// $content = str_replace( "&lt;", "<", $content );
+// 			// $content = str_replace( "&gt;", ">", $content );
+// 			$content = str_replace( "\r\n", "<br/>", $content );
+// 			$content = str_replace( "\n", "<br/>", $content );
+// 			$content = str_replace( "[br]", "<br/>", $content );
+// 			$content = str_replace( "[b]", "<b>", $content );
+// 			$content = str_replace( "[/b]", "</b>", $content );
+// 			$content = str_replace( "]", ">", $content );
+// 			$content = str_replace( "[a ", "<a ", $content );
+// 			$content = str_replace( "[/a>", "</a>", $content );
+// 			$content = str_replace( "[3", "&lt;3", $content );
+// 			$content = str_replace( ">.[", "&gt;.&lt;", $content );
+// 			$content = do_clickable($content);
+// 		}
+// 		
+// 		return $content;
+// 	}
 	
 	// Dom två följande funktionerna är stulna från FluxBB, http://fluxbb.org
 
@@ -83,27 +83,26 @@ function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
 			return $content;
 		}
 		
-		function Dwoo_Plugin_fuzzytime( Dwoo $dwoo, $timestamp, $prefix = NULL, $suffix = NULL, $hoverDateFormat = 'Y-m-d H:i' ) {
-			$CI =& get_instance();
-			return $CI->util->fuzzytime($timestamp, $prefix, $suffix);
-		}
+		// function Dwoo_Plugin_fuzzytime( Dwoo $dwoo, $timestamp, $prefix = NULL, $suffix = NULL, $hoverDateFormat = 'Y-m-d H:i' ) {
+		// 	$CI =& get_instance();
+		// 	return $CI->util->fuzzytime($timestamp, $prefix, $suffix);
+		// }
 		
 		function fuzzytime( $timestamp, $prefix = NULL, $suffix = NULL, $hoverDateFormat = 'Y-m-d H:i' ) {
 			return get_instance()->util->fuzzytime($timestamp, $prefix, $suffix);
 		}
 		
-		function Dwoo_Plugin_nicedate( Dwoo $dwoo, $timestamp) {
-			$CI =& get_instance();
-			return $CI->util->nicedate($timestamp);
-		}
+		// function Dwoo_Plugin_nicedate( Dwoo $dwoo, $timestamp) {
+		// 	$CI =& get_instance();
+		// 	return $CI->util->nicedate($timestamp);
+		// }
+		// 
+		// function Dwoo_Plugin_shortdate( Dwoo $dwoo, $timestamp) {
+		// 	$CI =& get_instance();
+		// 	return $CI->util->shortdate($timestamp);
+		// }
 		
-		function Dwoo_Plugin_shortdate( Dwoo $dwoo, $timestamp) {
-			$CI =& get_instance();
-			return $CI->util->shortdate($timestamp);
-		}
-		
-		function truncate( $value, $length=80, $etc='...', $break=false, $middle=false)
-		{
+		function truncate( $value, $length=80, $etc='...', $break=false, $middle=false) {
 			if ($length == 0) {
 				return '';
 			}
@@ -126,84 +125,84 @@ function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
 			return substr($value, 0, ceil($length/2)) . $etc . substr($value, -floor($length/2));
 		}		
 		
-		function Dwoo_plugin_alertcounter( Dwoo $dwoo ) {
-			$CI =& get_instance();
-			$alert_count = $CI->models->alert->total_count();
-			return ($alert_count > 0 ? '('.$alert_count.')' : '');
-		}
+		// function Dwoo_plugin_alertcounter( Dwoo $dwoo ) {
+		// 	$CI =& get_instance();
+		// 	$alert_count = $CI->models->alert->total_count();
+		// 	return ($alert_count > 0 ? '('.$alert_count.')' : '');
+		// }
+		// 
+		// function Dwoo_plugin_usersetting( Dwoo $dwoo, $key, $default ) {
+		// 	$CI =& get_instance();
+		// 	return $CI->session->setting($key, $default);
+		// }
+		// 
+		// function Dwoo_plugin_slugify( Dwoo $dwoo, $string ) {
+		// 	$CI =& get_instance();
+		// 	return $CI->util->slugify($string);
+		// }
+		// 
+		// function Dwoo_plugin_titlify( Dwoo $dwoo, $title ) {
+		// 	$CI =& get_instance();
+		// 	return $CI->util->titlify($title);
+		// }
+		// 
+		// function Dwoo_plugin_age( Dwoo $dwoo, $timestamp ) {
+		// 	$CI =& get_instance();
+		// 	return $CI->util->fuzzyage($timestamp);
+		// }
 		
-		function Dwoo_plugin_usersetting( Dwoo $dwoo, $key, $default ) {
-			$CI =& get_instance();
-			return $CI->session->setting($key, $default);
-		}
-		
-		function Dwoo_plugin_slugify( Dwoo $dwoo, $string ) {
-			$CI =& get_instance();
-			return $CI->util->slugify($string);
-		}
-		
-		function Dwoo_plugin_titlify( Dwoo $dwoo, $title ) {
-			$CI =& get_instance();
-			return $CI->util->titlify($title);
-		}
-		
-		function Dwoo_plugin_age( Dwoo $dwoo, $timestamp ) {
-			$CI =& get_instance();
-			return $CI->util->fuzzyage($timestamp);
-		}
-		
-		function Dwoo_Plugin_escape(Dwoo $dwoo, $value='', $format='html', $charset=null)
-		{
-			if ($charset === null) {
-				$charset = $dwoo->getCharset();
-			}
-
-			switch($format)
-			{
-
-			case 'html':
-				return htmlspecialchars((string) $value, ENT_QUOTES, $charset);
-			case 'htmlall':
-				return htmlentities((string) $value, ENT_QUOTES, $charset);
-			case 'url':
-				return rawurlencode((string) $value);
-			case 'urlpathinfo':
-				return str_replace('%2F', '/', rawurlencode((string) $value));
-			case 'quotes':
-				return preg_replace("#(?<!\\\\)'#", "\\'", (string) $value);
-			case 'hex':
-				$out = '';
-				$cnt = strlen((string) $value);
-				for ($i=0; $i < $cnt; $i++) {
-					$out .= '%' . bin2hex((string) $value[$i]);
-				}
-				return $out;
-			case 'hexentity':
-				$out = '';
-				$cnt = strlen((string) $value);
-				for ($i=0; $i < $cnt; $i++)
-					$out .= '&#x' . bin2hex((string) $value[$i]) . ';';
-				return $out;
-			case 'javascript':
-				return strtr((string) $value, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
-			case 'mail':
-				return str_replace(array('@', '.'), array('&nbsp;(AT)&nbsp;', '&nbsp;(DOT)&nbsp;'), (string) $value);
-			default:
-				return $dwoo->triggerError('Escape\'s format argument must be one of : html, htmlall, url, urlpathinfo, hex, hexentity, javascript or mail, "'.$format.'" given.', E_USER_WARNING);
-
-			}
-		}
-
-	function Dwoo_plugin_natural_implode(Dwoo $dwoo, $array, $and = 'and') {
-		$count = count($array);
-		if($count == 1)
-			return current($array);
-		elseif($count > 1) {
-			$last = array_pop($array);
-			return implode(', ', $array).' '.$and.' '.$last;
-		}
-	
-	}
+		// function Dwoo_Plugin_escape(Dwoo $dwoo, $value='', $format='html', $charset=null)
+		// 		{
+		// 			if ($charset === null) {
+		// 				$charset = $dwoo->getCharset();
+		// 			}
+		// 
+		// 			switch($format)
+		// 			{
+		// 
+		// 			case 'html':
+		// 				return htmlspecialchars((string) $value, ENT_QUOTES, $charset);
+		// 			case 'htmlall':
+		// 				return htmlentities((string) $value, ENT_QUOTES, $charset);
+		// 			case 'url':
+		// 				return rawurlencode((string) $value);
+		// 			case 'urlpathinfo':
+		// 				return str_replace('%2F', '/', rawurlencode((string) $value));
+		// 			case 'quotes':
+		// 				return preg_replace("#(?<!\\\\)'#", "\\'", (string) $value);
+		// 			case 'hex':
+		// 				$out = '';
+		// 				$cnt = strlen((string) $value);
+		// 				for ($i=0; $i < $cnt; $i++) {
+		// 					$out .= '%' . bin2hex((string) $value[$i]);
+		// 				}
+		// 				return $out;
+		// 			case 'hexentity':
+		// 				$out = '';
+		// 				$cnt = strlen((string) $value);
+		// 				for ($i=0; $i < $cnt; $i++)
+		// 					$out .= '&#x' . bin2hex((string) $value[$i]) . ';';
+		// 				return $out;
+		// 			case 'javascript':
+		// 				return strtr((string) $value, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
+		// 			case 'mail':
+		// 				return str_replace(array('@', '.'), array('&nbsp;(AT)&nbsp;', '&nbsp;(DOT)&nbsp;'), (string) $value);
+		// 			default:
+		// 				return $dwoo->triggerError('Escape\'s format argument must be one of : html, htmlall, url, urlpathinfo, hex, hexentity, javascript or mail, "'.$format.'" given.', E_USER_WARNING);
+		// 
+		// 			}
+		// 		}
+		// 
+		// 	function Dwoo_plugin_natural_implode(Dwoo $dwoo, $array, $and = 'and') {
+		// 		$count = count($array);
+		// 		if($count == 1)
+		// 			return current($array);
+		// 		elseif($count > 1) {
+		// 			$last = array_pop($array);
+		// 			return implode(', ', $array).' '.$and.' '.$last;
+		// 		}
+		// 	
+		// 	}
 
 function slugify( $string ) {
 	return get_instance()->util->slugify($string);
@@ -221,9 +220,7 @@ function actions($actions = NULL, $icons_only = FALSE) {
 }
 
 function userlink($user) {
-	// $slug = isset($user->slug) ? $user->slug : slugify($user->username);
-	$slug = $user->userid;
-	return '<a href="/userPresentation.php?userid='.$slug.'" class="user u'.$user->userid.'" title="'.$user->username.'">'.$user->username.'</a>';
+	return '<a href="/user/'.$user->userid.'" class="user u'.$user->userid.'" title="'.$user->username.'">'.$user->username.'</a>';
 }
 
 function pager($pager) {
@@ -272,7 +269,7 @@ function post($post) {
 				<?php echo rq($post->body); ?>
 			</div>
 			<div class="meta">
-				<?php echo fuzzytime($post->created); ?> <?php echo actions($post->actions, TRUE); ?>
+				<?php echo fuzzytime($post->created); ?> <?php echo actions($post->actions); ?>
 			</div>
 		</div>
 		<span class="clear">&nbsp;</span>
@@ -612,9 +609,15 @@ function datepager($prefix, $year, $month = NULL, $day = NULL) { ?>
 	</div>
 <?php }
 
-function userlist_item($user) {
-	return '<div class="userlist">'.userimage($user).userlink($user).(isset($user->body) ? '<span>'.$user->body.'</span>' : '').'<span class="clear">&nbsp;</span></div>';
-}
+function userlist_item($user) { ?>
+<div class="userlist">
+	<?php echo userimage($user).userlink($user); ?>
+	<?php if(isset($user->birthday)) echo ' - '.age($user->birthday).' år'; ?>
+	<?php if(isset($user->location)) echo ' - '.$user->location; ?>
+	<?php if(isset($user->online)) echo $user->online ? ' - <span class="online">Online</span>' : ''; ?>
+	<?php if(isset($user->body)) echo '<div>'.$user->body.'</div>'; ?>
+	<span class="clear">&nbsp;</span></div>
+<?php }
 
 function messages(Array $messages) { 
 	if( ! empty($messages)): ?>
@@ -632,3 +635,21 @@ function breadcrumbs(Array $breadcrumbs) { ?>
 		<?php endforeach; ?>
 	</span>
 <?php }
+
+function age($timestamp) {
+	$diff = time( ) - $timestamp;
+	$age = $diff / ( 3600 * 24 );
+	$age = floor( round($age / 365, 1) * 10 ) / 10;
+	return $age;
+}
+
+function natural_implode($array, $and = 'and') {
+	$count = count($array);
+	if($count == 1)
+		return current($array);
+	elseif($count > 1) {
+		$last = array_pop($array);
+		return implode(', ', $array).' '.$and.' '.$last;
+	}
+
+}

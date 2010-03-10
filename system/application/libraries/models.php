@@ -26,7 +26,7 @@ Class models {
 	}
 	
 	public static function autoload($class) {
-		// print $class.' ';
+		//print $class.' ';
 		// print APPPATH.'models/'.$class.'.php ';
 		$class = strtolower($class);
 		if(file_exists(APPPATH.'models/'.$class.'.php'))

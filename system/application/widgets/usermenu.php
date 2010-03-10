@@ -3,16 +3,16 @@ class Usermenu extends Widget {
 	public function run() {
 		$this->items = array();
 		
-		$this->items[] = (object) array('href' => '/userPresentation.php?userid='.$this->session->userid(), 'title' => 'Hem', 'class' => 'home');
+		$this->items[] = (object) array('href' => '/user/'.$this->session->userid(), 'title' => 'Hem', 'class' => 'home');
 		
 		$gb_count = $this->db->query("SELECT COUNT(unread) AS count FROM guestbook WHERE touserid = ".$this->session->userId()." AND unread = 1")->row()->count;
-		$this->items[] = (object) array('href' => '/guestbook.php?userid='.$this->session->userid(), 'title' => 'Gästbok'.$this->counter($gb_count), 'class' => $gb_count ? 'guestbook new' : 'guestbook');
+		$this->items[] = (object) array('href' => '/guestbook/view/'.$this->session->userid(), 'title' => 'Gästbok'.$this->counter($gb_count), 'class' => $gb_count ? 'guestbook new' : 'guestbook');
 		
 		$msg_count = $this->db->query("SELECT COUNT(readmessage) AS count FROM messages WHERE userid = ".$this->session->userId()." AND readmessage = 0")->row()->count;
 		$this->items[] = (object) array('href' => '/messages.php?userid='.$this->session->userid(), 'title' => 'Meddelanden'.$this->counter($msg_count), 'class' => $msg_count ? 'messages new' : 'messages');
-		$this->items[] = (object) array('href' => '/forum', 'title' => 'Forum', 'class' => 'forum');		
-		$this->items[] = (object) array('href' => '/gallery.php', 'title' => 'Galleri', 'class' => 'gallery');		
-		$this->items[] = (object) array('href' => '/members.php', 'title' => 'Folk', 'class' => 'people');
+		$this->items[] = (object) array('href' => '/forum', 'title' => 'Diskussioner', 'class' => 'forum');		
+		$this->items[] = (object) array('href' => '/gallery.php', 'title' => 'Bilder', 'class' => 'gallery');		
+		$this->items[] = (object) array('href' => '/people', 'title' => 'Folk', 'class' => 'people');
 		$this->items[] = (object) array('href' => '/thoughts', 'title' => 'Tankar', 'class' => 'thoughts');
 		
 		// $event_count = $this->db->query("SELECT COUNT(calendarnotifyid) AS count FROM calendarnotify WHERE userid = ".$this->session->userId())->row()->count;
@@ -38,7 +38,7 @@ class Usermenu extends Widget {
 			$this->items[] = (object) array('href' => '/admin/log', 'title' => 'Logg'.$this->counter($logs), 'class' => 'admin-log');			
 		}
 			
-		$this->items[] = (object) array('href' => '/userEdit.php?mode=editAccount&userid='.$this->session->userid(), 'title' => 'Inställningar', 'class' => 'settings');
+		$this->items[] = (object) array('href' => '/user/'.$this->session->userid().'/edit', 'title' => 'Inställningar', 'class' => 'settings');
 		$this->items[] = (object) array('href' => '/logout', 'title' => 'Logga ut', 'class' => 'logout');
 	}
 	

@@ -62,6 +62,16 @@ class Calendar extends MY_Controller {
 		$this->view->items = $this->models->event->get_attendees((int) $topic_id);
 		$this->view->item_function = 'userlist_item';
 		$this->view->template = 'list';
+		if($this->models->event->user_has_signed_up($this->session->userId(), $topic_id)) {
+			$comment = $this->models->event->get_comment($topic_id, $this->session->userId());
+			$this->view->before = form_open('/calendar/attendees/'.$topic_id).textarea('body', 'Din deltagarnotis! (allergi, samåkning, eller vad som helst)', $comment).submit('Så äre!').form_close();			
+		}
+	}
+	
+	function post_attendees($topic_id) {
+		$this->db->update('forumjoin', array('comment' => $this->input->post('body')), array('user_id' => $this->session->userId(), 'topic_id' => (int) $topic_id));
+		$this->session->message('Fixat och klart!');
+		$this->redirect('/calendar/attendees/'.$topic_id);
 	}
 	
 	function acl_attendees($topic_id) {
