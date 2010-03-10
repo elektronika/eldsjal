@@ -176,7 +176,7 @@ else {
 		$boardlists = $boardlist;
 		foreach( $boardlists as $boardlist ) {
 			print "<TD width=97 align=center><a href=javascript:openUserImage('uploads/userImages/".$boardlist['userid'].".jpg');><img src=\"uploads/userImages/tn_".$boardlist['userid'].".jpg\" border=\"0\"></a></TD>";
-			print "<TD valign=top><B>Namn: </B><a href=\"userPresentation.php?userid=".$boardlist['userid']."\" class=a2>".$boardlist['first_name']." \"".$boardlist['username']."\" ".$boardlist['last_name']."</a><BR>";
+			print "<TD valign=top><B>Namn: </B><a href=\"/user/".$boardlist['userid']."\" class=a2>".$boardlist['first_name']." \"".$boardlist['username']."\" ".$boardlist['last_name']."</a><BR>";
 			print "<B>Post: </B>".$boardlist['title']."<BR><B>Epost: </B><a href=\"mailto:".$boardlist['email']."\" class=a2>".$boardlist['email']."</TD></TR>";
 
 			//      $boardlist->movenext;

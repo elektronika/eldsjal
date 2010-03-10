@@ -1,5 +1,5 @@
 <?php
-	session_start( );
+session_start( );
 session_register( "userid_session" );
 session_register( "userType_session" );
 $dont_display_header = TRUE;
@@ -9,16 +9,18 @@ if( $tempUser == "" ) {
 	$tempUser = 0;
 }
 print isset( $_GET['message'] ) ? $_GET['message'] : '';
-$sql = "select * from imagescore where userid = ".$tempUser." and imagescore.fkimageid = ".intval( $_GET['imageid'] );
-$voteCheck = $conn->execute( $sql );
-if( isset( $_GET['mode'] ) && $_GET['mode'] == "vote" ) {
-	$sql = "delete from imagescore where userid = '".$_SESSION['userid']."' and fkimageid = '".intval( $_POST['imageid'] )."'";
-	$deleteRow = $conn->execute($sql);
-	$sql = "insert into imagescore (fkimageid, userid, score) values ('".intval( $_POST['imageid'] )."', '".$_SESSION['userid']."', '".intval( $_POST['score'] )."')";
-	$vote = $conn->execute($sql);
-	header( "Location: "."viewPicture.php?imageid=".$_POST['imageid']."&message=Po&auml;ngen inf&ouml;rd!&click=no" );
-}
-else {?>
+// $sql = "select * from imagescore where userid = ".$tempUser." and imagescore.fkimageid = ".intval( $_GET['imageid'] );
+// $voteCheck = $conn->execute( $sql );
+// if( isset( $_GET['mode'] ) && $_GET['mode'] == "vote" ) {
+// 	$sql = "delete from imagescore where userid = '".$_SESSION['userid']."' and fkimageid = '".intval( $_POST['imageid'] )."'";
+// 	$deleteRow = $conn->execute($sql);
+// 	$sql = "insert into imagescore (fkimageid, userid, score) values ('".intval( $_POST['imageid'] )."', '".$_SESSION['userid']."', '".intval( $_POST['score'] )."')";
+// 	$vote = $conn->execute($sql);
+// 	header( "Location: "."viewPicture.php?imageid=".$_POST['imageid']."&message=Po&auml;ngen inf&ouml;rd!&click=no" );
+// }
+// else 
+{
+	?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 	<head>
@@ -38,24 +40,23 @@ else {?>
 	if( !( $imageInfo == 0 ) ) {
 		$sql = "select imageartlist.artid, imageartlist.imageid, artlist.artname from imageartlist left join artlist on imageartlist.artid = artlist.artid where imageartlist.imageid = ".$_GET['imageid'];
 		$categorys = $conn->execute( $sql );
-		$sql = "select sum(imagescore.score) as score from imagescore where fkimageid = ".$_GET['imageid'];
-		$imageScore = $conn->execute( $sql );
-		$sql = "select count(*) as votes from imagescore where fkimageid = ".$_GET['imageid'];
-		$totalVotes = $conn->execute( $sql );
+		// $sql = "select sum(imagescore.score) as score from imagescore where fkimageid = ".$_GET['imageid'];
+		// $imageScore = $conn->execute( $sql );
+		// $sql = "select count(*) as votes from imagescore where fkimageid = ".$_GET['imageid'];
+		// $totalVotes = $conn->execute( $sql );
 		if( !isset( $_GET['click'] ) || $_GET['click'] != "no" ) {
 			$clickTest = $conn->execute( "select clicks FROM images WHERE imageid = ".intval( $_GET['imageid'] ) );
 			if( !( $clickTest == 0 ) || $clickTest['clicks'] == 0 ) 
 				$conn->execute( "UPDATE images SET clicks = clicks + 1 WHERE imageid = ".$_GET['imageid'] );
 		}
 		else {
-
 			//$sql="INSERT INTO images (imageid, Clicks) VALUES (".intval($_GET['imageid']).", 1)";
 			//$conn->execute($sql);
 		}
 	}
 	if( is_array( current( $imageInfo ) ) ) 
 		$imageInfo = current( $imageInfo );
-	print "<div class=mediumBox><b><span class=plainThead>".$imageInfo['imagename']."</b></span><br><a href=uploads/galleryImages/original_".$imageInfo['imageid'].".".$imageInfo['filetype']."><img src=\"uploads/galleryImages/".$_GET['imageid'].".".$imageInfo['filetype']."\" border = 0></a><br><br><br>Uppladdad av: <a href=\"userPresentation.php?userid=".$imageInfo['userid']."\">".$imageInfo['username']."</a><br>Kategorier: ";
+	print "<div class=mediumBox><b><span class=plainThead>".$imageInfo['imagename']."</b></span><br><a href=uploads/galleryImages/original_".$imageInfo['imageid'].".".$imageInfo['filetype']."><img src=\"uploads/galleryImages/".$_GET['imageid'].".".$imageInfo['filetype']."\" border = 0></a><br><br><br>Uppladdad av: <a href=\"/user/".$imageInfo['userid']."\">".$imageInfo['username']."</a><br>Kategorier: ";
 	if( $categorys ) {
 		$kCount = 0;
 		$categoryss = $categorys;

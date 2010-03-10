@@ -128,7 +128,7 @@ else {
 		if( $parentList ) {
 			$parentLists = $parentList;
 			foreach( $parentLists as $parentList ) {
-				print $parentList['parentname']." &ouml;nskar &ouml;dmjukt att &ouml;verta v&aring;rdnaden om <a href=userPresentation.php?userid=".$parentList['adopteeuserid']." target=_blank class=a2>".$parentList['childname']."</a><br>Vill du <a href=\"parentHood.php?mode=approve&id=".$parentList['pendingadoptionid']."\" class=\"a2\" onClick=\"return confirmSubmit('Du kommer nu att l&auml;mna &ouml;ver fadderskapet av ".$parentList['childname']." till ".$parentList['parentname']."');\">&raquo; Godk&auml;nna &laquo;</a> eller <a href=\"parentHood.php?mode=disapprove&id=".$parentList['pendingadoptionid']."\" class=\"a2\" onClick=\"return confirmSubmit('Du kommer nu att avsl&aring; ans&ouml;kan om fadderskap av ".$parentList['childname']." fr&aring;n ".$parentList['parentname']."');\">&raquo; Avsl&aring; &laquo;</a><br><br>";
+				print $parentList['parentname']." &ouml;nskar &ouml;dmjukt att &ouml;verta v&aring;rdnaden om <a href=/user/".$parentList['adopteeuserid']." target=_blank class=a2>".$parentList['childname']."</a><br>Vill du <a href=\"parentHood.php?mode=approve&id=".$parentList['pendingadoptionid']."\" class=\"a2\" onClick=\"return confirmSubmit('Du kommer nu att l&auml;mna &ouml;ver fadderskapet av ".$parentList['childname']." till ".$parentList['parentname']."');\">&raquo; Godk&auml;nna &laquo;</a> eller <a href=\"parentHood.php?mode=disapprove&id=".$parentList['pendingadoptionid']."\" class=\"a2\" onClick=\"return confirmSubmit('Du kommer nu att avsl&aring; ans&ouml;kan om fadderskap av ".$parentList['childname']." fr&aring;n ".$parentList['parentname']."');\">&raquo; Avsl&aring; &laquo;</a><br><br>";
 
 				//      $parentList->moveNext;
 			}
@@ -151,7 +151,7 @@ else {
 		else {
 			$online = "<font color=green> online</font>";
 		}
-		print "<tr><td><a href=\"userPresentation.php?userid=".$parentList['userid']."\" class=\"a2\">".$parentList['username']."</a></td><td> - ".$parentList['locationname']."</td><td> - ".$online."</td></tr>";
+		print "<tr><td><a href=\"/user/".$parentList['userid']."\" class=\"a2\">".$parentList['username']."</a></td><td> - ".$parentList['locationname']."</td><td> - ".$online."</td></tr>";
 
 		//    $parentList->moveNext;
 	}

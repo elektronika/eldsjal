@@ -57,7 +57,7 @@ else
 	if( isset( $_GET['message'] ) ) 
 	print "<div align=\"center\" class=\"message\">".$_GET['message']."</div>";
 if( $_SESSION['userid'] == "" || $_SESSION['userid'] == 0 ) 
-	header( "Location: "."userPresentation.php?userid=".$_GET['userid'] );
+	header( "Location: "."/user/".$_GET['userid'] );
 elseif( isset( $_GET['mode'] ) && $_GET['mode'] == "readMessage" ) {
 	if( $_SESSION['usertype'] != 0 ) {
 		if( isset( $_GET['box'] ) && $_GET['box'] == "outbox" ) 
@@ -83,7 +83,7 @@ elseif( isset( $_GET['mode'] ) && $_GET['mode'] == "readMessage" ) {
 		if(!is_array(current($dbMessages)))
 			$dbMessages = array($dbMessages);
 		foreach( $dbMessages as $dbMessage ) 
-			print "<a class=\"a2\" href=\"userPresentation.php?userid=".$dbMessage['userid']."\"><img src=\"images/userImages/tn_".$dbMessage['userid'].".jpg\" border=\"0\" width=\"50\"><br>".$dbMessage['username']."</a></td><td valign=top><b>".RQ( $dbMessage['messagetopic'] )."</b><br><br>".RQ( $dbMessage['message'] )."</td></tr>";
+			print "<a class=\"a2\" href=\"/user/".$dbMessage['userid']."\"><img src=\"images/userImages/tn_".$dbMessage['userid'].".jpg\" border=\"0\" width=\"50\"><br>".$dbMessage['username']."</a></td><td valign=top><b>".RQ( $dbMessage['messagetopic'] )."</b><br><br>".RQ( $dbMessage['message'] )."</td></tr>";
 	}
 	else {
 		$sql = "select messages.messagedate, messages.messagetopic, messages.messagefrom, messages.message, users.username, users.userid from messages inner join users on messages.messagefrom = users.userid where messages.userid = ".intval( $_SESSION['userid'] )." and messageid = ".intval( $_GET['messageid'] );
@@ -99,7 +99,7 @@ elseif( isset( $_GET['mode'] ) && $_GET['mode'] == "readMessage" ) {
 		if(!is_array(current($dbMessages)))
 			$dbMessages = array($dbMessages);
 		foreach( $dbMessages as $dbMessage ) 
-			print "<a class=\"a2\" href=\"userPresentation.php?userid=".$dbMessage['userid']."\"><img src=\"images/userImages/tn_".$dbMessage['userid'].".jpg\" border=\"0\" width=\"50\"><br>".$dbMessage['username']."</a></td><td valign=top><b>".RQ( $dbMessage['messagetopic'] )."</b><br><br>".RQ( $dbMessage['message'] )."</td></tr>";
+			print "<a class=\"a2\" href=\"/user/".$dbMessage['userid']."\"><img src=\"images/userImages/tn_".$dbMessage['userid'].".jpg\" border=\"0\" width=\"50\"><br>".$dbMessage['username']."</a></td><td valign=top><b>".RQ( $dbMessage['messagetopic'] )."</b><br><br>".RQ( $dbMessage['message'] )."</td></tr>";
 	}
 	print '</table>';
 }
@@ -108,11 +108,11 @@ elseif( isset( $_GET['mode'] ) && $_GET['mode'] == "love" ) {
 		header( "Location: "."main.php?message=Ingen medlem att fr&aring;ga!" );
 	}
 	if( $_SESSION['userid'] == "" ) {
-		header( "Location: "."userPresentation.php?userid=".$_GET['userid'] );
+		header( "Location: "."/user/".$_GET['userid'] );
 	}
 	$sql = "insert into messages (userid, messagetopic, message, readmessage, messagedate, messagefrom) values (".intval( $_GET['userid'] ).",'f&aring;r jag chans p&aring; dig!','du &auml;r min &ouml;gonsten och jag vill s&aring; g&auml;rna f&aring; chans p&aring; dig, det var v&auml;l allt jag ville f&ouml;r den h&auml;r g&aring;ngen! kramar!',0,getdate(), ".$_SESSION['userid'].")";
 	$conn->execute( $sql );
-	header( "Location: "."userPresentation.php?userid=".$_GET['userid']."&message=Nu har en chans skickats, h&aring;ll tummarna!" );
+	header( "Location: "."/user/".$_GET['userid']."&message=Nu har en chans skickats, h&aring;ll tummarna!" );
 }
 elseif( isset( $_GET['mode'] ) && $_GET['mode'] == "writecalendar" ) {
 	if( $_SESSION['userid'] == "" || $_SESSION['userid'] == 0 ) {

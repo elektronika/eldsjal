@@ -122,7 +122,7 @@ if( isset( $_GET['mode'] ) && $_GET['mode'] != "firstpage" || isset( $_GET['cate
 		$dbusername = $conn->execute( $sql );
 		$sql = "select distinct images.uploadedby,images.width, images.height, images.imageid, images.imagename, images.filetype, images.clicks, images.uploadedby from images inner join imageartlist on images.imageid = imageartlist.imageid where images.uploadedby = ".$_GET['userid']." order by images.imageid desc";
 		$dbImages = $conn->execute( $sql );
-		print "<a class=\"a2\" href=\"userPresentation.php?userid=".$_GET['userid']."\">&laquo; Tillbaka till ".$dbusername['username']."'s presentation</a><br>";
+		print "<a class=\"a2\" href=\"/user/".$_GET['userid']."\">&laquo; Tillbaka till ".$dbusername['username']."'s presentation</a><br>";
 	}
 	else {
 		$sql = "select images.uploadedby,images.width, images.height, images.imageid, images.imagename, images.filetype, images.clicks from images inner join imageartlist on images.imageid = imageartlist.imageid where imageartlist.artid = ".$_GET['categoryid']." and private = 0";

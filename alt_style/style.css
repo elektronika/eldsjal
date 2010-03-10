@@ -375,11 +375,12 @@ ul.flat {
 .userlist .userimage {
 	float: left;
 	margin-right: 10px;
-	height: 30px;
+	width: 30px;
 }
 
-.userlist span {
-	display: block;
+.online {
+	color: green;
+	font-weight: bold;
 }
 
 #messages .notice, #messages .warning {
@@ -419,6 +420,7 @@ ul.flat {
 	background-position: center left;
 	background-repeat: no-repeat;
 	opacity: 0.7;
+	font-style: normal;
 }
 
 .actions.icons-only .action {
@@ -500,6 +502,10 @@ ul.flat {
 
 .action-admin {
 	background-image: url('icons/cog.png');
+}
+
+.action-reply {
+	background-image: url('icons/book_add.png');	
 }
 
 
@@ -703,7 +709,7 @@ input.form-item-submit {
 	padding: 2px 10px;
 }
 
-textarea#form-item-body {
+textarea#form-item-body, .form-item-textarea {
 	height: 150px;
 }
 
@@ -818,4 +824,37 @@ textarea#form-item-body {
 
 .calendar-year .month {
 	float: left;
+}
+
+/* Presentationer */
+.presentation-header .userimage {
+	float: left;
+}
+
+.presentation-header .userdata {
+	margin-left: 110px;
+}
+
+.presentation-body {
+	clear: both;
+	padding-top: 10px;
+}
+
+.user-properties {
+	padding: 10px;
+}
+
+.user-properties dt, .user-properties dd {
+	padding: 0;
+	margin: 0;
+}
+
+.user-properties dt {
+	width: 100px;
+	float: left;
+	color: #666;
+}
+
+.user-properties dd {
+	clear: right;
 }

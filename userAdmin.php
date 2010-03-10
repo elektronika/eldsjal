@@ -148,7 +148,7 @@ if( isset( $_GET['mode'] ) && $_GET['mode'] == "remind" ) {
 		print "Dessa anv&auml;ndare saknar emailadress:<br>";
 		$userLists = $userList;
 		foreach( $userLists as $userList ) {
-			print "<a href=userPresentation.php?userid=".$userList['userid']." class=a2>".$userList['username']."</a><BR>";
+			print "<a href=/user/".$userList['userid']." class=a2>".$userList['username']."</a><BR>";
 
 			//      $userList->moveNext;
 		}
@@ -383,7 +383,7 @@ elseif( isset( $_GET['mode'] ) && $_GET['mode'] == "approve" ) {
 		$conn->execute( $sql );
 		$sql = "insert into parenthistory ([date], message, ownerid, userid) values (getdate(), '".$_SESSION['username']." godk&auml;nde ".$user['username']." som medlem', ".$_SESSION['userid'].", ".intval( $_GET['userid'] ).")";
 		$conn->execute( $sql );
-		header( "Location: "."userPresentation.php?userid=".$_GET['userid']."&message=Användaren godkänd och informationsmail skickat!" );
+		header( "Location: "."/user/".$_GET['userid']."&message=Användaren godkänd och informationsmail skickat!" );
 	}
 	else {
 		header( "Location: "."main.php?message=FEL: ".$message );
@@ -754,7 +754,7 @@ elseif( isset( $_GET['mode'] ) && $_GET['mode'] == "fadder" ) {
 		$name = $conn->execute( $sql );
 		$sql = "insert into messages (messagetopic, message, readmessage, messagedate, messagefrom, userid) values ('ny fadder (".$name['username'].") utsedd av ".$_SESSION['username']."', 'jag har nu utsett ".$name['username']." till fadder och lovar att medlemmen kommer att bruka detta f&ouml;rtroende med st&ouml;rsta ansvar. v&auml;nligen s&auml;kerst&auml;ll att medlemmen har en @eldsjal.org-address.', 0, getdate(), ".$_SESSION['userid'].", 5122)";
 		$conn->execute( $sql );
-		header( "Location: "."userPresentation.php?userid=".$_GET['userid']."&message=användaren är nu fadder, glöm inte att användaren behöver en @eldsjal.org-address i sina inställningar!" );
+		header( "Location: "."/user/".$_GET['userid']."&message=användaren är nu fadder, glöm inte att användaren behöver en @eldsjal.org-address i sina inställningar!" );
 	}
 	else {
 		header( "Location: "."main.php?message=Ingen användare angedd" );
@@ -775,7 +775,7 @@ else {
 
 			$sql = "select count(userid) as antal from users where approvedby = ".$parents['userid'];
 			$count = $conn->execute( $sql );
-			$list = $list."<tr><td><a href=userPresentation.php?userid=".$parents['userid']." class=a2>".$parents['username']."</a></td><td><b>".$parents['locationname']."</b</td><td></td></tr>";
+			$list = $list."<tr><td><a href=/user/".$parents['userid']." class=a2>".$parents['username']."</a></td><td><b>".$parents['locationname']."</b</td><td></td></tr>";
 
 			//      $parents->moveNext;
 		}
@@ -828,7 +828,7 @@ else {
 			if( $userList['online'] == true ) {
 				$online = "<font color=GREEN><i>online</i></font>";
 			}
-			print "<tr><td><a onMouseOver=\"return overlib('<b>".$userList['locationname']."</b><br><br>".rqJS( $userList['eldsjalfind'] )."<br><br>__Historik___<br>".$historik."');\" onMouseOut=\"return nd();\" href=\"userPresentation.php?userid=".$userList['userid']."\" class=\"a2\" target=\"_blank\">".$userList['username']."</a></td><td width=\"50\" align=\"middle\"><a href=userAdmin.php?mode=approve&userid=".$userList['userid']." onClick=\"return confirmSubmit('Vill du verkligen godk&auml;nna medlemmen?');\"><img src=\"images/buttons/vbutton.gif\" border=\"0\" alt=\"Godk&auml;nn anv&auml;ndaren!\"></a></td><td><a href=userAdmin.php?mode=notify&letter=change&userid=".$userList['userid']." class=a2><img src=\"images/buttons/vbutton.gif\" border=\"0\" alt=\"P&aring;minn anv&auml;ndaren!\"></a></td><td><a href=userAdmin.php?mode=delete&userid=".$userList['userid']." onClick=\"return confirmSubmit('Vill du verkligen ta bort medlemmen?');\"><img src=\"images/buttons/xbutton.gif\" border=\"0\" alt=\"Ta bort anv&auml;ndaren!\"></a></td><td>".$reminderDate."&nbsp;</td><td>".$lastLogin."</td><td>".$online."</td></tr>";
+			print "<tr><td><a onMouseOver=\"return overlib('<b>".$userList['locationname']."</b><br><br>".rqJS( $userList['eldsjalfind'] )."<br><br>__Historik___<br>".$historik."');\" onMouseOut=\"return nd();\" href=\"/user/".$userList['userid']."\" class=\"a2\" target=\"_blank\">".$userList['username']."</a></td><td width=\"50\" align=\"middle\"><a href=userAdmin.php?mode=approve&userid=".$userList['userid']." onClick=\"return confirmSubmit('Vill du verkligen godk&auml;nna medlemmen?');\"><img src=\"images/buttons/vbutton.gif\" border=\"0\" alt=\"Godk&auml;nn anv&auml;ndaren!\"></a></td><td><a href=userAdmin.php?mode=notify&letter=change&userid=".$userList['userid']." class=a2><img src=\"images/buttons/vbutton.gif\" border=\"0\" alt=\"P&aring;minn anv&auml;ndaren!\"></a></td><td><a href=userAdmin.php?mode=delete&userid=".$userList['userid']." onClick=\"return confirmSubmit('Vill du verkligen ta bort medlemmen?');\"><img src=\"images/buttons/xbutton.gif\" border=\"0\" alt=\"Ta bort anv&auml;ndaren!\"></a></td><td>".$reminderDate."&nbsp;</td><td>".$lastLogin."</td><td>".$online."</td></tr>";
 
 			//      $userList->moveNext;
 		}
@@ -856,7 +856,7 @@ else {
 			if( $userList['online'] == true ) {
 				$online = "<font color=GREEN><i>online</i></font>";
 			}
-			print "<tr><td><a href=userPresentation.php?userid=".$userList['userid']." class=a2>".$userList['username']."</a></td><td width=\"50\" align=\"middle\">&nbsp;</td><td>".$reminderDate."</td><td>".$lastLogin."</td><td>".$online."</td></tr>";
+			print "<tr><td><a href=/user/".$userList['userid']." class=a2>".$userList['username']."</a></td><td width=\"50\" align=\"middle\">&nbsp;</td><td>".$reminderDate."</td><td>".$lastLogin."</td><td>".$online."</td></tr>";
 
 			//      $userList->moveNext;
 		}

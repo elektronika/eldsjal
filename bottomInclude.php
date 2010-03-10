@@ -11,7 +11,7 @@ $onlineCount = current($conn->execute('select count(*) from users where online =
 <div id="footer-wrap">
 	<div id="footer">
 		<div class="float-left">
-			<a href = "members.php?mode=showOnline" class = "a2" ><?php echo $onlineCount; ?> eldsjälar är online</a><br/>
+			<a href = "/people/search?online=1"><?php echo $onlineCount; ?> eldsjälar är online</a><br/>
 			Antal inloggade idag: <?php echo $application['visitorcount'];?>
 		</div>
 		<div class="float-right">
