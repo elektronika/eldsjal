@@ -24,23 +24,6 @@ class UserModel extends AutoModel {
 			->get('users')->row();
 		unset($user->password);
 		$user->birthday = mktime(0, 0, 0, $user->born_month, $user->born_date, $user->born_year);
-		// $user->actions = array(
-		// 			array('title' => 'Presentation', 'class' => 'presentation', 'href' => '/user/'.$user->slug),
-		// 			array('title' => 'Gästbok', 'class' => 'guestbook', 'href' => '/user/'.$user->slug.'/guestbook'),
-		// 			array('title' => 'Meddelande', 'class' => 'message', 'href' => '/message/new/'.$user->slug)
-		// 		);
-		// 		
-		// 		if($this->has_images($user_id))
-		// 			$user->actions[] = array('title' => 'Bilder', 'class' => 'images', 'href' => '/user/'.$user->slug.'/images');
-		// 		if($this->has_thoughts($user_id))
-		// 			$user->actions[] = array('title' => 'Tankar', 'class' => 'thoughts', 'href' => '/user/'.$user->slug.'/thoughts');
-		// 			
-		// 		if($user->userId == $this->session->userId() || $this->session->isAdmin()) {
-		// 			$user->actions[] = array('title' => 'Inställningar', 'class' => 'usersettings', 'href' => '/user/'.$user->slug.'/edit');
-		// 			$user->actions[] = array('title' => 'Byt bild', 'class' => 'image', 'href' => '/user/'.$user->slug.'/image');
-		// 		}
-		// 		if($this->session->isAdmin())
-		// 			$user->actions[] = array('title' => 'Admin', 'class' => 'admin', 'href' => '/user/'.$user->slug.'/admin');
 
 		return $this->util->remap($user, $this->remap);
 	}
@@ -144,7 +127,7 @@ class UserModel extends AutoModel {
 		
 		$sublinks['presentation'] = array('href' => '/user/'.$user_id, 'title' => 'Presentation');
 		$sublinks['guestbook'] = array('href' => '/guestbook/view/'.$user_id, 'title' => 'Gästbok');
-		$sublinks['message'] = array('href' => '/messages.php?userid='.$user_id.'&mode=write', 'title' => 'Meddelande');
+		$sublinks['message'] = array('href' => '/messages/new/'.$user_id, 'title' => 'Meddelande');
 		if($this->has_images($user_id))
 			$sublinks['gallery'] = array('href' => '/gallery.php?userid='.$user_id, 'title' => 'Bilder');
 		if($this->has_thoughts($user_id))

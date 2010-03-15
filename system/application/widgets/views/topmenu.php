@@ -6,7 +6,7 @@
 		<a href="/people" title="Här finns alla våra medlemmar!">Medlemmar</a>
 		<a href="/gallery.php" title="Underbara bilder med anknytning till alternativkonst från våra medlemmar *uppladdning kräver medlemskap*">Galleri</a>
 		<a href="http://www.cby.se/" title="Camp Burn Yourselfs egna sida!" target="_blank">C.B.Y</a>
-		<a href="/board.php" title="Information om föreningen">Föreningen</a>
+		<a href="/board" title="Information om föreningen">Föreningen</a>
 	</div>
 	<form id="quicksearch" action = "/people/search" method = "get"> 
 		<div>

@@ -1,3 +1,13 @@
+<?php
+if(isset($widgets['left']) && ! empty($widgets['left']) && isset($widgets['right']) && ! empty($widgets['right']))
+	$sidebar_class = 'two-sidebars';
+elseif(isset($widgets['left']) && ! empty($widgets['left']))
+	$sidebar_class = 'sidebar-left';
+elseif(isset($widgets['right']) && ! empty($widgets['right']))
+	$sidebar_class = 'sidebar-right';
+else
+	$sidebar_class = 'no-sidebars';
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -21,16 +31,7 @@
 		<?php endforeach; ?>
 	</div>
 </div>
-<?php
-if(isset($widgets['left']) && ! empty($widgets['left']) && isset($widgets['right']) && ! empty($widgets['right']))
-	$sidebar_class = 'two-sidebars';
-elseif(isset($widgets['left']) && ! empty($widgets['left']))
-	$sidebar_class = 'sidebar-left';
-elseif(isset($widgets['right']) && ! empty($widgets['right']))
-	$sidebar_class = 'sidebar-right';
-else
-	$sidebar_class = 'no-sidebars';
-?>
+
 <div id="content-wrap" class="<?php echo $sidebar_class; ?>">
 	<div id="content">
 		
@@ -41,6 +42,7 @@ else
 	</div>
 <?php endforeach; ?>
 </div>
+
 <div class="region" id="region-content">
 <?php if($display_header):?>
 <?php if(isset($page_title)): ?><h2><?php if( ! empty($breadcrumbs)) echo breadcrumbs($breadcrumbs); ?><?php echo $page_title; ?></h2><?php endif; ?>
@@ -49,6 +51,7 @@ else
 <?php echo messages($messages); ?>
 <?php echo region_contents('content'); ?>
 </div>
+
 <?php if(isset($widgets['right']) && ! empty($widgets['right'])): ?>
 	<div class="sidebar" id="sidebar-right">
 		<?php foreach($widgets['right'] as $widget): ?>
@@ -58,6 +61,7 @@ else
 		<?php endforeach; ?>
 	</div>
 <?php endif; ?>
+
 <div class="clear">&nbsp;</div>
 
 </div>
@@ -72,7 +76,7 @@ else
 		</div>
 		<div id="footer-text">
 			Det &auml;r ej till&aring;tet att kopiera, sprida eller vidaref&ouml;rmedla information fr&aring;n Eldsj&auml;l	F&ouml;reningen Eldsj&auml;l  (C) 2005 - <?php echo date('Y');?><br>
-			eldsjal.org drivs av f&ouml;reningen Eldsj&auml;l med st&ouml;d fr&aring;n Ungdomsstyrelsen
+			eldsjal.org drivs av f&ouml;reningen Eldsj&auml;l utan st&ouml;d fr&aring;n Ungdomsstyrelsen
 		</div>
 	</div>
 </div>

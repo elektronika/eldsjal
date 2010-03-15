@@ -9,7 +9,7 @@ class Usermenu extends Widget {
 		$this->items[] = (object) array('href' => '/guestbook/view/'.$this->session->userid(), 'title' => 'Gästbok'.$this->counter($gb_count), 'class' => $gb_count ? 'guestbook new' : 'guestbook');
 		
 		$msg_count = $this->db->query("SELECT COUNT(readmessage) AS count FROM messages WHERE userid = ".$this->session->userId()." AND readmessage = 0")->row()->count;
-		$this->items[] = (object) array('href' => '/messages.php?userid='.$this->session->userid(), 'title' => 'Meddelanden'.$this->counter($msg_count), 'class' => $msg_count ? 'messages new' : 'messages');
+		$this->items[] = (object) array('href' => '/messages', 'title' => 'Meddelanden'.$this->counter($msg_count), 'class' => $msg_count ? 'messages new' : 'messages');
 		$this->items[] = (object) array('href' => '/forum', 'title' => 'Forum', 'class' => 'forum');		
 		$this->items[] = (object) array('href' => '/gallery.php', 'title' => 'Bilder', 'class' => 'gallery');		
 		$this->items[] = (object) array('href' => '/people', 'title' => 'Folk', 'class' => 'people');
@@ -40,6 +40,8 @@ class Usermenu extends Widget {
 			
 		$this->items[] = (object) array('href' => '/user/'.$this->session->userid().'/edit', 'title' => 'Inställningar', 'class' => 'settings');
 		$this->items[] = (object) array('href' => '/logout', 'title' => 'Logga ut', 'class' => 'logout');
+
+		$this->items[] = (object) array('href' => '/board', 'title' => 'Föreningsinformation', 'class' => 'board');
 	}
 	
 	protected function counter($number) {

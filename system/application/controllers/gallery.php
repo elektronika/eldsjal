@@ -9,8 +9,8 @@ class Gallery extends MY_Controller {
 	}
 	
 	public function get_index() {
-		// $this->load->library('pagination');
-		$images_per_page = $this->session->setting('images_per_page');
+		$this->load->library('pagination');
+		$images_per_page = $this->settings->get('images_per_page');
 		$cur_page = $this->arguments->get('page', 0);
 		
 		// Taggar
@@ -29,11 +29,11 @@ class Gallery extends MY_Controller {
 			$this->_tags_filter($this->db, $tag_ids);
 		if($user = $this->arguments->get('user'))
 			$this->_user_filter($this->db, $user);
-		$this->images = $this->db->get('images', $images_per_page, $cur_page)->result();
+		$this->view->images = $this->db->get('images', $images_per_page, $cur_page)->result();
 		
 		// Taggmolnet
 		if(isset($tags)) {
-			$this->tagcloud_prefix = '/gallery/tags:'.implode(':', $tag_slugs).':';
+			$this->view->tagcloud_prefix = '/gallery/tags:'.implode(':', $tag_slugs).':';
 			
 			$tag_joins = '';
 			foreach ($tags as $x => $tag)
@@ -44,7 +44,7 @@ class Gallery extends MY_Controller {
 			$tagcloud = $this->db->query("SELECT DISTINCT ial.artid AS tid, al.artname AS tag, slug, COUNT(DISTINCT ial.imageid) AS size FROM imageartlist AS ial JOIN artlist AS al ON ial.artid = al.artid {$tag_joins} WHERE NOT ($whereors) GROUP BY al.artid ORDER BY size DESC")->result();
 		} else {
 			$tagcloud_prefix = '/gallery/tags:';
-			$this->tagcloud = $this->db->query('SELECT artname AS tag, COUNT( * ) AS size, slug FROM `imageartlist` JOIN artlist ON imageartlist.artid = artlist.artid GROUP BY artname ORDER BY size DESC')->result();
+			$this->view->tagcloud = $this->db->query('SELECT artname AS tag, COUNT( * ) AS size, slug FROM `imageartlist` JOIN artlist ON imageartlist.artid = artlist.artid GROUP BY artname ORDER BY size DESC')->result();
 		}
 		
 		// "Avtaggningslänkarna"
@@ -59,7 +59,7 @@ class Gallery extends MY_Controller {
 			}
 			unset($tag);
 			
-			$this->tags = $tags;
+			$this->view->tags = $tags;
 		}
 		
 		// Siduppdelning
@@ -76,8 +76,8 @@ class Gallery extends MY_Controller {
 			'per_page' => $images_per_page,
 			'total_rows' => $number_of_images,
 			'cur_page' => $cur_page
-		));
-		$this->pager = $this->pagination->create_links();
+		));		
+		$this->view->pager = $this->pagination->create_links();
 	}
 	
 	// Borde egentligen ligga i image-modellen
@@ -95,7 +95,7 @@ class Gallery extends MY_Controller {
 	}
 	
 	public function get_upload() {
-		$this->tags = $this->models->tag->get_all();
+		$this->view->tags = $this->models->tag->get_all();
 	}
 	
 	public function post_upload() {
@@ -110,7 +110,7 @@ class Gallery extends MY_Controller {
 			$this->get_upload();
 		} else {
 			if( ! $this->upload->do_upload('file') ) {
-				$this->upload_errors = $this->upload->display_errors();
+				$this->view->upload_errors = $this->upload->display_errors();
 				$this->get_upload();
 			} else {
 				$upload_data = $this->upload->data();
@@ -121,7 +121,7 @@ class Gallery extends MY_Controller {
 				$image_id = $this->models->image->save($image);
 
 				// Byt namn på originalfilen
-				$original_file = $this->util->setting('original_image_folder').$image_id.$upload_data['file_ext'];
+				$original_file = $this->settings->get('original_image_folder').$image_id.$upload_data['file_ext'];
 				rename($upload_data['full_path'], $original_file);
 				
 				$image_size = getimagesize($original_file);
@@ -133,7 +133,7 @@ class Gallery extends MY_Controller {
 				$config = array(
 					'source_image' => $original_file,
 					'maintain_ratio' => TRUE,
-					'new_image' => $this->util->setting('gallery_folder').'tn_'.$image_id.'.'.$this->util->setting('default_image_extension'),
+					'new_image' => $this->settings->get('gallery_folder').'tn_'.$image_id.'.'.$this->settings->get('default_image_extension'),
 					$resize_axis => 100,
 					$other_axis => 300
 				);
@@ -150,7 +150,7 @@ class Gallery extends MY_Controller {
 				$config = array(
 					'source_image' => $original_file,
 					'maintain_ratio' => TRUE,
-					'new_image' => $this->util->setting('gallery_folder').$image_id.'.'.$this->util->setting('default_image_extension'),
+					'new_image' => $this->settings->get('gallery_folder').$image_id.'.'.$this->settings->get('default_image_extension'),
 					$resize_axis => 1000,
 					$other_axis => 999
 				);
@@ -163,7 +163,7 @@ class Gallery extends MY_Controller {
 				$this->models->image->set_categories($image_id, array_keys($this->input->post('tag')));
 				
 				$this->resize_error = $error;
-				$this->template = 'gallery_upload_success.tpl';
+				$this->template = 'gallery_upload_success';
 			}
 		}
 	}
@@ -173,7 +173,7 @@ class Gallery extends MY_Controller {
 	}
 	
 	public function get_view($image_id) {
-		$this->image = $this->models->image->get_by_id($image_id);
+		$this->view->image = $this->models->image->get_by_id($image_id);
 	}
 	
 	public function get_random() {
@@ -185,15 +185,20 @@ class Gallery extends MY_Controller {
 	}
 	
 	public function get_edit($image_id) {
-		$this->image = $this->models->image->get_by_id($image_id);
+		$this->view->image = $this->models->image->get_by_id($image_id);
 	}
 	
 	public function acl_edit($image_id) {
 		// Kolla om användaren äger bilden, har lattjo rättigheter, eller är admin.
+		return $this->session->isAdmin();
 	}
 	
-	public function get_user($user_slug) {
-		$this->user = $this->models->user->get_by_slug($this->uri->rsegment(3));
-		$this->images = $this->db->select('images.*')->where('uploadedby', $this->user->userid)->order_by('imageuploaddate DESC')->get('images')->result();
+	public function get_user($user_id) {
+		$this->view->user = $this->models->user->get_by_id((int) $this->uri->rsegment(3));
+		$this->view->images = $this->db
+			// ->select('images.*')
+			->where('uploadedby', (int) $user_id)
+			->order_by('imageuploaddate', 'DESC')
+			->get('images')->result();
 	}
 }
