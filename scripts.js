@@ -1,4 +1,4 @@
-window.setInterval("jQuery.get('/json/keepalive?'+Math.random())", 5 * 60 * 1000);
+window.setInterval("jQuery.get('/json/keepalive/'+Math.random())", 5 * 60 * 1000);
 
 function openWindow(windowName,url) {
 	window.open(url, windowName, 'fullscreen=no, toolbar=no, status=no, menubar=no, scrollbars=auto, resizable=yes, directories=no,location=no, left=0, top=0, width=800, height=600');
@@ -11,9 +11,9 @@ function openImage(url,x,y,qs){
 function confirmSubmit(message){
 	var agree=confirm(message);
 	if (agree)
-	return true;
+		return true;
 	else
-	return false ;
+		return false ;
 }
 
 function openImage(url,x,y,qs){
@@ -22,7 +22,7 @@ function openImage(url,x,y,qs){
 
 function checkPersonnr(nr) {
 	this.valid=false;
-	if(!nr.match(/^(\d{2})(\d{2})(\d{2})\-(\d{4})$/)){ return false; }
+	if(!nr.match(/^(\d{2})(\d{2})(\d{2})\-(\d{4})$/)) { return false; }
 	this.now=new Date(); this.nowFullYear=this.now.getFullYear()+""; this.nowCentury=this.nowFullYear.substring(0,2); this.nowShortYear=this.nowFullYear.substring(2,4);
 	this.year=RegExp.$1; this.month=RegExp.$2; this.day=RegExp.$3; this.controldigits=RegExp.$4;
 	this.fullYear=(this.year*1<=this.nowShortYear*1)?(this.nowCentury+this.year)*1:((this.nowCentury*1-1)+this.year)*1;
@@ -115,12 +115,9 @@ function ValidatePresentation() {
 }
 
 function isNumeric(str,message) {
-	if (str == str.replace(/[^\d]*/gi,"")) {
-	}
-	else {
+	if (str != str.replace(/[^\d]*/gi,"")) {
 		alert(message);
 		document.register2.icq.value = "";
-
 	}
 	return;
 }
