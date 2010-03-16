@@ -599,17 +599,11 @@ textarea#form-item-body, .form-item-textarea {
 	font-weight: normal;
 }
 
-#widget-timeline .item-thought {
-	background-image: url('icons/lightbulb.png');
-}
-
-#widget-timeline .item-forum {
-	background-image: url('icons/comment.png');
-}
-
-#widget-timeline .item-event {
-	background-image: url('icons/date.png');
-}
+#widget-timeline .item-thought { background-image: url('icons/lightbulb.png'); }
+#widget-timeline .item-forum { background-image: url('icons/comment.png'); }
+#widget-timeline .item-event { background-image: url('icons/date.png'); }
+#widget-timeline .item-user { background-image: url('icons/user.png'); }
+#widget-timeline .item-image { background-image: url('icons/image.png'); }
 
 /* Kalendern */
 .day {
@@ -719,4 +713,33 @@ textarea#form-item-body, .form-item-textarea {
 
 .board_index .member {
 	clear: both;
+}
+
+/* Galleriet */
+a.thumbnail {
+	display: block;
+	width: 94px;
+	height: 94px;
+	background-position: center center;
+	background-repeat: no-repeat;
+	float: left;
+}
+
+.tagcloud {
+	text-align: center;
+}
+
+.tag-level-1 { font-size: 0.8em; }
+.tag-level-2 { font-size: 0.9em; }
+.tag-level-3 { font-size: 1.1em; }
+.tag-level-4 { font-size: 1.4em; }
+.tag-level-5 { font-size: 1.6em; }
+
+.gallery-image {
+	max-width: 597px;
+	max-height: 600px;
+}
+
+.gallery_view #region-content .userimage {
+	display: none;
 }

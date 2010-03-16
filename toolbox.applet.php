@@ -99,7 +99,7 @@ if( $_SESSION['userid'] != 0 || $_SESSION['userid'] != "" ) {
 	}?>
 		 <a class="a2" href="/user/<?php   echo $_SESSION['userid'];?>"><img src="images/icons/house.gif" border="0" height="10" width="13"> Hem </a><br>
 		 <a class="a2" href="/guestbook/view/<?php   echo $_SESSION['userid'];?>"><img src="<?php   echo $guestBookImage;?>" border="0" height="10" width="13"> G&auml;stbok <?php   echo $entrys;?>&nbsp;&nbsp;</a><br>
-		 <a class="a2" href="messages.php?userid=<?php   echo $_SESSION['userid'];?>"><img src="<?php   echo $MessageImage;?>" border="0"> Meddelanden <?php   echo $messageentrys;?></a><br>
+		 <a class="a2" href="/messages"><img src="<?php   echo $MessageImage;?>" border="0"> Meddelanden <?php   echo $messageentrys;?></a><br>
 		 <?php /* ><a class="a2" href="friends.php?userid=<?php   echo $_SESSION['userid'];?>"><img src="<?php   echo $friendsImage;?>" border="0" height="10" width="13"> Slattar</a><br> */ ?>
 		 <a class="a2" href="/thoughts"><img src="images/icons/diary.gif" border="0" height="10" width="13"> Tankar</a><br>
 		 <a class="a2" href="/calendar"><img src="<?php   echo $notifyImage;?>" border="0" height="10" width="13"> Aktiviteter <?php
@@ -126,7 +126,7 @@ if( $_SESSION['userid'] != 0 || $_SESSION['userid'] != "" ) {
 	// }
 
 	// if session("userType") >= application("imageAdmin") then response.Write("<a class=a2 href=image.tool.php><img src=images/icons/bildhantering.gif border=0>&nbsp;Bildhantering</a><br>")
-
+/*
 	if( $_SESSION['usertype'] >= $application['wisdomadmin'] ) {
 		print "<a class=a2 href=insertWisdom.php><img src=images/icons/vishetsadministration.gif border=0>&nbsp;Visheter</a><br>";
 	}
@@ -147,10 +147,10 @@ if( $_SESSION['userid'] != 0 || $_SESSION['userid'] != "" ) {
 	}
 	if( $_SESSION['usertype'] >= $application['linksadmin'] ) {
 		print "<a class=a2 href=linksAdmin.php><img src=images/icons/lankadministration.gif border=0>&nbsp;L&auml;nkadmin</a><br>";
-	}
+	}*/
 	if( $_SESSION['usertype'] >= $application['useradmin'] ) {
 		print "<a class=a2 href=userAdmin.php><img src=images/icons/medlemsadministration.gif border=0>&nbsp;Ny medlem ".$users."</a><br>";
-	}
+	}/*
 	if( $_SESSION['usertype'] >= $application['useradmin'] ) {
 		print "_______________<br><a href=memberRegister.php?mode=addmemberinfo class=a2 onClick=\"window.alert('Detta f&aring;r du endast g&ouml;ra om du har explicit beh&ouml;righet att registrera f&ouml;reningsmedlemmar, om inte s&aring; l&aring;t detta vara.\\nR&auml;tt att registrera f&ouml;reningsmedlemmar erh&aring;lls av glemme');\">Medlemsreg. &raquo;</a><br>";
 	}?>
@@ -163,6 +163,7 @@ if( $_SESSION['userid'] != 0 || $_SESSION['userid'] != "" ) {
 		
 	
 <?php
+*/
 }
 else {
 	print "<h3 class=\"boxHeader\">Hoppa In</h3><h4 class=boxContent>";

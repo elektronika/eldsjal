@@ -162,38 +162,7 @@ else {
 		</td>
 		
 			<td valign="top" align="right">
-		
-		<div class="boxRight">
-		<h3 class="boxHeader">Aktivitetss&ouml;k</h3>
-		<h4 class="boxContentCalendar">
-				<?php require_once( 'activitySearch.applet.php' );?>
-		</h4></div>
-				
-		<div class="boxRight">
-		<h3 class="boxHeader">Aktiviteter</h3>
-		<h4 class="boxContentCalendar">
-				<?php require_once( 'calendar.php' );?>
-		</h4></div>
-				
-		<div class="boxRight" align="left">
-		<h3 class="boxHeader">
-		Visheter</h3>
-		<h4 class="boxContent">
-		<div class="plainText">		
-			<?php require_once( 'wiseBox.applet.php' );?>		
-		</div>			
-		</h4>
-		</div>	
-
-		
-		<div class="boxRight">
-		<h3 class="boxHeader">
-		S&ouml;k medlem:</h3>
-		<h4 class="boxContent">
-
-			<?php require_once( 'memberSearch.applet.php' );?>
-		</h4>
-		</div>
+				</td>
 			
 	</td>
 	</tr>

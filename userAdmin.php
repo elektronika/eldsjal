@@ -871,26 +871,7 @@ else {
 }
 ?>
 		</td>		
-		<td valign="top">
-		<div class="boxRight">
-		<h3 class="boxHeader">
-		S&ouml;k medlem:</h3>
-		<h4 class="boxContent">
-			<?php  require_once( 'memberSearch.applet.php' );?>
-		</h4>
-		</div>
-		<div class="boxRight">
-		<h3 class="boxHeader">Aktiviteter</h3>
-		<h4 class="boxContentCalendar">
-				<?php  require_once( 'calendar.php' );?>
-		</h4></div>
-		<div class="boxRight">
-		<h3 class="boxHeader">
-		Senaste bilder:</h3>
-		<h4 class="boxContent">
-			<?php  require_once( 'image.applet.php' );?>
-		</h4>
-		</div>	
+		<td valign="top">	
 		</td>
 	</tr>
 <?php  require_once( 'bottomInclude.php' );?>
