@@ -206,4 +206,154 @@ class User extends MY_Controller {
 				$this->models->user->mark_as_having_image($user->userid);
 		}
 	}
+	
+	public function get_delete($user_id) {
+		
+	}
+	
+	public function post_delete($user_id) {
+		die('Nej. Inte.');
+		$userid = intval( $_GET['userid'] );
+
+		//R.I.P-account 1590
+		//styr om fadderskapet
+		//response.Write("&Auml;ndra fadderbarnens fadder - ")
+		//SQL = "update users set approved_by = (select approved_by from users where userid = " & userid & ") where approved_by = " userid
+		//conn.execute SQL, rowsaffected, adCmdText
+		//response.Write(rowsaffected & " rader <br><br>")
+
+		//Ta bort fr&#140;n adresshistoriken
+
+		print "tar bort gamla adressrader - ";
+		$sql = "delete from address where userid = ".$userid;
+
+		//Ta bort gamla namn
+		print "tar bort gamla namn - ";
+		$sql = "delete from history_name where user_id = ".$userid;
+
+		// Update all inserted wisdom by the user
+		print "&Auml;ndrar ansvarig p&aring; alla visheter som kommer fr&aring;n anv&auml;ndaren - ";
+		$sql = "update wisebox set addedbyid = ".$application['ripuser']." where addedbyid = ".$userid;
+
+		// Update all inserted trivias by the user
+		print "&Auml;ndrar ansvarig p&aring; all trivia som kommer fr&aring;n anv&auml;ndaren - ";
+		$sql = "update trivia set insertedby = ".$application['ripuser']." where insertedby = ".$userid;
+
+		// Update all approved trivias by the user
+		print "&Auml;ndrar ansvarig p&aring; godk&auml;nd trivia av anv&auml;ndaren - ";
+		$sql = "update trivia set approvedby = ".$application['ripuser']." where approvedby = ".$userid;
+
+		// Changes the userid of all messages sent FROM the RIP-user
+		print "&Auml;ndrar avs&auml;ndare p&aring; alla meddelanden skickade FR&Aring;N anv&auml;ndaren - ";
+		$sql = "update messages set messagefrom = ".$application['ripuser']." where messagefrom = ".$userid;
+
+		// Changes the userid of all news posted FROM the user
+		print "&Auml;ndrar avs&auml;ndare p&aring; alla nyheter skickade FR&Aring;N anv&auml;ndaren - ";
+		$sql = "update news set newsauthor = ".$application['ripuser']." where newsauthor = ".$userid;
+
+		// Changes the userid to the RIP-user in login-statistics
+		print "Styr om alla inloggningar f&ouml;r statistikens skull - ";
+		$sql = "update loginhistory set userid = ".$application['ripuser']." where userid = ".$userid;
+
+		// Redirect all links submitted by the users to the RIP-account
+		print "Styr om alla l&auml;nkar registrerade av anv&auml;ndaren till RIP-anv&auml;ndaren - ";
+		$sql = "update links set posterid = ".$application['ripuser']." where posterid = ".$userid;
+
+		// Redirect all posts to users from the deleted user to the RIP-account
+		print "Styr om alla bilduppladdningar fr&aring;n anv&auml;ndaren till RIP-anv&auml;ndaren - ";
+		$sql = "update images set uploadedby = ".$application['ripuser']." where uploadedby = ".$userid;
+
+		// Redirect all posts to users from the deleted user to the RIP-account
+		print "Styr om alla bildgodk&auml;nningar av anv&auml;ndaren till RIP-anv&auml;ndaren - ";
+		$sql = "update images set approvedby = ".$application['ripuser']." where approvedby = ".$userid;
+
+		// Redirect all posts to users from the deleted user to the RIP-account
+		print "Styr om alla foruminl&auml;gg fr&aring;n anv&auml;ndaren till RIP-anv&auml;ndaren - ";
+		$sql = "update guestbook set fromuserid = ".$application['ripuser']." where fromuserid = ".$userid;
+
+		// Update the posterID to the R.I.P-id on all messages posted by the user in the forum
+		print "Styr om alla foruminl&auml;gg fr&aring;n anv&auml;ndaren till RIP-anv&auml;ndaren - ";
+		$sql = "update forummessages set posterid = ".$application['ripuser']." where posterid = ".$userid;
+
+		// Update the topics that the user might have created
+		print "Styr om alla forumtr&aring;dar fr&aring;n anv&auml;ndaren till RIP-anv&auml;ndaren - ";
+		$sql = "update forumtopics set topicposterid = ".$application['ripuser']." where topicposterid = ".$userid;
+
+		// If the user ever registred an event, direct to the R.I.P-user
+		print "Styr om alla aktiviteter registrerad av anv&auml;ndaren till RIP-anv&auml;ndaren - ";
+		$sql = "update calendarevents set userid = ".$application['ripuser']." where userid = ".$userid;
+
+		//Remove user from Userlist
+		print "Tar bort anv&auml;ndare ur listan - ";
+		$sql = "delete from users where userid = ".$userid;
+
+		// If the user was a member of the board, remove him from the list
+		print "Tar bort anv&auml;ndare ur styrelsen - ";
+		$sql = "delete from board where userid = ".$userid;
+
+		// Delete all pending notifications
+		print "Tar bort alla kalendernotifieringar - ";
+		$sql = "delete from calendarnotify where userid = ".$userid;
+
+		// Delete all traces of the people that read the diary first, before deleting the actual diarys,
+		// or else we dont know which diarys to delete
+
+		print "Tar bort alla l&auml;smarkeringar i tankar - ";
+		$sql = "delete from diaryread where diaryid in (select diaryid from diary where userid = ".$userid.")";
+
+		// Delete all diarys
+		print "Tar bort alla tankar - ";
+		$sql = "delete from diary where userid = ".$userid;
+
+		// Remove all friendrelation to and from the user
+		print "Tar bort alla v&auml;nrelation till och fr&aring;n anv&auml;ndaren - ";
+		$sql = "delete from friends where user_id = ".$userid." or friend_id = ".$userid;
+
+		// Remove all guestBookentrys to and from the user
+		print "Tar bort alla g&auml;stboksinl&auml;gg till anv&auml;ndaren - ";
+		$sql = "delete from guestbook where touserid = ".$userid;
+
+		// Remove all imagescoring from the user
+		print "Rensar alla po&auml;ng anv&auml;ndare satt p&aring; bilder - ";
+		$sql = "delete from imagescore where userid = ".$userid;
+
+		// Remove all traces of activities that the user has participated in
+		print "Tar bort alla sp&aring;r av de aktiviteter anv&auml;ndaren varit med p&aring; - ";
+		$sql = "delete from joinactivity where userid = ".$userid;
+
+		// Remove all messages sent TO the user
+		print "Tar bort alla meddelanden anv&auml;ndaren har f&aring;tt - ";
+		$sql = "delete from messages where userid = ".$userid;
+
+		// Remove all news notifications to the user
+		print "Tar bort alla nyhetsnotifieringar anv&auml;ndaren har f&aring;tt - ";
+		$sql = "delete from newsnotify where userid = ".$userid;
+
+		// Remove all adoption processes
+		print "Tar bort alla adoptionsprocesser som p&aring;g&aring;r f&ouml;r anv&auml;ndaren - ";
+		$this->db->query("delete from pendingadoption where adopteeuserid = ".$userid);
+		
+		// Remove the user from pending delete-table
+		print "Tar bort anv&auml;ndaren ur tabort-k&ouml;n - ";
+		$this->db->query("delete from pendingdelete where userid = ".$userid);
+
+		// Remove the user from the logged in-table
+		print "Om anv&auml;ndaren hakat upp sig i inloggadtabellen s&aring; rensar vi bort denne d&auml;r nu - ";
+		$this->db->query("delete from seen where userid = ".$user_id);
+
+		// Remove the user from the artlist table
+		print "Tar bort alla aktiviter som anv&auml;ndaren sagt sig h&aring;lla p&aring; med - ";
+		$this->db->query("delete from userartlist where userid = ".$user_id);
+
+		// Remove the user from the artlist table
+		print "Tar bort alla medlemsskapsbekr&auml;ftelser - ";
+		$this->db->query("delete from user_years where userid = ".$userid);
+
+		print "Anv&auml;ndaren nu helt borttagen!";
+		exit( );
+	}
+	
+	public function acl_delete($user_id) {
+		return $this->session->isAdmin();
+	}
 }

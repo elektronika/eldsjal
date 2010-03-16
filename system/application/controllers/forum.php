@@ -266,9 +266,9 @@ class Forum extends MY_Controller {
 	
 	public function post_admin() {
 		// $this->db->empty_table('board');
-		// 		foreach($_POST['items'] as $item)
-		// 			if( ! empty($item['rights']))
-		// 				$this->db->insert('board', $item);
+		// foreach($_POST['items'] as $item)
+		// 	if( ! empty($item['rights']))
+		// 		$this->db->insert('board', $item);
 		$this->session->message('Sådärja!');
 		$this->redirect('/forum/admin');
 	}

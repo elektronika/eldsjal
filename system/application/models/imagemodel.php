@@ -1,5 +1,5 @@
 <?php
-class Image extends Model {
+class ImageModel extends AutoModel {
 	protected $remap = array();
 	
 	public function __construct() {
@@ -24,7 +24,7 @@ class Image extends Model {
 		$new_image->filetype = 'jpg';
 		$new_image->private = $image->private;
 		$new_image->approved = 0;
-		$new_image->uploadedBy = isset($image->userid) ? $image->userid : $this->user->userId();
+		$new_image->uploadedBy = isset($image->userid) ? $image->userid : $this->session->userId();
 		
 		if(isset($image->id)) {
 			$this->db->update('images', $new_image, array('imageid' => $image->id));

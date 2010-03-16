@@ -3,7 +3,7 @@
 $iWidth = $frontimage->width + 50;
 $iHeight = $frontimage->height + 300;
 ?>
-<a href="javascript:openImage('viewPicture.php?imageid=<?php echo $frontimage->imageid; ?>','<?php echo $iWidth; ?>','<?php echo $iHeight; ?>','firstpage');">
+<a href="/gallery/view/<?php echo $frontimage->imageid; ?>">
 	<img src="/uploads/galleryImages/<?php echo $frontimage->imageid.'.'.$frontimage->filetype; ?>" width="450" alt="<?php echo $frontimage->imagename; ?>">
 </a>
 <h2>Välkommen till eldsjäl!</h2>

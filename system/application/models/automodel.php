@@ -17,13 +17,13 @@ class AutoModel extends Model {
 			$this->table = $table;
 	}
 	
-	public function __call($method, $arguments) {
-		$method_parts = explode('_', $method);
-		if(current($method_parts) == 'find') {
-			return $this->find_by_field($this->reverse_remap_field(implode('_', array_slice($method_parts, 2))), current($arguments));
-			// return $this->util->remapLoop($objects, $this->remap);
-		}
-	}
+	// public function __call($method, $arguments) {
+	// 	$method_parts = explode('_', $method);
+	// 	if(current($method_parts) == 'find') {
+	// 		return $this->find_by_field($this->reverse_remap_field(implode('_', array_slice($method_parts, 2))), current($arguments));
+	// 		// return $this->util->remapLoop($objects, $this->remap);
+	// 	}
+	// }
 	
 	public function find_by_field($field, $value) {
 		$this->query = $this->db->where($field, $value);

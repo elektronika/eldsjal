@@ -31,9 +31,13 @@ class Gallery extends MY_Controller {
 			$this->_user_filter($this->db, $user);
 		$this->view->images = $this->db->get('images', $images_per_page, $cur_page)->result();
 		
+		$this->view->tagcloud_prefix = '/gallery/tags:';
+		$this->view->page_title = 'Bilder';
+		
 		// Taggmolnet
 		if(isset($tags)) {
-			$this->view->tagcloud_prefix = '/gallery/tags:'.implode(':', $tag_slugs).':';
+			$this->view->page_title = 'Bilder ('.implode(', ', $tag_names).')';
+			$tagcloud_prefix = '/gallery/tags:'.implode(':', $tag_slugs).':';
 			
 			$tag_joins = '';
 			foreach ($tags as $x => $tag)
@@ -44,7 +48,7 @@ class Gallery extends MY_Controller {
 			$tagcloud = $this->db->query("SELECT DISTINCT ial.artid AS tid, al.artname AS tag, slug, COUNT(DISTINCT ial.imageid) AS size FROM imageartlist AS ial JOIN artlist AS al ON ial.artid = al.artid {$tag_joins} WHERE NOT ($whereors) GROUP BY al.artid ORDER BY size DESC")->result();
 		} else {
 			$tagcloud_prefix = '/gallery/tags:';
-			$this->view->tagcloud = $this->db->query('SELECT artname AS tag, COUNT( * ) AS size, slug FROM `imageartlist` JOIN artlist ON imageartlist.artid = artlist.artid GROUP BY artname ORDER BY size DESC')->result();
+			$tagcloud = $this->db->query('SELECT artname AS tag, COUNT( * ) AS size, slug FROM `imageartlist` JOIN artlist ON imageartlist.artid = artlist.artid GROUP BY artname ORDER BY size DESC')->result();
 		}
 		
 		// "Avtaggningslänkarna"
@@ -78,6 +82,11 @@ class Gallery extends MY_Controller {
 			'cur_page' => $cur_page
 		));		
 		$this->view->pager = $this->pagination->create_links();
+		$this->view->template = 'gallery_index';
+		$this->view->tagcloud_prefix = $tagcloud_prefix;
+		$this->view->tagcloud = $tagcloud;		
+		$this->view->sublinks[] = array('href' => '/gallery/upload', 'title' => 'Ladda upp bild');
+		$this->view->sublinks[] = array('href' => '/gallery/random', 'title' => 'Slumpa bild!');
 	}
 	
 	// Borde egentligen ligga i image-modellen
@@ -90,8 +99,8 @@ class Gallery extends MY_Controller {
 	}
 	
 	// Borde egentligen ligga i image-modellen
-	protected function _user_filter(&$db, $user_slug) {		
-		$db->where('uploadedby', $this->models->user->user_id_for_slug($user_slug));
+	protected function _user_filter(&$db, $user_id) {		
+		$db->where('uploadedby', (int) $user_id);
 	}
 	
 	public function get_upload() {
@@ -101,7 +110,9 @@ class Gallery extends MY_Controller {
 	public function post_upload() {
 		$config['upload_path'] = './tmp_upload/';
 		$config['allowed_types'] = 'gif|jpg|png|jpeg';
-
+		
+		$this->load->library('upload', $config);
+		
 		$this->form_validation->set_rules('title', 'Rubrik', 'trim|xss_clean|required');
 		$this->form_validation->set_rules('body', 'Beskrivning', 'trim|xss_clean|required');
 		$this->form_validation->set_message('required', 'Fältet "%s" måste fyllas i hörru.');
@@ -109,8 +120,8 @@ class Gallery extends MY_Controller {
 		if($this->form_validation->run() == FALSE) {
 			$this->get_upload();
 		} else {
-			if( ! $this->upload->do_upload('file') ) {
-				$this->view->upload_errors = $this->upload->display_errors();
+			if( ! $this->upload->do_upload('file', $config)) {
+				$this->session->message($this->upload->display_errors(), 'warning');
 				$this->get_upload();
 			} else {
 				$upload_data = $this->upload->data();
@@ -137,6 +148,8 @@ class Gallery extends MY_Controller {
 					$resize_axis => 100,
 					$other_axis => 300
 				);
+				
+				$this->load->library('image_lib');
 				$this->image_lib->initialize($config);
 				if( ! $this->image_lib->resize()) {
 					$error .= $this->image_lib->display_errors();
@@ -160,10 +173,13 @@ class Gallery extends MY_Controller {
 				}
 				
 				// Lägg till kategorier
-				$this->models->image->set_categories($image_id, array_keys($this->input->post('tag')));
+				if($tags = $this->input->post('tag'))
+					$this->models->image->set_categories($image_id, array_keys($tags));
 				
-				$this->resize_error = $error;
-				$this->template = 'gallery_upload_success';
+				if( ! empty($error))
+					$this->session->message($error, 'warning');
+				$this->session->message('Uppladdat och klart!');
+				$this->redirect('/gallery/view/'.$image_id);
 			}
 		}
 	}
@@ -173,7 +189,14 @@ class Gallery extends MY_Controller {
 	}
 	
 	public function get_view($image_id) {
-		$this->view->image = $this->models->image->get_by_id($image_id);
+		$image = $this->models->image->get_by_id((int) $image_id);
+		if($image->userid == $this->session->userid() || $this->session->isAdmin())
+			$image->actions[] = array('href' => '/gallery/delete/'.$image->id, 'title' => 'Radera', 'class' => 'delete');
+		$this->view->sublinks[] = array('href' => '/gallery', 'title' => 'Tillbaka till galleriet');
+		$this->view->sublinks[] = array('href' => '/gallery/user/'.$image->userid, 'title' => $image->username.'s andra bilder');
+		$this->view->sublinks[] = array('href' => '/gallery/random', 'title' => 'Slumpa bild!');
+		$this->view->page_title = $image->title;
+		$this->view->image = $image;
 	}
 	
 	public function get_random() {
@@ -189,16 +212,40 @@ class Gallery extends MY_Controller {
 	}
 	
 	public function acl_edit($image_id) {
-		// Kolla om användaren äger bilden, har lattjo rättigheter, eller är admin.
+		// Kolla om användaren äger bilden, har lattjo rättigheter, eller är admin. Just nu mest bara admin.
 		return $this->session->isAdmin();
 	}
 	
 	public function get_user($user_id) {
-		$this->view->user = $this->models->user->get_by_id((int) $this->uri->rsegment(3));
+		$user = $this->models->user->get_by_id((int) $this->uri->rsegment(3));
 		$this->view->images = $this->db
-			// ->select('images.*')
 			->where('uploadedby', (int) $user_id)
 			->order_by('imageuploaddate', 'DESC')
 			->get('images')->result();
+		$this->view->sublinks = $this->models->user->sublinks($user->userid, 'gallery');
+		$this->view->page_title = $user->username.'s bilder';
+		$this->view->template = 'gallery_index';
+	}
+	
+	public function get_delete($image_id) {
+		$this->view->template = 'confirm';
+		$this->view->message = 'Är du säker på att du vill ta bort bilden?';
+		$this->view->form_action = '/gallery/delete/'.$image_id;
+		$this->util->trail('funderar på att ta bort något! :-o');
+		$this->view->page_title = 'Radera bild';	
+	}
+	
+	public function post_delete($image_id) {
+		$image = $this->models->image->get_by_id((int) $image_id);
+		$this->db->delete('images', array('imageid' => $image->id));
+		$this->db->delete('imageartlist', array('imageid' => $image->id));
+		@unlink($this->settings->get('gallery_folder').$image->id.'.'.$this->settings->get('default_image_extension'));
+		@unlink($this->settings->get('gallery_folder').'tn_'.$image->id.'.'.$this->settings->get('default_image_extension'));
+		$this->session->message('Poff botta!');
+		$this->redirect('/gallery');
+	}
+	
+	public function acl_delete($image_id) {
+		return ($this->session->isAdmin() || $this->models->image->get_by_id((int) $image_id)->userid == $this->session->userid());
 	}
 }

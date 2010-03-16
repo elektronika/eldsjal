@@ -23,6 +23,26 @@ class Timeline extends Widget {
 			$this->items[$item->timestamp.'_thought_'.$item->id] = $item;
 		}
 		
+		foreach($this->db->order_by('register_date', 'desc')->get('users', 10)->result() as $item) {
+			$item->type = 'user';
+			$item->timestamp = $this->util->assureTimestamp($item->register_date);
+			$item->title = $item->username;
+			$item->body = mb_substr($item->presentation, 0, 30).'...';
+			$item->id = $item->userId;
+			$item->href = '/user/'.$item->id;
+			$this->items[$item->timestamp.'_user_'.$item->id] = $item;
+		}
+		
+		foreach($this->db->order_by('imageuploaddate', 'desc')->get('images', 20)->result() as $item) {
+			$item->type = 'image';
+			$item->timestamp = $this->util->assureTimestamp($item->imageUploadDate);
+			$item->title = $item->imageName;
+			$item->body = mb_substr($item->imageDesc, 0, 30).'...';
+			$item->id = $item->imageId;
+			$item->href = '/gallery/view/'.$item->id;
+			$this->items[$item->timestamp.'_image_'.$item->id] = $item;
+		}
+		
 		krsort($this->items);
 		$this->items = array_slice($this->items, 0, $this->settings->get('timeline_items'));
 

@@ -1,32 +1,4 @@
 <?php
-// function Dwoo_Plugin_rq( Dwoo $dwoo, $content ) {
-// 		if( $content != "" ) {
-// 			$content = str_replace( "&#59;", ";", $content );
-// 			$content = str_replace( "&amp;#59;", ";", $content );
-// 			$content = str_replace( "&#44;", ",", $content );
-// 			$content = str_replace( "&amp;#44;", ",", $content );			
-// 			$content = str_replace( "&#39;", "'", $content );
-// 			$content = str_replace( "&amp;#39;", "'", $content );
-// 			$content = str_replace( "&#34;", "\"", $content );
-// 			$content = str_replace( "&amp;#34;", "\"", $content );
-// 			// $content = str_replace( "&lt;", "<", $content );
-// 			// $content = str_replace( "&gt;", ">", $content );
-// 			$content = str_replace( "\r\n", "<br/>", $content );
-// 			$content = str_replace( "\n", "<br/>", $content );
-// 			$content = str_replace( "[br]", "<br/>", $content );
-// 			$content = str_replace( "[b]", "<b>", $content );
-// 			$content = str_replace( "[/b]", "</b>", $content );
-// 			$content = str_replace( "]", ">", $content );
-// 			$content = str_replace( "[a ", "<a ", $content );
-// 			$content = str_replace( "[/a>", "</a>", $content );
-// 			$content = str_replace( "[3", "&lt;3", $content );
-// 			$content = str_replace( ">.[", "&gt;.&lt;", $content );
-// 			$content = do_clickable($content);
-// 		}
-// 		
-// 		return $content;
-// 	}
-	
 	// Dom två följande funktionerna är stulna från FluxBB, http://fluxbb.org
 
 	//
@@ -83,24 +55,9 @@
 			return $content;
 		}
 		
-		// function Dwoo_Plugin_fuzzytime( Dwoo $dwoo, $timestamp, $prefix = NULL, $suffix = NULL, $hoverDateFormat = 'Y-m-d H:i' ) {
-		// 	$CI =& get_instance();
-		// 	return $CI->util->fuzzytime($timestamp, $prefix, $suffix);
-		// }
-		
 		function fuzzytime( $timestamp, $prefix = NULL, $suffix = NULL, $hoverDateFormat = 'Y-m-d H:i' ) {
 			return get_instance()->util->fuzzytime($timestamp, $prefix, $suffix);
 		}
-		
-		// function Dwoo_Plugin_nicedate( Dwoo $dwoo, $timestamp) {
-		// 	$CI =& get_instance();
-		// 	return $CI->util->nicedate($timestamp);
-		// }
-		// 
-		// function Dwoo_Plugin_shortdate( Dwoo $dwoo, $timestamp) {
-		// 	$CI =& get_instance();
-		// 	return $CI->util->shortdate($timestamp);
-		// }
 		
 		function truncate( $value, $length=80, $etc='...', $break=false, $middle=false) {
 			if ($length == 0) {
@@ -123,86 +80,7 @@
 				return substr($value, 0, $length) . $etc;
 			}
 			return substr($value, 0, ceil($length/2)) . $etc . substr($value, -floor($length/2));
-		}		
-		
-		// function Dwoo_plugin_alertcounter( Dwoo $dwoo ) {
-		// 	$CI =& get_instance();
-		// 	$alert_count = $CI->models->alert->total_count();
-		// 	return ($alert_count > 0 ? '('.$alert_count.')' : '');
-		// }
-		// 
-		// function Dwoo_plugin_usersetting( Dwoo $dwoo, $key, $default ) {
-		// 	$CI =& get_instance();
-		// 	return $CI->session->setting($key, $default);
-		// }
-		// 
-		// function Dwoo_plugin_slugify( Dwoo $dwoo, $string ) {
-		// 	$CI =& get_instance();
-		// 	return $CI->util->slugify($string);
-		// }
-		// 
-		// function Dwoo_plugin_titlify( Dwoo $dwoo, $title ) {
-		// 	$CI =& get_instance();
-		// 	return $CI->util->titlify($title);
-		// }
-		// 
-		// function Dwoo_plugin_age( Dwoo $dwoo, $timestamp ) {
-		// 	$CI =& get_instance();
-		// 	return $CI->util->fuzzyage($timestamp);
-		// }
-		
-		// function Dwoo_Plugin_escape(Dwoo $dwoo, $value='', $format='html', $charset=null)
-		// 		{
-		// 			if ($charset === null) {
-		// 				$charset = $dwoo->getCharset();
-		// 			}
-		// 
-		// 			switch($format)
-		// 			{
-		// 
-		// 			case 'html':
-		// 				return htmlspecialchars((string) $value, ENT_QUOTES, $charset);
-		// 			case 'htmlall':
-		// 				return htmlentities((string) $value, ENT_QUOTES, $charset);
-		// 			case 'url':
-		// 				return rawurlencode((string) $value);
-		// 			case 'urlpathinfo':
-		// 				return str_replace('%2F', '/', rawurlencode((string) $value));
-		// 			case 'quotes':
-		// 				return preg_replace("#(?<!\\\\)'#", "\\'", (string) $value);
-		// 			case 'hex':
-		// 				$out = '';
-		// 				$cnt = strlen((string) $value);
-		// 				for ($i=0; $i < $cnt; $i++) {
-		// 					$out .= '%' . bin2hex((string) $value[$i]);
-		// 				}
-		// 				return $out;
-		// 			case 'hexentity':
-		// 				$out = '';
-		// 				$cnt = strlen((string) $value);
-		// 				for ($i=0; $i < $cnt; $i++)
-		// 					$out .= '&#x' . bin2hex((string) $value[$i]) . ';';
-		// 				return $out;
-		// 			case 'javascript':
-		// 				return strtr((string) $value, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
-		// 			case 'mail':
-		// 				return str_replace(array('@', '.'), array('&nbsp;(AT)&nbsp;', '&nbsp;(DOT)&nbsp;'), (string) $value);
-		// 			default:
-		// 				return $dwoo->triggerError('Escape\'s format argument must be one of : html, htmlall, url, urlpathinfo, hex, hexentity, javascript or mail, "'.$format.'" given.', E_USER_WARNING);
-		// 
-		// 			}
-		// 		}
-		// 
-		// 	function Dwoo_plugin_natural_implode(Dwoo $dwoo, $array, $and = 'and') {
-		// 		$count = count($array);
-		// 		if($count == 1)
-		// 			return current($array);
-		// 		elseif($count > 1) {
-		// 			$last = array_pop($array);
-		// 			return implode(', ', $array).' '.$and.' '.$last;
-		// 		}
-		// 	
-		// 	}
+		}
 
 function slugify( $string ) {
 	return get_instance()->util->slugify($string);
@@ -651,5 +529,36 @@ function natural_implode($array, $and = 'and') {
 		$last = array_pop($array);
 		return implode(', ', $array).' '.$and.' '.$last;
 	}
-
 }
+
+function thumbnail($image) {
+	return "<a href='/gallery/view/{$image->imageId}' class='thumbnail image-{$image->imageId}' style='background-image: url(\"/uploads/galleryImages/tn_{$image->imageId}.jpg\")' title='{$image->imageName}'> </a>";
+}
+
+function tagcloud(Array $tags, $prefix) {
+	$tag_max = $tag_min = 0;
+
+	foreach($tags as $tag) {
+		if($tag->size > $tag_max)
+			$tag_max = $tag->size;
+		if($tag->size < $tag_min)
+			$tag_min = $tag->size;
+	}
+
+	$tag_levels = 5;
+	$tag_count = count($tags);
+	$size_range = log($tag_max - $tag_min);
+	foreach($tags as &$tag) {
+		if($size_range > 0) {
+			$size_diff = $tag->size - $tag_min;
+			$tag->level = floor($tag_levels*(log($size_diff) / $size_range));
+		} else {
+			$tag->level = 2;
+		}
+	} ?>
+	<div class="tagcloud">
+	<?php foreach($tags as $tag): ?>
+		<a class="tag tag-level-<?php echo $tag->level; ?>" href="<?php echo $prefix.$tag->slug; ?>"><?php echo $tag->tag; ?> (<?php echo $tag->size; ?>)</a>
+	<?php endforeach; ?>
+	</div>
+<?php }

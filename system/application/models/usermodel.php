@@ -19,7 +19,7 @@ class UserModel extends AutoModel {
 		$user = $this->db
 			->select('users.*, locations.*, fadder.userid AS fadder_id, fadder.username AS fadder_name')
 			->where('users.userid', intval($user_id))
-			->join('locations', 'city = locationid')
+			->join('locations', 'city = locationid', 'left')
 			->join('users AS fadder', 'fadder.userid = users.approvedby', 'left')
 			->get('users')->row();
 		unset($user->password);
@@ -129,7 +129,7 @@ class UserModel extends AutoModel {
 		$sublinks['guestbook'] = array('href' => '/guestbook/view/'.$user_id, 'title' => 'Gästbok');
 		$sublinks['message'] = array('href' => '/messages/new/'.$user_id, 'title' => 'Meddelande');
 		if($this->has_images($user_id))
-			$sublinks['gallery'] = array('href' => '/gallery.php?userid='.$user_id, 'title' => 'Bilder');
+			$sublinks['gallery'] = array('href' => '/gallery/user/'.$user_id, 'title' => 'Bilder');
 		if($this->has_thoughts($user_id))
 			$sublinks['thoughts'] = array('href' => '/thoughts/user/'.$user_id, 'title' => 'Tankar');
 		if($this->session->userid() == $user_id || $this->session->isAdmin())
