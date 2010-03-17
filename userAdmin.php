@@ -14,27 +14,6 @@ ob_start();
 		<td valign="top">
 		<div class="boxLeft">
 		<?php  require_once( 'toolbox.applet.php' );?>
-		</div>		
-		<div class="boxLeft">
-		<h3 class="boxHeader">
-		Visheter:</h3>
-		<h4 class="boxContent">
-			<?php  require_once( 'wiseBox.applet.php' );?>
-		</h4>
-		</div>
-		<div class="boxLeft">
-		<h3 class="boxHeader">
-		nya tankar:</h3>
-		<h4 class="boxContent">
-			<?php  require_once( 'diarys.applet.php' );?>
-		</h4>
-		</div>	
-		<div class="boxLeft">
-		<h3 class="boxHeader">
-		senast inloggade:</h3>
-		<h4 class="boxContent">
-			<?php  require_once( 'userHistory.applet.php' );?>
-		</h4>
 		</div>	
 		</td>
 <script LANGUAGE="JavaScript">

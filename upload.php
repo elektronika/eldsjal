@@ -1,1 +1,0 @@
-<?php < HTML > < BODYBGCOLOR = "#FFFFFF" > < FORMMETHOD = "POST"ENCTYPE = "multipart/form-data"ACTION = "UploadScript1.php" > < INPUTTYPE = "FILE"SIZE = "40"NAME = "FILE1" > < BR > < INPUTTYPE = "FILE"SIZE = "40"NAME = "FILE2" > < BR > < INPUTTYPE = "FILE"SIZE = "40"NAME = "FILE3" > < BR > < INPUTTYPE = SUBMITVALUE = "Upload!" > < / FORM > < / BODY > < / HTML > ?>

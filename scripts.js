@@ -1,23 +1,11 @@
 window.setInterval("jQuery.get('/json/keepalive/'+Math.random())", 5 * 60 * 1000);
 
-function openWindow(windowName,url) {
-	window.open(url, windowName, 'fullscreen=no, toolbar=no, status=no, menubar=no, scrollbars=auto, resizable=yes, directories=no,location=no, left=0, top=0, width=800, height=600');
-}
-
-function openImage(url,x,y,qs){
-	window.open(url, 'galleryImage', 'fullscreen=no, toolbar=no, status=no, menubar=no, scrollbars=yes, resizable=yes, directories=no, location=no, left=80, top=30, width=' + x + ', height=' + y);
-	window.self.location='gallery.php?mode=' + qs;
-}
 function confirmSubmit(message){
 	var agree=confirm(message);
 	if (agree)
 		return true;
 	else
 		return false ;
-}
-
-function openImage(url,x,y,qs){
-	window.open(url, 'galleryImage', 'fullscreen=no,toolbar=no,status=no,menubar=no,scrollbars=yes,resizable=yes,directories=no,location=no,left=80,top=30,width=' + x + ',height=' + y);
 }
 
 function checkPersonnr(nr) {

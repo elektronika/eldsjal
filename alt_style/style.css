@@ -305,7 +305,7 @@ ul.flat {
 	margin-top: 0;
 }
 
-.widget p, .widget ul {
+.widget p, .widget ul, .widget h4 {
 	padding: 3px;
 	margin-top: 0;
 }
@@ -742,4 +742,16 @@ a.thumbnail {
 
 .gallery_view #region-content .userimage {
 	display: none;
+}
+
+/* Nyhetsrutan på förstasidan */
+.news .meta {
+	font-style: italic;
+	font-weight: normal;
+	color: #666;
+}
+
+/* Vishetsadmin */
+.admin_wisdom #region-content .wisdom {
+	padding: 10px;
 }
