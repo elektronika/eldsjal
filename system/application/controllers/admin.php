@@ -125,7 +125,7 @@ class Admin extends MY_Controller {
 		// $this->redirect('/main');
 	}
 	
-	public function upcoming_events($limit = NULL) {
+	protected function upcoming_events($limit = NULL) {
 		$events =  $this->db
 			->select("e.title, e.eventid AS id, e.fulldate AS date, e.text AS body, e.regdate AS created, e.*, l.*, u.userid, u.username, CONCAT('/calendar/view/', e.eventid) AS href", FALSE)
 			->from('calendarevents AS e')
@@ -140,7 +140,38 @@ class Admin extends MY_Controller {
 		return $events->get()->result();
 	}
 	
-	public function attendees($event_id) {
+	protected function attendees($event_id) {
 		return $this->db->select('users.username, users.userid')->join('users', 'users.userid = joinactivity.userid')->where('joinactivity.eventid', $event_id)->get('joinactivity')->result();
+	}
+	
+	public function get_wisdom($wisdom_id = NULL) {
+		if( ! is_null($wisdom_id))
+			$wisdom = $this->models->wisdom->get_by_id((int) $wisdom_id);
+		else
+			$wisdom = (object) array('body' => '');
+		$this->view->template = 'list';
+		$this->view->items = $this->models->wisdom->get_all();
+		$this->view->item_function = 'wisdom_item';
+		$this->view->page_title = 'Vishetsadmin';
+		$this->view->before = form_open('/admin/wisdom/'.$wisdom_id).textarea('body', 'Vishet', rqForm($wisdom->body)).submit('Spara vishet').form_close();
+		$this->view->sublinks[] = array('href' => '/admin/wisdom', 'title' => 'Ny vishet');
+	}
+	
+	public function post_wisdom($wisdom_id = NULL) {
+		if(is_null($wisdom_id)) {
+			if($this->input->post('body') != '') {
+				$this->db->insert('wisebox', array('wisdom' => $this->input->post('body'), 'addedbyid' => $this->session->userid(), 'addeddate' => $this->util->mysql_date()));
+				$this->session->message('Vishet sparad!');
+			}
+		} else {
+			if($this->input->post('body') != '') {
+				$this->db->update('wisebox', array('wisdom' => $this->input->post('body'), 'addedbyid' => $this->session->userid(), 'addeddate' => $this->util->mysql_date()), array('wiseboxid' => (int) $wisdom_id));
+				$this->session->message('Vishet uppdaterad!');
+			} else {
+				$this->db->delete('wisebox', array('wiseboxid' => (int) $wisdom_id));
+				$this->session->message('Vishet raderad!');
+			}
+		}
+		$this->redirect('/admin/wisdom');		
 	}
 }

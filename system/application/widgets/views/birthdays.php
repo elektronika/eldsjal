@@ -1,0 +1,6 @@
+<h3>Födelsedagsbarn</h3>
+<ul id="birthdays" class="flat">
+<?php foreach($birthdays as $user): ?>
+	<li><?php echo userlink($user); ?></li>
+<?php endforeach; ?>
+</ul>

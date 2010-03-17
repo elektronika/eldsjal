@@ -24,11 +24,7 @@ else
 	<div id="wrap">
 <div id="header-wrap">
 	<div id="header">
-		<?php foreach($widgets['header'] as $widget): ?>
-			<div class="widget" id="widget-<?php echo $widget; ?>">
-				<?php widget::run($widget); ?>
-			</div>
-		<?php endforeach; ?>
+		<?php widgets($widgets['header']); ?>
 	</div>
 </div>
 
@@ -36,11 +32,7 @@ else
 	<div id="content">
 		
 <div class="sidebar" id="sidebar-left">
-<?php foreach($widgets['left'] as $widget): ?>
-	<div class="widget" id="widget-<?php echo $widget; ?>">
-		<?php widget::run($widget); ?>
-	</div>
-<?php endforeach; ?>
+	<?php widgets($widgets['left']); ?>
 </div>
 
 <div class="region" id="region-content">
@@ -54,11 +46,7 @@ else
 
 <?php if(isset($widgets['right']) && ! empty($widgets['right'])): ?>
 	<div class="sidebar" id="sidebar-right">
-		<?php foreach($widgets['right'] as $widget): ?>
-			<div class="widget" id="widget-<?php echo $widget; ?>">
-				<?php widget::run($widget); ?>
-			</div>
-		<?php endforeach; ?>
+		<?php widgets($widgets['right']); ?>
 	</div>
 <?php endif; ?>
 

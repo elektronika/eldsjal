@@ -30,7 +30,7 @@ class Usermenu extends Widget {
 		}
 		
 		if($this->session->hasPrivilege('wisdomadmin'))
-			$this->items[] = (object) array('href' => '/insertWisdom.php', 'title' => 'Visheter', 'class' => 'wisdom');
+			$this->items[] = (object) array('href' => '/admin/wisdom', 'title' => 'Visheter', 'class' => 'wisdom');
 		if($this->session->isAdmin()) {
 			$this->items[] = (object) array('href' => '/admin/settings', 'title' => 'Inställningar', 'class' => 'admin-settings');
 			$this->items[] = (object) array('href' => '/admin/board', 'title' => 'Rättigheter', 'class' => 'admin-permissions');

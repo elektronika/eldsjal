@@ -323,10 +323,6 @@ class ForumModel extends AutoModel {
 			LIMIT {$limit}")->result();
 	}
 	
-	public function get_latest_news($limit = 5) {
-		return array();
-	}
-	
 	public function set_topic_fields($topic_id, Array $fields) {
 		$this->db->update('forumtopics', $fields, array('topicid' => $topic_id));
 	}
@@ -337,5 +333,9 @@ class ForumModel extends AutoModel {
 	
 	public function set_category($topic_id, $category_id) {
 		$this->db->update('forumtopics', array('forumcategoryid' => $category_id), array('topicid' => $topic_id));
+	}
+	
+	public function topic_is_wiki($topic_id) {
+		return FALSE;
 	}
 }

@@ -131,10 +131,15 @@ class Forum extends MY_Controller {
 			
 			$topic_id = $this->models->forum->create_topic($new_topic);
 			
+			$date_from = datepicker_timestamp('date_from');
+			$date_to = datepicker_timestamp('date_to');
+			if($date_to < $date_from)
+				$date_to = $date_from;
+				
 			$this->models->forum->set_topic_fields($topic_id, array(
 				'is_event' => (int) $this->input->post('is_event'),
-				'date_from' => datepicker_timestamp('date_from'),
-				'date_to' => datepicker_timestamp('date_to')
+				'date_from' => $date_from,
+				'date_to' => $date_to
 			));
 			
 			$this->session->message('Japp, nu är tråden skapad!');
@@ -183,11 +188,17 @@ class Forum extends MY_Controller {
 						'locked' => (int) $this->input->post('locked'),
 						'forumcategoryid' => (int) $this->input->post('category')
 					));
+					
+				$date_from = datepicker_timestamp('date_from');
+				$date_to = datepicker_timestamp('date_to');
+				if($date_to < $date_from)
+					$date_to = $date_from;
+					
 				$this->models->forum->set_topic_fields($post->topic_id, array(
 					'topicname' => $this->input->post('title'),
 					'is_event' => (int) $this->input->post('is_event'),
-					'date_from' => datepicker_timestamp('date_from'),
-					'date_to' => datepicker_timestamp('date_to')
+					'date_from' => $date_from,
+					'date_to' => $date_to
 				));
 			}
 			if($post->body != $this->input->post('body'))
@@ -199,7 +210,7 @@ class Forum extends MY_Controller {
 
 	public function acl_edit($post_id) {
 		// Kolla om användaren äger posten, har extra rättigheter eller är admin
-		return $this->session->isAdmin() || $this->models->forum->post_creator($post_id) == $this->session->userId();
+		return $this->session->isAdmin() || $this->models->forum->topic_is_wiki((int) $post_id) || $this->models->forum->post_creator((int) $post_id) == $this->session->userId();
 	}
 
 	public function get_delete($post_id) {

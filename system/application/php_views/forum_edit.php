@@ -4,7 +4,7 @@
 echo form_open($form_action); 
 if($is_first_post) echo input('text', 'title', 'Rubrik', $topic->title);
 echo textarea('body', 'Inlägg', rqForm($post->body));
-if($is_moderator) {
+if($is_moderator && $is_first_post) {
 	echo form_fieldset('Moderatorsfunktioner');
 	echo form_checkbox('locked', '1', $topic->locked);
 	echo form_label('Låst tråd', 'locked');

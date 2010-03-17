@@ -562,3 +562,18 @@ function tagcloud(Array $tags, $prefix) {
 	<?php endforeach; ?>
 	</div>
 <?php }
+
+function widget($widget) { ?>
+	<div class="widget" id="widget-<?php echo $widget; ?>">
+		<?php widget::run($widget); ?>
+	</div>
+<?php }
+
+function widgets(Array $names) {
+	foreach($names as $name)
+		widget($name);
+}
+
+function wisdom_item($item) { ?>
+	<div class="wisdom"><?php echo rq($item->body); ?><br/><?php echo userlink($item); ?> - <?php echo date('Y-m-d', $item->created); ?> - <a href="/admin/wisdom/<?php echo $item->id; ?>">Redigera</a></div>
+<?php }

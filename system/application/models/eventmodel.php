@@ -59,8 +59,14 @@ class EventModel extends AutoModel {
 	}
 	
 	public function group_by_day($events, $out = array()) {
-		foreach($events as $event)
-			$out[date('j', $event->date_from)][] = $event;
+		foreach($events as $event) {
+			$date_from = date('j', $event->date_from);
+			$date_to = date('j', $event->date_to);
+			if($date_to < $date_from)
+				$date_to = $date_from;
+			foreach(range($date_from, $date_to) as $date)
+				$out[$date][] = $event;
+		}
 		return $out;
 	}
 	
