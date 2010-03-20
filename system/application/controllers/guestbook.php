@@ -36,6 +36,8 @@ class Guestbook extends MY_Controller {
 		// Markera alla som lästa när man kollar i sin egna gästbok
 		if($this->session->userId() == $user->userid)
 			$this->models->guestbook->mark_all_as_read($user->userid);
+		
+		$this->util->trail("kollar i {$user->username}s gästbok");
 	}
 	
 	public function post_view($user_id) {

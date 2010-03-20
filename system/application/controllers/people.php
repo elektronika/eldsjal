@@ -22,7 +22,7 @@ class People extends MY_Controller {
 		);
 		
 		$items = $this->db
-			->select("username, last_name, first_name, online, users.userid, born_month, born_year, born_date, presentation AS body, locationname AS location", FALSE)
+			->select("username, last_name, first_name, online, users.userid, born_month, born_year, born_date, presentation AS body, locationname AS location, hasimage", FALSE)
 			->join('locations', 'city = locationid');
 			
 		if($this->input->get('faddrade'))
@@ -83,5 +83,8 @@ class People extends MY_Controller {
 		$this->view->page_title = 'Folk';
 		$this->view->item_function = 'userlist_item';
 		$this->view->items = $items;
+		
+		$texts = array('spanar in potentiella ragg', 'letar folk', 'gräver i medlemslistan');
+		$this->util->trail($texts[array_rand($texts)]);
     }
 }

@@ -87,6 +87,8 @@ class Gallery extends MY_Controller {
 		$this->view->tagcloud = $tagcloud;		
 		$this->view->sublinks[] = array('href' => '/gallery/upload', 'title' => 'Ladda upp bild');
 		$this->view->sublinks[] = array('href' => '/gallery/random', 'title' => 'Slumpa bild!');
+	
+		$this->util->trail('spanar på lite schyssta bilder');
 	}
 	
 	// Borde egentligen ligga i image-modellen
@@ -105,6 +107,7 @@ class Gallery extends MY_Controller {
 	
 	public function get_upload() {
 		$this->view->tags = $this->models->tag->get_all();
+		$this->util->trail('laddar upp en bild. Yay!');
 	}
 	
 	public function post_upload() {
@@ -197,6 +200,7 @@ class Gallery extends MY_Controller {
 		$this->view->sublinks[] = array('href' => '/gallery/random', 'title' => 'Slumpa bild!');
 		$this->view->page_title = $image->title;
 		$this->view->image = $image;
+		$this->util->trail('kikar på en bild.');
 	}
 	
 	public function get_random() {
@@ -225,6 +229,7 @@ class Gallery extends MY_Controller {
 		$this->view->sublinks = $this->models->user->sublinks($user->userid, 'gallery');
 		$this->view->page_title = $user->username.'s bilder';
 		$this->view->template = 'gallery_index';
+		$this->util->trail("tittar på {$user->username}s bilder");
 	}
 	
 	public function get_delete($image_id) {

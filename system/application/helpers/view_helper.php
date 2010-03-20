@@ -98,7 +98,10 @@ function actions($actions = NULL, $icons_only = FALSE) {
 }
 
 function userlink($user) {
-	return '<a href="/user/'.$user->userid.'" class="user u'.$user->userid.'" title="'.$user->username.'">'.$user->username.'</a>';
+	if(isset($user->deleted) && $user->deleted)
+		return "<span class='user deleted'>{$user->username}</span>";
+	else
+		return '<a href="/user/'.$user->userid.'" class="user u'.$user->userid.'" title="'.$user->username.'">'.$user->username.'</a>';
 }
 
 function pager($pager) {
@@ -130,7 +133,10 @@ function shortdate($timestamp) {
 }
 
 function userimage($user) {
-	return "<img class='userimage' src='/uploads/userImages/tn_{$user->userid}.jpg' alt='{$user->username}'/>";
+	if(isset($user->hasimage) && ! $user->hasimage)
+		return "<img class='userimage' src='/images/ingetfoto.gif' alt='{$user->username}'/>";
+	else
+		return "<img class='userimage' src='/uploads/userImages/tn_{$user->userid}.jpg' alt='{$user->username}'/>";
 }
 
 function post($post) { 

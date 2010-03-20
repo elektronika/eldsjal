@@ -149,8 +149,10 @@ class ForumModel extends AutoModel {
 				0 AS is_news, 
 				creator.username AS creator__username, 
 				creator.userid AS creator__userid, 
+				creator.deleted AS creator__deleted,
 				updater.username AS updater__username, 
 				updater.userid AS updater__userid,
+				updater.deleted AS updater__deleted,
 				fts.time AS track
 			FROM forumtopics AS f 
 			JOIN users AS creator 
@@ -213,7 +215,9 @@ class ForumModel extends AutoModel {
 				f.messagedate AS created, 
 				f.messageid AS id, 
 				u.username, 
-				u.userid 
+				u.userid,
+				u.deleted,
+				u.hasimage
 			FROM forummessages AS f 
 			JOIN users AS u 
 				ON u.userid = f.posterid 

@@ -29,6 +29,7 @@ class User extends MY_Controller {
 		$this->view->page_title = $user->first_name.' "'.$user->username.'" '.$user->last_name;
 		$this->view->sublinks = $this->models->user->sublinks($user->userid, 'presentation');
 		$this->view->display_header = FALSE;
+		$this->util->trail("spanar in {$user->username}s presentation");
 	}
 	
 	public function acl_view($user_id) {
@@ -64,7 +65,8 @@ class User extends MY_Controller {
 			$this->form_validation->set_rules('old_password', 'Ditt lösenord', 'trim|xss_clean|required|callback_password_check');
 			if($this->input->post('username') != $user->username)
 				$this->form_validation->set_rules('username', 'Användarnamn', 'trim|xss_clean|required|callback_check_unique_username|callback_check_bad_username');
-			$this->form_validation->set_rules('email', 'E-mail', 'trim|xss_clean|required|valid_email');			
+			if($this->input->post('email') != $user->email)
+				$this->form_validation->set_rules('email', 'E-mail', 'trim|xss_clean|required|valid_email|callback_check_unique_email');			
 			if($this->input->post('new_password')) {
 				$this->form_validation->set_rules('new_password', 'Nytt lösenord', 'trim|xss_clean|required|min_length[5]');
 				$this->form_validation->set_rules('new_password_confirm', 'Nytt lösenord igen', 'trim|xss_clean|required|matches[new_password]');
@@ -94,6 +96,7 @@ class User extends MY_Controller {
 		$this->form_validation->set_message('min_length', 'Lite längre än så måste det vara, annars går korna inte hem.');
 		$this->form_validation->set_message('valid_email', 'Njae, det där ser inte riktigt ut som en riktig e-mail. Bättre kan du!');
 		$this->form_validation->set_message('check_unique_username', 'Sorry, det namnet är redan taget.');
+		$this->form_validation->set_message('check_unique_email', 'Det där är någon annans mailadress. Inte ok.');
 		$this->form_validation->set_message('check_bad_username', 'Njae, det blir nog inte så bra om du tar det namnet.');
 
 		if($this->form_validation->run() == FALSE) {
@@ -140,6 +143,10 @@ class User extends MY_Controller {
 	
 	public function check_unique_username($username) {
 		return $this->models->user->check_unique_username($username);
+	}
+	
+	public function check_unique_email($email) {
+		return $this->models->user->check_unique_email($email);
 	}
 	
 	public function check_bad_username($username) {

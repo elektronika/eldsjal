@@ -7,5 +7,5 @@
 	<label for="cookie"><input type="checkbox" checked="checked" value="1" name="cookie">kom ihåg mig</label>
 	<br/>
 	<a href="register.php">Bli medlem &raquo;</a><br>
-	<a href="retrievePassword.php">Tappat lösen? &raquo;</a>
+	<a href="/lostpassword">Tappat lösen? &raquo;</a>
 </form>

@@ -39,7 +39,7 @@ class ImageModel extends AutoModel {
 	
 	public function get_by_id($image_id) {
 		$image = $this->db
-			->select('images.*, users.username, users.userid')
+			->select('images.*, users.username, users.userid, users.deleted')
 			->where('imageid', intval($image_id))
 			->join('users', 'users.userid = images.uploadedby')
 			->get('images')->row();
