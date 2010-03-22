@@ -132,11 +132,12 @@ function shortdate($timestamp) {
 	return get_instance()->util->shortdate($timestamp);
 }
 
-function userimage($user) {
-	if(isset($user->hasimage) && ! $user->hasimage)
-		return "<img class='userimage' src='/images/ingetfoto.gif' alt='{$user->username}'/>";
+function userimage($user, $square = FALSE) {
+	$img_url = (isset($user->hasimage) && ! $user->hasimage) ? '/images/ingetfoto.gif' : "/uploads/userImages/tn_{$user->userid}.jpg";
+	if($square)
+		return "<span class='userimage' style='background-image: url(\n{$img_url}\n)' title='{$user->username}'>&nbsp;</span>";
 	else
-		return "<img class='userimage' src='/uploads/userImages/tn_{$user->userid}.jpg' alt='{$user->username}'/>";
+		return "<img class='userimage' src={$img_url} alt='{$user->username}'/>";
 }
 
 function post($post) { 
@@ -362,8 +363,10 @@ function teaser($data, $truncate = TRUE) {
 function sublinks(Array $links = array()) {
 	if( ! empty($links)) {
 		$out = '<ul class="sublinks">';
-		foreach($links as $link)
-			$out .= "<li><a href='{$link['href']}'>{$link['title']}</a></li>";
+		foreach($links as $link) {
+			$link['title'] = str_replace(' ', '&nbsp;', $link['title']);
+			$out .= "<li> <a href='{$link['href']}'>{$link['title']}</a> </li>";
+		}
 		$out .= '</ul>';
 		return $out;
 	}
@@ -495,7 +498,7 @@ function datepager($prefix, $year, $month = NULL, $day = NULL) { ?>
 
 function userlist_item($user) { ?>
 <div class="userlist">
-	<?php echo userimage($user).userlink($user); ?>
+	<?php echo userimage($user, TRUE).userlink($user); ?>
 	<?php if(isset($user->birthday)) echo ' - '.age($user->birthday).' år'; ?>
 	<?php if(isset($user->location)) echo ' - '.$user->location; ?>
 	<?php if(isset($user->online)) echo $user->online ? ' - <span class="online">Online</span>' : ''; ?>

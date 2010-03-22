@@ -11,8 +11,10 @@ class User extends MY_Controller {
 			$props[] = (object) array('title' => 'Telefonnummer', 'value' => $user->phone);
 		if(trim($user->public_email) != '')
 			$props[] = (object) array('title' => 'E-mail', 'value' => $user->public_email);
-		$props[] = (object) array('title' => 'Bor', 'value' => empty($user->inhabitance) ? $user->location : $user->inhabitance.', '.$user->location);
-		$props[] = (object) array('title' => 'Fadder', 'value' => $user->userid == 69 ? 'Gudfader' : userlink((object) array('username' => $user->fadder_name, 'userid' => $user->fadder_id)));
+		if(isset($user->location))
+			$props[] = (object) array('title' => 'Bor', 'value' => empty($user->inhabitance) ? $user->location : $user->inhabitance.', '.$user->location);
+		if( ! empty($user->fadder_id))
+			$props[] = (object) array('title' => 'Fadder', 'value' => $user->userid == 69 ? 'Gudfader' : userlink((object) array('username' => $user->fadder_name, 'userid' => $user->fadder_id)));
 		if(trim($user->icq) != '')
 			$props[] = (object) array('title' => 'ICQ', 'value' => $user->icq);
 		if(trim($user->msn) != '')

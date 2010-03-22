@@ -41,7 +41,7 @@ class Usermenu extends Widget {
 		$this->items[] = (object) array('href' => '/user/'.$this->session->userid().'/edit', 'title' => 'Inställningar', 'class' => 'settings');
 		$this->items[] = (object) array('href' => '/logout', 'title' => 'Logga ut', 'class' => 'logout');
 
-		$this->items[] = (object) array('href' => '/board', 'title' => 'Föreningsinformation', 'class' => 'board');
+		$this->items[] = (object) array('href' => '/board', 'title' => 'Föreningsinfo', 'class' => 'board');
 	}
 	
 	protected function counter($number) {
