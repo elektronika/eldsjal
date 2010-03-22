@@ -22,14 +22,14 @@ class People extends MY_Controller {
 		);
 		
 		$items = $this->db
-			->select("username, last_name, first_name, online, users.userid, born_month, born_year, born_date, presentation AS body, locationname AS location, hasimage", FALSE)
+			->select("username, last_name, first_name, users.userid, born_month, born_year, born_date, presentation AS body, locationname AS location, hasimage, ping")
 			->join('locations', 'city = locationid');
 			
 		if($this->input->get('faddrade'))
 			$items->where('usertype >', 0);
 		
 		if($this->input->get('online'))
-			$items->where('online', 1);
+			$items->where('ping >', (time() - $this->settings->get('online_timeout')));
 		
 		if($city = $this->input->get('city'))
 			if($city != 'all')
@@ -61,6 +61,7 @@ class People extends MY_Controller {
 			$item->body = truncate(remove_tags($item->body), 110);
 			$item->birthday = mktime(0, 0, 0, $item->born_month, $item->born_date, $item->born_year);
 			$item->username = $item->first_name.' "'.$item->username.'" '.$item->last_name;
+			$item->online = ($item->ping > (time() - $this->settings->get('online_timeout')));
 		}
 		
 		$locations = $this->models->location->get_all_assoc();

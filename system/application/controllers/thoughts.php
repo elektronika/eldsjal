@@ -11,7 +11,7 @@ class Thoughts extends MY_Controller {
 		$this->util->trail('filurar runt bland tankarna');
 		$this->pagination->initialize(array(
 			'base_url' => '/thoughts/index/page:',
-			'per_page' => $this->session->setting('thoughts_per_page'),
+			'per_page' => $this->settings->get('thoughts_per_page'),
 			'total_rows' => $this->models->thought->total_amount(),
 			'cur_page' => $this->arguments->get('page', 0)
 		));

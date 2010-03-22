@@ -179,4 +179,8 @@ class UserModel extends AutoModel {
 		$user_id = $this->db->where('email', $email)->get('users')->row()->userId;
 		return $this->get_by_id($user_id);
 	}
+	
+	public function online_count() {
+		return $this->db->where('ping >', (time() - $this->settings->get('online_timeout')))->count_all_results('users');
+	}
 }

@@ -16,7 +16,7 @@ class Forum extends MY_Controller {
 	
 	public function get_topic($id) {
 		$this->load->library('pagination');
-		$posts_per_page = $this->util->setting('forum_posts_per_page');
+		$posts_per_page = $this->settings->get('forum_posts_per_page');
 		$cur_page = (int) $this->arguments->get('page', 0);
 
 		$topic = $this->models->forum->get_topic_by_id((int) $id);
@@ -72,7 +72,7 @@ class Forum extends MY_Controller {
 			$new_reply->userid = $this->session->userId();
 			
 			$post_id = $this->models->forum->create_post($new_reply);
-			$page = floor($this->models->forum->count_posts_in_topic($id) / $this->util->setting('forum_posts_per_page')) * $this->util->setting('forum_posts_per_page');
+			$page = floor($this->models->forum->count_posts_in_topic($id) / $this->settings->get('forum_posts_per_page')) * $this->settings->get('forum_posts_per_page');
 			$this->session->message('Inlägg sparat!');
 			$this->redirect('/forum/topic/'.$id.'/page:'.$page.'#post-'.$post_id);
 		}
@@ -81,7 +81,7 @@ class Forum extends MY_Controller {
 	public function get_category($id) {
 		$this->load->library('pagination');
 			
-		$topics_per_page = $this->session->setting('topics_per_page');
+		$topics_per_page = $this->settings->get('topics_per_page');
 		$topics_in_category = $this->models->forum->count_topics_in_category($id);
 
 		$cur_page = $this->arguments->get('page', 0);
@@ -95,7 +95,7 @@ class Forum extends MY_Controller {
 			'cur_page' => $cur_page
 		));
 		$this->view->pager = $this->pagination->create_links();
-		$this->view->posts_per_page = $this->session->setting('forum_posts_per_page');
+		$this->view->posts_per_page = $this->settings->get('forum_posts_per_page');
 		$category = $this->models->forum->get_category_by_id($id);
 		$this->view->category = $category;
 		$this->util->trail('kikar runt i forumkategorin '.$category->forumCategoryName, $category->forumSecurityLevel);
@@ -255,7 +255,7 @@ class Forum extends MY_Controller {
 	
 	public function get_redirectupdated($topic_id) {
 		$latest = $this->db->query("SELECT COUNT(*) AS previous, MAX(messageid) AS max FROM forummessages WHERE topicid = {$topic_id} AND messagedate < (SELECT FROM_UNIXTIME(time) FROM forumtracks WHERE topic_id = {$topic_id} AND user_id = ".$this->session->userid().")")->row();
-		$per_page = $this->session->setting('forum_posts_per_page');
+		$per_page = $this->settings->get('forum_posts_per_page');
 		$page = floor($latest->previous / $per_page) * $per_page;
 		$this->redirect('/forum/topic/'.$topic_id.'/page:'.$page.'#post-'.$latest->max);
 	}
@@ -263,7 +263,7 @@ class Forum extends MY_Controller {
 	public function get_redirecttopost($post_id) {
 		$post = $this->models->forum->get_post_by_id((int) $post_id);
 		$previous = $this->db->query("SELECT COUNT(*) AS previous FROM forummessages WHERE topicid = {$post->topic_id} AND messageid < {$post->id}")->row()->previous;
-		$per_page = $this->session->setting('forum_posts_per_page');
+		$per_page = $this->settings->get('forum_posts_per_page');
 		$page = floor($previous / $per_page) * $per_page;
 		$this->redirect("/forum/topic/{$post->topic_id}/page:{$page}#post-{$post->id}");
 	}

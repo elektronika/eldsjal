@@ -22,7 +22,7 @@ class User extends MY_Controller {
 		if(trim($user->webpage) != '')
 			$props[] = (object) array('title' => 'Hemsida', 'value' => "<a href='{$user->webpage}'>{$user->webpage}</a>");
 		$props[] = (object) array('title' => 'Medlem sedan', 'value' => $user->userid == 69 ? 'Tidernas begynnelse' : shortdate($user->register_date));
-		$props[] = (object) array('title' => 'Senast inloggad', 'value' => $user->online ? '<span class="online">Online!</span>' : fuzzytime($user->lastLogin));
+		$props[] = (object) array('title' => 'Senast inloggad', 'value' => $user->ping > (time() - $this->settings->get('online_timeout')) ? '<span class="online">Online!</span>' : fuzzytime($user->lastLogin));
 		if( ! empty($user->does))
 			$props[] = (object) array('title' => 'Sysslar med', 'value' => natural_implode($user->does, 'och'));		
 		$user->properties = $props;

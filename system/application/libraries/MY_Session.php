@@ -166,14 +166,8 @@ class MY_Session extends CI_Session {
 	}
 
 	public function logout() {
-		$this->object->db->update('users', array('online' => 0), array('userid' => $this->userid()));
+		$this->object->db->update('users', array('ping' => 0), array('userid' => $this->userid()));
 		$this->destroy();
-	}
-
-	public function setting($key, $default = NULL) {
-		if(is_null($default))
-			$default = $this->object->util->setting($key);
-		return isset($this->settings[$key]) ? $this->settings[$key] : $default;
 	}
 
 	public function message($message, $type = 'notice') {

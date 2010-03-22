@@ -66,7 +66,7 @@ class ThoughtModel extends AutoModel {
 			$page = intval($page);
 		else
 			$page = 0;
-		$thoughts_per_page = $this->session->setting('thoughts_per_page');
+		$thoughts_per_page = $this->settings->get('thoughts_per_page'); // Borde inte vara där
 		return $this->db->query("SELECT diary.diaryid AS id, diary.diarytopic AS title, diary.diary AS body, diary.diarydate AS created, users.username, users.userid, CONCAT('/thoughts/view/', diaryid) AS href FROM diary JOIN users on diary.userid = users.userid ORDER BY diary.diarydate DESC LIMIT {$page}, {$thoughts_per_page}")->result();
 	}
 	

@@ -35,7 +35,7 @@ class CI_Util {
 	}
 	
 	/**
-	 * Omvandlar $string till ett URL-vänligt format och returnerar det.
+	 * Omvandlar $string till ett URL-vänligt format och returnerar det. ANVÄNDS INTE LÄNGRE.
 	 *
 	 * @param string $string 
 	 * @return string
@@ -52,17 +52,6 @@ class CI_Util {
 		$slug = preg_replace(array('/[^a-z0-9-]/', '/-+/'), '-', $slug);
 		
 		return $slug;
-	}
-	
-	/**
-	 * Returnerar värdet av en inställning.
-	 *
-	 * @param string $key 
-	 * @return mixed
-	 * @author Johnny Karhinen
-	 */
-	public function setting($key) {
-		return $this->CI->settings->get($key);
 	}
 	
 	/**
@@ -180,26 +169,6 @@ class CI_Util {
 			$out = '<span class="date" title="'.date($hoverDateFormat, $timestamp).'">'.$out.'</span>';
 
 		return $out;
-	}
-	
-	public function userlink($userid, $username, $slug = NULL) {
-		if(is_null($slug))
-			$slug = $this->slugify($username);
-		return '<a href="/user/'.$slug.'" class="user u'.$userid.'">'.$username.'</a>';
-	}
-	
-	public function onlineCount() {
-		return $this->CI->db->query('SELECT COUNT(*) AS count FROM users WHERE online = 1')->row()->count;
-	}
-	
-	public function titlify($title) {
-		$titles = array(
-			'event' => 'Aktiviteter',
-			'guestbook' => 'Gästboksinlägg',
-			'forum' => 'Foruminlägg',
-			'message' => 'Meddelanden'
-		);
-		return isset($titles[(string) $title]) ? $titles[(string) $title] : (string) $title;
 	}
 	
 	public function fuzzyage($timestamp) {

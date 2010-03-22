@@ -28,7 +28,7 @@ class MY_Controller extends Controller {
 			$this->view->revision_name = 'DEV';
 		}		
 		$this->view->messages = $this->session->getMessages();
-		$this->view->usersonline = $this->util->onlineCount();
+		$this->view->usersonline = $this->models->user->online_count();
 		// }
 		
 		if($this->session->isLoggedIn()) {
