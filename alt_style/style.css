@@ -111,7 +111,7 @@ h2 {
 	float: left;
 }
 
-#quicksearch {
+#widget-topmenu #quicksearch {
 	float: right;
 	margin-bottom: 0;
 }
@@ -765,4 +765,19 @@ a.thumbnail {
 
 #quicklinks h2 {
 	margin-left: 77px;
+}
+
+/* Snabbsöken */
+#widget-quicksearch .form-item-text, #widget-quicksearch .form-item-submit {
+	width: 65%;
+	display: inline;
+	clear: none;
+	margin: 0;
+	margin-top: 5px;
+	padding: 2px;
+}
+
+#widget-quicksearch .form-item-submit {
+	width: auto;
+	padding: 2px 10px;
 }

@@ -47,7 +47,10 @@ class Thoughts extends MY_Controller {
 	public function get_view($tid) {
 		$thought = $this->models->thought->get_by_id((int) $tid);
 		$this->view->page_title = $thought->title;
-		$this->util->trail('läser '.$thought->username.'s tanke '.$thought->title);
+		if($thought->userid == $this->session->userId())
+			$this->util->trail('läser sin egen tanke '.$thought->title);
+		else
+			$this->util->trail('läser '.$thought->username.'s tanke '.$thought->title);
 		$this->view->item = $thought;
 		$this->view->sublinks = array(
 			array('href' => '/thoughts/user/'.$thought->userid, 'title' => $thought->username.'s andra tankar')

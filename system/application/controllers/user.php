@@ -31,7 +31,10 @@ class User extends MY_Controller {
 		$this->view->page_title = $user->first_name.' "'.$user->username.'" '.$user->last_name;
 		$this->view->sublinks = $this->models->user->sublinks($user->userid, 'presentation');
 		$this->view->display_header = FALSE;
-		$this->util->trail("spanar in {$user->username}s presentation");
+		if($user_id == $this->session->userId())
+			$this->util->trail("tar en kik på sin egna presentation");
+		else
+			$this->util->trail("spanar in {$user->username}s presentation");
 	}
 	
 	public function acl_view($user_id) {
@@ -89,7 +92,6 @@ class User extends MY_Controller {
 		$this->form_validation->set_rules('public_email', 'E-mail', 'trim|xss_clean|valid_email');			
 		$this->form_validation->set_rules('msn', 'MSN', 'trim|xss_clean|valid_email');			
 		$this->form_validation->set_rules('webpage', 'Hemsida', 'trim|xss_clean|prep_url');			
-		$this->form_validation->set_rules('webpage', 'Hemsida', 'trim|xss_clean');			
 		
 		// Mer eller mindre användarvänliga meddelanden för respektive fel. Varför finns det inte systemvänliga användare?
 		$this->form_validation->set_message('required', 'Heddu, fylla i är ett måste!');
@@ -110,7 +112,7 @@ class User extends MY_Controller {
 			// Ehm, ja, egentligen borde väl mer utav det här ske i user-modellen. Men wtf.
 			
 			// Users-tabellen
-			$fields = array('username', 'email', 'presentation', 'privacy', 'first_name', 'last_name', 'msn', 'icq', 'city', 'inhabitance', 'public_email');
+			$fields = array('username', 'email', 'presentation', 'privacy', 'first_name', 'last_name', 'msn', 'icq', 'webpage', 'city', 'inhabitance', 'public_email');
 			$data = (object) $this->input->post_array($fields);
 			$data->yahoo = $this->input->post('phone');
 			$this->db->update('users', $data, array('userid' => $user->userid));
