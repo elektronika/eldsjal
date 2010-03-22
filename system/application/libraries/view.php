@@ -4,7 +4,7 @@ Class view {
 	protected $template_folder = '';
 	
 	public function __construct() {
-		$this->template_folder = dirname(FCPATH) . '/system/application/php_views/';
+		$this->template_folder = dirname(FCPATH) . '/system/application/views/';
 	}
 	
 	public function __set($name, $value) {
