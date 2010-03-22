@@ -20,7 +20,8 @@
 	height: 248px;
 	position: absolute;
 	top: -100px;
-	left: -35px;
+	left: -45px;
+	z-index: 1;
 }
 
 .longman #widget-logo h1 {
@@ -39,4 +40,10 @@
 
 .longman #widget-logo a {
 	height: 350px;
+}
+
+#region-content, #sidebar-right {
+	padding-top: 30px;
+	position: relative;
+	z-index: 2;
 }

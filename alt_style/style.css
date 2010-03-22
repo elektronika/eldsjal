@@ -355,6 +355,14 @@ ul.flat {
 	float: left;
 	margin-right: 10px;
 	width: 30px;
+	height: 30px;
+}
+
+span.userimage {
+	display: block;
+	width: 100px;
+	height: 100px;
+	background-position: center center;
 }
 
 .online {
@@ -587,10 +595,15 @@ textarea#form-item-body, .form-item-textarea {
 }
 
 /* Timelinen */
+#widget-timeline {
+	clear: both;
+	padding-top: 10px;
+}
+
 #widget-timeline li {
 	padding-left: 22px;
 	background: transparent url('icons/bullet_black.png') no-repeat center left;
-	margin-bottom: 4px;
+	margin-bottom: 5px;
 }
 
 #widget-timeline a span {
@@ -718,8 +731,8 @@ textarea#form-item-body, .form-item-textarea {
 /* Galleriet */
 a.thumbnail {
 	display: block;
-	width: 94px;
-	height: 94px;
+	width: 99px;
+	height: 99px;
 	background-position: center center;
 	background-repeat: no-repeat;
 	float: left;
@@ -746,6 +759,7 @@ a.thumbnail {
 
 /* Nyhetsrutan på förstasidan */
 .news .meta {
+	display: block;
 	font-style: italic;
 	font-weight: normal;
 	color: #666;
@@ -754,4 +768,20 @@ a.thumbnail {
 /* Vishetsadmin */
 .admin_wisdom #region-content .wisdom {
 	padding: 10px;
+}
+
+/* Snabblänkarna */
+#quicklinks .userimage {
+	float: left;
+	width: 70px;
+	height: 70px;
+	margin-right: 10px;
+}
+
+#quicklinks .sublinks {
+	line-height: 18px
+}
+
+#quicklinks h2 {
+	margin-left: 77px;
 }

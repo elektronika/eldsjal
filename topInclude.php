@@ -39,10 +39,10 @@ if( isset($_SESSION['alt_style']) && $_SESSION['alt_style'] == 1 || TRUE ) {
 <html>
 <head>
 	<title>eldsj&auml;l - communityn f&ouml;r v&auml;rme och alternativkonst</title>
-	<link rel="stylesheet" href="/style.css" type="text/css"/>
+<?php /*	<link rel="stylesheet" href="/style.css" type="text/css"/> */ ?>
 	<link rel="stylesheet" href="/alt_style/style.css?<?php echo filemtime('alt_style/style.css');?>" type="text/css"/>
-	<link rel="stylesheet" href="/calendar.css" type="text/css"/>
-<?php /*	<link rel="shortcut icon" href="images/icons/favicon.ico"/>
+<?php /*	<link rel="stylesheet" href="/calendar.css" type="text/css"/>
+	<link rel="shortcut icon" href="images/icons/favicon.ico"/>
 	<link rel="icon" type="image/ico" href="images/icons/favicon.ico"/> */ ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="Expires" content="<?php echo time( );?>"/>

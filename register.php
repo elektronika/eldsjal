@@ -33,7 +33,6 @@ $noredirect = 1;
 
 
 	</head>
-	<br>
 	<body marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" <?php if( isset( $_GET['mode'] ) ) {
 	print "onLoad=\"document.register.username.focus();window.alert('P.g.a. folk blivit medlemmar utan att f&ouml;rst&aring; att det inneb&auml;r ett engagemang\\nhar medlemsregistreringen blivit en medlemsans&ouml;kan.\\nAlla uppgifter skall fyllas i med korrekt information,\\n och en bra presentationstext &auml;r krav f&ouml;r att bli medlem p&aring; Eldsj&auml;l!\\n\\nOm du inte kan uppfylla detta ber vi dig avst&aring; fr&aring;n medlemsskap,\\nhar du s&auml;rskild anledning ta g&auml;rna kontakt med oss p&aring; Eldsj&auml;l genom att trycka p&aring; kontakt ovan!\\nVarje konto godk&auml;nns av en medlem p&aring; Eldsj&auml;l.\\nUnder sommaren kr&auml;vs att du bes&ouml;kt en av v&aring;ra tr&auml;ffar eller tr&auml;ffat n&aring;gon som &auml;r medlem som godk&auml;nner dig, om du inte tr&auml;ffat n&aring;gon kom d&aring; till n&auml;sta tr&auml;ff, kolla i kalendern s&aring; ser du n&auml;r det &auml;r!\\n\\nTack f&ouml;r &ouml;verseende!');\"";
 }?> >
