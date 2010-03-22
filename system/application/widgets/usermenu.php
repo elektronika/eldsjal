@@ -20,7 +20,7 @@ class Usermenu extends Widget {
 		$this->items[] = (object) array('href' => '/calendar', 'title' => 'Kalender'.$this->counter($event_count), 'class' => $event_count ? 'events new' : 'events');
 
 		if($this->session->hasPrivilege('useradmin')) {
-			$pending = $this->db->query("select count(userid) as users from users where usertype = 0 and email <> '' and userid not in (select userid from pendingdelete)")->row()->users;
+			$pending = $this->db->query("select count(userid) as users from users where usertype = 0 and email <> ''")->row()->users;
 			$this->items[] = (object) array('href' => '/userAdmin.php', 'title' => 'Ny medlem'.$this->counter($pending), 'class' => 'fadder');
 			
 			if($this->db->query('select count(userid) as number from users where approvedby = '.$this->session->userid())->row()->number > 0) {

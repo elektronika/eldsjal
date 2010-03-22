@@ -72,7 +72,6 @@ h2 {
 }
 
 .sidebar-left #region-content, .sidebar-right #region-content {
-/*	margin-left: 135px;*/
 	float: right;
 	width: 597px;
 }
@@ -493,20 +492,6 @@ span.userimage {
 	margin-top: 18px;
 }
 
-/* Gamla alt_style-css'en, lär inte behövas när den gamla markupen är borta, tack och lov */
-.userList,.redAngry,span.galleryThumb,td.galleryThumb,td.presentationPhoto,.inputbox{background:transparent}
-span.galleryThumb,td.galleryThumb{border:none}
-img.galleryThumb{width:100px}
-h3.boxHeader,h3.boxHeaderRight{font-size:12px;border-bottom:3px solid #9E7937;color:#000;background:transparent;text-align:left}
-.plainTHeadWhite,.plainTextWhite,.boxLogin,h3.boxHeader,h3.boxHeaderRight{color:#000}
-div.boxLeft,div.boxRight{margin-bottom:5px}
-div.boxLeft,div.boxRight,h4.boxContent,td.presentationInfoTop,h4.boxContentCalendar,.calendarHeader,.calendarDayName{border:none;background-color:transparent;background:none}
-h4.boxContent{color:#333}
-.calendarDateBox{background:#e4c898}
-.plainText{line-height:12px;color:inherit}
-.presentationTop{height:auto;width:auto;font-size:16px;background:none;border:none;border-bottom:3px solid #9E7937;margin-bottom:0;margin-top:-5px;padding-left:0}
-.presentationSub{margin-bottom:8px}
-
 /* Profilern, onödigt med en separat fil även om den används av väldigt få */
 /*#codeigniter_profiler{position:absolute;top:0;left:0;background-color:#eee!important;opacity:0.9;padding:0!important}
 #codeigniter_profiler fieldset{float:left;border:none!important;background-color:transparent!important;margin:0!important;padding:0!important}
@@ -517,9 +502,7 @@ h4.boxContent{color:#333}
 /* Formulärmekk */
 label {
 	color: #666;
-/*	clear: both;*/
 	display: block;
-/*	margin-top: 20px;*/
 }
 
 fieldset {
@@ -527,7 +510,6 @@ fieldset {
 	margin-bottom: 10px;
 }
 
-/*input, textarea*/
 .form-item-text, .form-item-password, .form-item-textarea, .form-item-submit {
 	padding: 2px;
 	background: #ddd;
@@ -554,7 +536,6 @@ input[type=text], input[type=password] {
 }
 
 input[type=checkbox] {
-/*	float: left;*/
 	width: auto;
 	margin-right: 5px;
 }

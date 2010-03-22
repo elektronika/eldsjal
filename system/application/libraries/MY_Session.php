@@ -148,7 +148,7 @@ class MY_Session extends CI_Session {
 			$this->set_userdata('username', $user->username);
 			$this->set_userdata('usertype', $user->userType);
 			$this->set_userdata('lastlogin', $this->object->util->assureTimestamp($user->lastLogin));
-			$this->object->db->update('users', array('online' => 1, 'lastlogin' => $this->object->util->mysql_date()), array('userid' => $user->userId));
+			$this->object->db->update('users', array('ping' => time(), 'lastlogin' => $this->object->util->mysql_date()), array('userid' => $user->userId));
 
 			return true;
 		} else {
