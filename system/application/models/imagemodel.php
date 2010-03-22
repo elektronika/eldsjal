@@ -56,7 +56,7 @@ class ImageModel extends AutoModel {
 		}
 	
 	protected function decorate(stdClass $image) {
-		$image->src = $this->util->setting('gallery_url').$image->id.'.'.$this->util->setting('default_image_extension');
+		$image->src = $this->settings->get('gallery_url').$image->id.'.'.$this->settings->get('default_image_extension');
 		return $image;
 	}
 	
