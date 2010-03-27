@@ -699,13 +699,13 @@ textarea#form-item-body, .form-item-textarea {
 }
 
 /* Styrelse-sidan */
-.board_index .member .userimage {
+.page-board-index .member .userimage {
 	float: left;
 	margin-right: 10px;
 	margin-bottom: 10px;
 }
 
-.board_index .member {
+.page-board-index .member {
 	clear: both;
 }
 
@@ -734,7 +734,7 @@ a.thumbnail {
 	max-height: 600px;
 }
 
-.gallery_view #region-content .userimage {
+.page-gallery-view #region-content .userimage {
 	display: none;
 }
 
@@ -747,7 +747,7 @@ a.thumbnail {
 }
 
 /* Vishetsadmin */
-.admin_wisdom #region-content .wisdom {
+.page-admin-wisdom #region-content .wisdom {
 	padding: 10px;
 }
 
