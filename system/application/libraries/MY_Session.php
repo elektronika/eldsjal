@@ -10,7 +10,6 @@ class MY_Session extends CI_Session {
 	protected $object;
 
 	public function MY_Session() {
-		// parent::CI_Session();
 		$this->object =& get_instance();
 		$this->_sess_run();
 	}

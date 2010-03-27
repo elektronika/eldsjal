@@ -68,19 +68,19 @@ class AlertModel extends AutoModel {
 		return $this->count_gb() + $this->count_mess() + $this->count_forum() + $this->count_event();
 	}
 	
-	protected function count_gb() {
+	public function count_gb() {
 		return $this->db->query("SELECT COUNT(unread) AS count FROM guestbook WHERE touserid = ".$this->session->userId()." AND unread = 1")->row()->count;
 	}
 	
-	protected function count_mess() {
+	public function count_mess() {
 		return $this->db->query("SELECT COUNT(readmessage) AS count FROM messages WHERE userid = ".$this->session->userId()." AND readmessage = 0")->row()->count;
 	}
 	
-	protected function count_forum() {
+	public function count_forum() {
 		return 0;
 	}
 	
-	protected function count_event() {
+	public function count_event() {
 		return $this->db->query("SELECT COUNT(calendarnotifyid) AS count FROM calendarnotify WHERE userid = ".$this->session->userId())->row()->count;
 	}
 	

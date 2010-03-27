@@ -268,23 +268,37 @@ class Forum extends MY_Controller {
 		$this->redirect("/forum/topic/{$post->topic_id}/page:{$page}#post-{$post->id}");
 	}
 	
-	public function get_admin() {
-		$this->view->items = $this->db->order_by('forumCategorySortOrder', 'asc')->get('forumcategory')->result();
-		$this->view->page_title = 'Forumskategorier';
-		$this->view->template = 'inputgrid';
-		$this->view->form_action = '/forum/admin';
+	// public function get_admin() {
+	// 	$this->view->items = $this->db->order_by('forumCategorySortOrder', 'asc')->get('forumcategory')->result();
+	// 	$this->view->page_title = 'Forumskategorier';
+	// 	$this->view->template = 'inputgrid';
+	// 	$this->view->form_action = '/forum/admin';
+	// }
+	// 
+	// public function post_admin() {
+	// 	// $this->db->empty_table('board');
+	// 	// foreach($_POST['items'] as $item)
+	// 	// 	if( ! empty($item['rights']))
+	// 	// 		$this->db->insert('board', $item);
+	// 	$this->session->message('Sådärja!');
+	// 	$this->redirect('/forum/admin');
+	// }
+	// 
+	// public function acl_admin() {
+	// 	return $this->session->isAdmin();
+	// }
+	
+	public function get_admin($category_id) {
+		$this->view->page_title = 'Administrera kategori';
+		$this->view->template = 'list';
+		$this->view->items = $this->models->acl->get((int) $category_id);
 	}
 	
-	public function post_admin() {
-		// $this->db->empty_table('board');
-		// foreach($_POST['items'] as $item)
-		// 	if( ! empty($item['rights']))
-		// 		$this->db->insert('board', $item);
-		$this->session->message('Sådärja!');
-		$this->redirect('/forum/admin');
+	public function post_admin($category_id) {
+		
 	}
 	
-	public function acl_admin() {
-		return $this->session->isAdmin();
+	public function acl_admin($category_id) {
+		return $this->models->forum->acl('admin', $this->session->userId(), (int) $category_id);
 	}
 }

@@ -11,13 +11,13 @@ class People extends MY_Controller {
     public function get_search() {
 		$sort_options = array(
 			'lastlogin' => 'Senast inloggad',
-			'registerdate' => 'Registreringsdatum',
+			'register_date' => 'Registreringsdatum',
 			'username' => 'Användarnamn'
 		);
 		
 		$sort_order = array(
 			'lastlogin' => 'desc',
-			'registerdate' => 'desc',
+			'register_date' => 'desc',
 			'username' => 'asc'
 		);
 		

@@ -40,8 +40,9 @@ class UserModel extends AutoModel {
 		
 	}
 	
-	public function create($username, $email) {
-		
+	public function create(stdClass $user) {
+		$this->db->insert('users', $user);
+		return $this->db->insert_id();
 	}
 	
 	public function get_restricted_fields() {
@@ -182,5 +183,9 @@ class UserModel extends AutoModel {
 	
 	public function online_count() {
 		return $this->db->where('ping >', (time() - $this->settings->get('online_timeout')))->count_all_results('users');
+	}
+	
+	public function mark_as_confirmed($user_id) {
+		$this->db->update('users', array('confirmed' => 1), array('userid' => $user_id));
 	}
 }
