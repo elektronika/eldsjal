@@ -174,12 +174,6 @@ label {
 	padding: 0;
 }
 
-/* moonfia's giraff */
-.user-presentation-2984 {
-	background: transparent url('/images/giraff.gif') no-repeat top right;
-}
-
-
 /* Style för nya forumet */
 #forum-topics, #forum-categories, #messages {
 	border: hidden;
@@ -780,4 +774,14 @@ a.thumbnail {
 #widget-quicksearch .form-item-submit {
 	width: auto;
 	padding: 2px 10px;
+}
+
+/* moonfia's giraff */
+
+.page-user-view-2984 #region-content {
+	background: transparent url('/images/giraff.gif') no-repeat top right;
+}
+
+.page-user-view-2959 #region-content {
+	background: transparent url('/images/vattenpipa.gif') no-repeat top right;
 }

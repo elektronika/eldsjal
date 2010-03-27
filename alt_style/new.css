@@ -24,12 +24,6 @@
 	z-index: 1;
 }
 
-.longman #widget-logo h1 {
-	background-image: url('longmanslogo.png');
-	height: 540px;
-	top: -140px;
-}
-
 #widget-logo a {
 	position: relative;
 	display: block;
@@ -38,12 +32,20 @@
 	margin-bottom: 70px;
 }
 
-.longman #widget-logo a {
-	height: 350px;
-}
-
 #region-content, #sidebar-right {
 	padding-top: 30px;
 	position: relative;
 	z-index: 2;
+}
+
+/* Longmans egna logga */
+
+.longman #widget-logo h1 {
+	background-image: url('longmanslogo.png');
+	height: 540px;
+	top: -140px;
+}
+
+.longman #widget-logo a {
+	height: 350px;
 }
