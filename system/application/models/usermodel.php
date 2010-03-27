@@ -40,8 +40,8 @@ class UserModel extends AutoModel {
 		
 	}
 	
-	public function create(stdClass $user) {
-		$this->db->insert('users', $user);
+	public function create($email) {
+		$this->db->insert('users', array('email' => $email));
 		return $this->db->insert_id();
 	}
 	

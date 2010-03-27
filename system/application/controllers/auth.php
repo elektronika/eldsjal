@@ -95,6 +95,40 @@ class Auth extends MY_Controller {
 	}
 	
 	public function post_register() {
+		$this->form_validation->set_rules('email', 'E-mail', 'trim|xss_clean|required|valid_email|callback_check_unique_email');
+		
+		$this->form_validation->set_message('required', 'Heddu, fylla i är ett måste!');
+		$this->form_validation->set_message('valid_email', 'Meh, en _riktig_ adress!');
+		$this->form_validation->set_message('check_unique_email', 'Tyvärr, den adressen är redan paxad.');
+		
+		if($this->form_validation->run() == FALSE) {
+			$this->get_register();
+		} else {
+			$user_id = $this->models->user->create($this->input->post('email'));
+			
+			$register_key = $this->models->user->create_reset_key((int) $user_id);
+			$register_link = 'http://eldsjal.org/register/'.$user_id.'/'.$register_key;
+			
+			$this->load->library('email');
+			$this->email->to($this->input->post('email'));
+			$this->email->subject('Eldsjäl - skapa nytt konto');
+			$this->email->from($this->settings->get('email_from'), $this->settings->get('email_from_name'));
+			$this->email->message("Hej {$user->username}!\n\nNågon (förhoppningsvis du) har registrerat sig med din mailadress på eldsjal.org. Klicka på länken här nedanför för att fortsätta skapa ditt  konto!\n\n{$register_link}\n\nPuss och välkommen!\n\n//Eldsjäl crew");
+			$this->email->send();
+			
+			$this->session->message('Nu är ett mail på väg till '.$this->input->post('email').' med info om hur du fortsätter. Dags att höka över inboxen mao!');
+			$this->redirect('/main');
+		}		
+	}
+	
+	public function get_register2($user_id, $key) {
+		$this->view->page_title = 'Slutför registrering';
+		$this->view->user = $this->models->user->get_by_id((int) $user_id);
+		$this->view->locations = $this->models->location->get_all_assoc();
+		$this->view->form_action = '/register/'.$user_id.'/'.$key;
+	}
+	
+	public function post_register2($user_id, $key) {
 		$this->form_validation->set_rules('password', 'Nytt lösenord', 'trim|xss_clean|required|min_length[5]');
 		$this->form_validation->set_rules('password_confirm', 'Nytt lösenord igen', 'trim|xss_clean|required|matches[password]');
 		$this->form_validation->set_rules('email', 'E-mail', 'trim|xss_clean|required|valid_email|callback_check_unique_email');
@@ -106,9 +140,11 @@ class Auth extends MY_Controller {
 		$this->form_validation->set_message('matches', 'Stämmer det inte så blir det inte någon ändring här inte!');
 		$this->form_validation->set_message('required', 'Heddu, fylla i är ett måste!');
 		$this->form_validation->set_message('min_length', 'Lite längre än så måste det vara, annars går korna inte hem.');
+		$this->form_validation->set_message('valid_email', 'Meh, en _riktig_ adress!');
+		$this->form_validation->set_message('check_unique_email', 'Tyvärr, den adressen är redan paxad.');
 		
 		if($this->form_validation->run() == FALSE) {
-			$this->get_register();
+			$this->get_register2($user_id, $key);
 		} else {
 			$user = (object) $this->input->post_array(array('username', 'email', 'presentation', 'first_name', 'last_name'));
 			$user_id = $this->models->user->create($user);
@@ -118,16 +154,15 @@ class Auth extends MY_Controller {
 			$confirm_key = $this->models->user->create_reset_key((int) $user_id);
 			$confirm_link = 'http://eldsjal.org/resetpassword/'.$user_id.'/'.$confirm_key;
 			
-			$this->load->library('email');
-			$this->email->to($user->email);
-			$this->email->subject('Eldsjäl - aktivering utav konto');
-			$this->email->from($this->settings->get('email_from'), $this->settings->get('email_from_name'));
-			$this->email->message("Hej {$user->username}!\n\nNågon (förhoppningsvis du) har registrerat sig med din mailadress på eldsjal.org. Klicka på länken här nedanför för att göra aktivera kontot!\n\n{$confirm_link}\n\nPuss och välkommen!\n\n//Eldsjäl crew");
-			$this->email->send();
+
 				
 			$this->session->message('Det enda som fattas nu är att du klickar på länken i mailet skickats till adressen du angivit. Dags att höka över inboxen mao!');
 			$this->redirect('/main');
 		}
+	}
+	
+	public function acl_register2($user_id, $key) {
+		return $this->models->user->validate_reset_key((int) $user_id, $key);
 	}
 	
 	public function check_unique_username($username) {
@@ -140,15 +175,5 @@ class Auth extends MY_Controller {
 	
 	public function check_bad_username($username) {
 		return $this->models->user->check_bad_username($username);
-	}
-	
-	public function get_confirm($user_id, $key) {
-		$this->models->user->mark_as_confirmed((int) $user_id);
-		$this->session->message('Ditt konto är nu aktiverat, så det är bara att logga in!');
-		$this->redirect('/main');
-	}
-	
-	public function acl_confirm($user_id, $key) {
-		return $this->models->user->validate_reset_key((int) $user_id, $key);
 	}
 }
