@@ -91,7 +91,7 @@ class Auth extends MY_Controller {
 	}
 	
 	public function get_register() {
-		$this->view->page_title = 'Registrera';
+		$this->view->page_title = 'Bli medlem';
 	}
 	
 	public function post_register() {
@@ -129,34 +129,41 @@ class Auth extends MY_Controller {
 	}
 	
 	public function post_register2($user_id, $key) {
-		$this->form_validation->set_rules('password', 'Nytt lösenord', 'trim|xss_clean|required|min_length[5]');
-		$this->form_validation->set_rules('password_confirm', 'Nytt lösenord igen', 'trim|xss_clean|required|matches[password]');
-		$this->form_validation->set_rules('email', 'E-mail', 'trim|xss_clean|required|valid_email|callback_check_unique_email');
-		$this->form_validation->set_rules('username', 'Användarnamn', 'trim|xss_clean|required|callback_check_unique_username|callback_check_bad_username');
+		$user = $this->models->user->get_by_id((int) $user_id);
+		
+		$this->form_validation->set_rules('new_password', 'Nytt lösenord', 'trim|xss_clean|required|min_length[5]');
+		$this->form_validation->set_rules('new_password_confirm', 'Nytt lösenord igen', 'trim|xss_clean|required|matches[new_password]');
+		if($this->input->post('email') != $user->email)
+			$this->form_validation->set_rules('email', 'E-mail', 'trim|xss_clean|required|valid_email|callback_check_unique_email');
+		$this->form_validation->set_rules('new_username', 'Användarnamn', 'trim|xss_clean|required|callback_check_unique_username|callback_check_bad_username');
 		$this->form_validation->set_rules('presentation', 'Presentation', 'trim|xss_clean|required|min_length[5]');			
 		$this->form_validation->set_rules('first_name', 'Förnamn', 'trim|xss_clean|required');			
 		$this->form_validation->set_rules('last_name', 'Efternamn', 'trim|xss_clean|required');
+		$this->form_validation->set_rules('born_year', 'År', 'trim|xss_clean|required|callback_not_dash');
+		$this->form_validation->set_rules('born_month', 'Månad', 'trim|xss_clean|required|callback_not_dash');
+		$this->form_validation->set_rules('born_date', 'Dag', 'trim|xss_clean|required|callback_not_dash');
 		
 		$this->form_validation->set_message('matches', 'Stämmer det inte så blir det inte någon ändring här inte!');
 		$this->form_validation->set_message('required', 'Heddu, fylla i är ett måste!');
 		$this->form_validation->set_message('min_length', 'Lite längre än så måste det vara, annars går korna inte hem.');
 		$this->form_validation->set_message('valid_email', 'Meh, en _riktig_ adress!');
 		$this->form_validation->set_message('check_unique_email', 'Tyvärr, den adressen är redan paxad.');
+		$this->form_validation->set_message('not_dash', 'Men du, det låter väl inte så troligt?');
 		
 		if($this->form_validation->run() == FALSE) {
 			$this->get_register2($user_id, $key);
 		} else {
-			$user = (object) $this->input->post_array(array('username', 'email', 'presentation', 'first_name', 'last_name'));
-			$user_id = $this->models->user->create($user);
+			$user = (object) $this->input->post_array(array('presentation', 'first_name', 'last_name', 'city', 'inhabitance', 'born_month', 'born_year', 'born_date'));
+			$user->username = $this->input->post('new_username');
+			$this->db->update('users', $user, array('userid' => (int) $user_id));
+			$user->user_id = (int) $user_id;
 			
-			$this->models->user->set_password((int) $user_id, $this->input->post('password'));
+			$this->models->user->set_password((int) $user_id, $this->input->post('new_password'));
 			
-			$confirm_key = $this->models->user->create_reset_key((int) $user_id);
-			$confirm_link = 'http://eldsjal.org/resetpassword/'.$user_id.'/'.$confirm_key;
+			// Den här är duplicerad från users/edit, känns inte så DRY
+			$this->handle_image($user);
 			
-
-				
-			$this->session->message('Det enda som fattas nu är att du klickar på länken i mailet skickats till adressen du angivit. Dags att höka över inboxen mao!');
+			$this->session->message('Woho, nu är det klart! Det är bara att logga in med dom uppgifterna du har angett. Sen när du blir faddrad så kommer du att få tillgång till ännu mer saker. :)');
 			$this->redirect('/main');
 		}
 	}
@@ -175,5 +182,46 @@ class Auth extends MY_Controller {
 	
 	public function check_bad_username($username) {
 		return $this->models->user->check_bad_username($username);
+	}
+	
+	public function not_dash($string) {
+		return $string != '-';
+	}
+	
+	public function handle_image($user) {		
+		$config['upload_path'] = './tmp_upload/';
+		$config['allowed_types'] = 'gif|jpg|png|jpeg';
+		
+		$this->load->library('upload', $config);
+		
+		if($this->upload->do_upload('image', $config)) {
+			$upload_data = (object) $this->upload->data();
+			$errors = array();
+			
+			// Byt namn på originalfilen, och lägg den på rätt ställe
+			$original_file = $this->settings->get('original_user_image_folder').$user->userid.$upload_data->file_ext;
+			if(file_exists($original_file))
+				unlink($original_file);
+			rename($upload_data->full_path, $original_file);
+			
+			// Dona thumbnailen
+			$config = array(
+				'source_image' => $original_file,
+				'maintain_ratio' => TRUE,
+				'new_image' => $this->settings->get('user_image_folder').'tn_'.$user->userid.'.'.$this->settings->get('default_image_extension'),
+				'width' => 100,
+				'height' => 300
+			);
+			$this->load->library('image_lib', $config);
+
+			if( ! $this->image_lib->resize())
+				$errors[] = $this->image_lib->display_errors();
+			
+			if( ! empty($errors))
+				foreach($errors as $error)
+					$this->session->message($error, 'warning');
+			else
+				$this->models->user->mark_as_having_image($user->userid);
+		}
 	}
 }

@@ -11,7 +11,6 @@
 	<form id="quicksearch" action = "/people/search" method = "get"> 
 		<div>
 		<input type = "text" name = "query" id = "quicksearch-username"/> 
-		<input type = "image" src = "/images/icons/arrows.gif" name = "search" id = "search" class = "proceed"/> 
 		</div>
 	</form>	
 	<div class="clear"> </div>

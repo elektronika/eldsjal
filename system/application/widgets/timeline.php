@@ -26,7 +26,7 @@ class Timeline extends Widget {
 			$this->items[$item->timestamp.'_thought_'.$item->id] = $item;
 		}
 		
-		foreach($this->db->order_by('register_date', 'desc')->get('users', $number_of_items)->result() as $item) {
+		foreach($this->db->order_by('register_date', 'desc')->where('username !=', '')->get('users', $number_of_items)->result() as $item) {
 			$item->type = 'user';
 			$item->timestamp = $this->util->assureTimestamp($item->register_date);
 			$item->title = $item->username;

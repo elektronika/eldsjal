@@ -36,12 +36,8 @@ class UserModel extends AutoModel {
 		return ($this->db->query("SELECT private FROM users WHERE userid = {$user_id}")->row()->private < 2);
 	}
 	
-	public function save($user) {
-		
-	}
-	
 	public function create($email) {
-		$this->db->insert('users', array('email' => $email));
+		$this->db->insert('users', array('email' => $email, 'register_date' => $this->util->mysql_date()));
 		return $this->db->insert_id();
 	}
 	

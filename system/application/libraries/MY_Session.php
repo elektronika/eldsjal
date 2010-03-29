@@ -39,7 +39,7 @@ class MY_Session extends CI_Session {
 	}
 
 	public function isLoggedIn() {
-		return ($this->usertype() > 0);
+		return ($this->userid() > 0);
 	}
 
 	public function hasPrivilege($privilege) {
