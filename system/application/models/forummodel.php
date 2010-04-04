@@ -249,12 +249,11 @@ class ForumModel extends AutoModel {
 			'topicPosterId' => 'creator',
 			'topicDate' => 'created',
 			'topicId' => 'id',
-			'totalEntrys' => 'replies',
 			'latestEntry' => 'updated',
 			'latestEntryBy' => 'updater',
 			'forumCategoryId' => 'category_id',
 		);
-		$topic = $this->db->query("SELECT * FROM forumtopics AS ft JOIN forumcategory AS fc ON fc.forumcategoryid = ft.forumcategoryid WHERE ft.topicid = ".intval($topic_id))->row();		
+		$topic = $this->db->query("SELECT ft.*, fc.*, COUNT(fm.messageid) - 1 AS replies, COUNT(fm.messageid) AS posts FROM forumtopics AS ft JOIN forumcategory AS fc ON fc.forumcategoryid = ft.forumcategoryid JOIN forummessages AS fm ON ft.topicid = fm.topicid WHERE ft.topicid = ".intval($topic_id))->row();		
 		return $this->util->remap($topic, $remap);
 	}
 	

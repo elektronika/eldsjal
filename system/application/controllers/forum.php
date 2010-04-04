@@ -30,7 +30,7 @@ class Forum extends MY_Controller {
 		$this->pagination->initialize(array(
 			'base_url' => '/forum/topic/'.$id.'/page:',
 			'per_page' => $posts_per_page,
-			'total_rows' => $topic->replies + 1,
+			'total_rows' => $topic->posts,
 			'cur_page' => $cur_page
 		));
 		$this->view->pager = $this->pagination->create_links();
