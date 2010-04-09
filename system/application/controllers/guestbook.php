@@ -27,9 +27,13 @@ class Guestbook extends MY_Controller {
 			if($this->session->isAdmin() || $active_user == $post->toUserId || $active_user == $post->userid)
 				$post->actions[] = array('href' => '/guestbook/delete/'.$post->guestbookId, 'title' => 'Radera', 'class' => 'delete');
 		}
+		$this->view->template = 'list';
+		$this->view->before = guestbook_form($user->userid);
+		$this->view->item_function = 'post';
 		$this->view->items = $posts;
 		$this->view->page_title = $user->username.'s gästbok';
 		$this->view->sublinks = $this->models->user->sublinks($user->userid, 'guestbook');
+		$this->view->user_id = $user->userid;
 		$this->view->display_form = $user->userid != $this->session->userid();
 		$this->view->form_action = '/guestbook/view/'.$user->userid;
 		
@@ -71,8 +75,12 @@ class Guestbook extends MY_Controller {
 		));
 		
 		$this->view->pager = $this->pagination->create_links();
+		$this->view->template = 'list';
+		$this->view->before = guestbook_form($user->userid);
+		$this->view->item_function = 'post';
+		
 		$this->view->items = $this->models->guestbook->between_users($user->userid, $this->session->userid(), $offset, $posts_per_page);
-		$this->view->template = 'guestbook_view';
+
 		$this->view->display_form = TRUE;
 		$this->view->form_action = '/guestbook/view/'.$user_id;
 		$this->view->page_title = 'Ditt gästbokande med '.$user->username;
