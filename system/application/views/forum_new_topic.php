@@ -3,9 +3,9 @@
 echo form_open("/forum/new/$category->forumCategoryId"); 
 echo input('text', 'title', 'Rubrik');
 echo textarea('body', 'Inlägg');
+echo form_label(form_checkbox('is_wiki', '1').'Gör till wiki-tråd (så alla kan redigera första inlägget)', 'is_wiki');
 echo form_fieldset('Kalenderlattjolajban');
-echo form_label('Visa i kalendern', 'is_event');
-echo form_checkbox('is_event', '1', $is_event);
+echo form_label(form_checkbox('is_event', '1', $is_event).' Visa i kalendern', 'is_event');
 echo form_label('Datum', 'date');
 echo datepicker('date_from', $years_ahead, $years_back).' - '.datepicker('date_to', $years_ahead, $years_back);
 echo form_fieldset_close();

@@ -23,9 +23,16 @@ class UserModel extends AutoModel {
 			->join('users AS fadder', 'fadder.userid = users.approvedby', 'left')
 			->get('users')->row();
 		unset($user->password);
+		
 		$user->birthday = mktime(0, 0, 0, $user->born_month, $user->born_date, $user->born_year);
 
-		return $this->util->remap($user, $this->remap);
+		$user = $this->util->remap($user, $this->remap);
+		
+		// Det här kommer från något lattjolajban på edit-sidan. Tydligen fukkas telefon-fältet upp på någe vänster. Jaja.
+		if( ! isset($user->phone))
+			$user->phone = '';
+		
+		return $user;
 	}
 	
 	public function get_by_slug($slug) {
@@ -147,10 +154,18 @@ class UserModel extends AutoModel {
 	
 	public function add_address_info($user) {
 		$address = $this->db->where('userid', $user->userid)->get('address')->row();
-		$user->street_address = $address->Gatuadress1;
-		$user->postal_code = $address->Postnummer;
-		$user->postal_city = $address->Stad;
-		$user->country = $address->Land;
+		if( ! empty($address)) {
+			$user->street_address = $address->Gatuadress1;
+			$user->postal_code = $address->Postnummer;
+			$user->postal_city = $address->Stad;
+			$user->country = $address->Land;
+		} else {
+			$user->street_address = 
+			$user->postal_code = 
+			$user->postal_city = 
+			$user->country = '';
+		}
+		
 		return $user;
 	}
 	

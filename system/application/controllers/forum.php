@@ -11,7 +11,8 @@ class Forum extends MY_Controller {
 	}
 	
 	public function acl_topic($id) {
-		return $this->models->forum->acl_topic($id, $this->session->usertype());
+		$category_id = $this->models->forum->get_topic_by_id((int) $id)->category_id;
+		return $this->models->forum->acl($this->session->userId(), $category_id);
 	}
 	
 	public function get_topic($id) {
@@ -34,6 +35,7 @@ class Forum extends MY_Controller {
 			'cur_page' => $cur_page
 		));
 		$this->view->pager = $this->pagination->create_links();
+		
 		$this->view->page_title = $topic->title;
 		$this->view->cur_page = $cur_page;
 		$this->view->is_last_page = (bool) ($topic->replies - $cur_page < $posts_per_page);
@@ -55,7 +57,8 @@ class Forum extends MY_Controller {
 	}
 	
 	public function acl_reply($id) {
-		return $this->session->isloggedin() && $this->models->forum->acl_topic($id, $this->session->usertype());
+		$category_id = $this->models->forum->get_topic_by_id((int) $id)->category_id;
+		return $this->session->isloggedin() && $this->models->forum->acl($this->session->userId(), $category_id, 'reply');
 	}
 
 	public function post_topic($id) {
@@ -95,6 +98,7 @@ class Forum extends MY_Controller {
 			'cur_page' => $cur_page
 		));
 		$this->view->pager = $this->pagination->create_links();
+		
 		$this->view->posts_per_page = $this->settings->get('forum_posts_per_page');
 		$category = $this->models->forum->get_category_by_id($id);
 		$this->view->category = $category;
@@ -103,6 +107,12 @@ class Forum extends MY_Controller {
 		$this->view->breadcrumbs[] = array('href' => '/forum', 'title' => 'Forum');
 		if($this->acl_new($id))
 			$this->view->sublinks[] = array('href' => '/forum/new/'.$category->forumCategoryId, 'title' => 'Ny tråd');
+		if($this->acl_admin($id))
+			$this->view->sublinks[] = array('href' => '/forum/admin/'.$category->forumCategoryId, 'title' => 'Administrera kategori');
+	}
+	
+	public function acl_category($category_id) {
+		return $this->models->forum->acl($this->session->userId(), (int) $category_id);
 	}
 	
 	public function get_new($id) {
@@ -138,6 +148,7 @@ class Forum extends MY_Controller {
 				
 			$this->models->forum->set_topic_fields($topic_id, array(
 				'is_event' => (int) $this->input->post('is_event'),
+				'is_wiki' => (int) $this->input->post('is_wiki'),
 				'date_from' => $date_from,
 				'date_to' => $date_to
 			));
@@ -148,7 +159,7 @@ class Forum extends MY_Controller {
 	}
 	
 	public function acl_new($id) {
-		return $this->session->isloggedin() && $this->models->forum->acl_category_new($id, $this->session->usertype());
+		return $this->session->isloggedin() && $this->models->forum->acl($this->session->userId(), (int) $id, 'create');
 	}
 	
 	public function get_edit($post_id) {
@@ -157,7 +168,7 @@ class Forum extends MY_Controller {
 		$topic = $this->models->forum->get_topic_by_id($post->topic_id);
 		$this->view->topic = $topic;
 		$this->view->is_first_post = $this->models->forum->post_is_first($post->id);
-		$this->view->categories = $this->models->forum->get_categories_for_usertype_assoc($this->session->usertype());	
+		$this->view->categories = $this->models->forum->get_categories_for_user_assoc($this->session->userId());	
 		$this->view->form_action = '/forum/edit/'.$post_id;				
 		$this->view->is_moderator = $this->session->isAdmin();
 		$this->util->trail('ångrar sig, och redigerar ett inlägg');
@@ -198,7 +209,8 @@ class Forum extends MY_Controller {
 					'topicname' => $this->input->post('title'),
 					'is_event' => (int) $this->input->post('is_event'),
 					'date_from' => $date_from,
-					'date_to' => $date_to
+					'date_to' => $date_to,
+					'is_wiki' => (int) $this->input->post('is_wiki')
 				));
 			}
 			if($post->body != $this->input->post('body'))
@@ -290,8 +302,9 @@ class Forum extends MY_Controller {
 	
 	public function get_admin($category_id) {
 		$this->view->page_title = 'Administrera kategori';
-		$this->view->template = 'list';
-		$this->view->items = $this->models->acl->get((int) $category_id);
+		$this->view->template = 'inputgrid';
+		$this->view->form_action = '/forum/admin/'.(int) $category_id;
+		$this->view->items = $this->models->forum->get_category_acl((int) $category_id);
 	}
 	
 	public function post_admin($category_id) {
@@ -299,6 +312,6 @@ class Forum extends MY_Controller {
 	}
 	
 	public function acl_admin($category_id) {
-		return $this->models->forum->acl('admin', $this->session->userId(), (int) $category_id);
+		return $this->models->forum->acl($this->session->userId(), (int) $category_id, 'admin');
 	}
 }

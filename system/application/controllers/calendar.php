@@ -77,7 +77,8 @@ class Calendar extends MY_Controller {
 	}
 	
 	function acl_attendees($topic_id) {
-		return $this->session->isloggedin() && $this->models->forum->acl_topic($topic_id, $this->session->usertype());
+		$category_id = $this->models->forum->get_topic_by_id((int) $topic_id)->category_id;
+		return $this->session->isloggedin() && $this->models->forum->acl($this->session->userId(), $category_id);
 	}
 	
 	function get_message($topic_id) {

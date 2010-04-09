@@ -1,6 +1,6 @@
 <?php
 class ForumModel extends AutoModel {
-	public function get_categories_for_usertype($usertype = 0, $user_id = 0, $last_visit = NULL) {
+	public function get_categories_for_usertype($usertype = 0, $user_id = 0, $last_visit = NULL, $right = 'read') {
 		// WOHO, nästan vettigt normaliserat! :D
 		$categories = $this->db->query(
 			"SELECT
@@ -15,8 +15,15 @@ class ForumModel extends AutoModel {
 			LEFT JOIN forumtopics AS ft
 				ON fc.forumcategoryid = ft.forumcategoryid
 			LEFT JOIN forumtracks AS fts
-				ON ft.topicid = fts.topic_id AND fts.user_id = {$user_id}
-			WHERE fc.forumsecuritylevel <= {$usertype}
+				ON ft.topicid = fts.topic_id 
+				AND fts.user_id = {$user_id}
+			LEFT JOIN acl AS default_acl
+				ON fc.forumCategoryId = default_acl.category_id
+				AND default_acl.user_id = 0
+			LEFT JOIN acl AS user_acl
+				ON fc.forumCategoryId = user_acl.category_id
+				AND user_acl.user_id = {$user_id}
+			WHERE GREATEST(IFNULL(user_acl.{$right}, 0), IFNULL(default_acl.{$right}, 0)) > 0
 			GROUP BY ft.forumcategoryid
 			ORDER BY fc.forumcategorysortorder"
 		)->result();
@@ -49,17 +56,26 @@ class ForumModel extends AutoModel {
 		return $out;
 	}
 	
-	public function acl_topic($id, $usertype) {
-		return ($this->db->query("SELECT fc.forumcategoryid FROM forumcategory AS fc JOIN forumtopics AS ft ON fc.forumcategoryid = ft.forumcategoryid WHERE fc.forumsecuritylevel <= {$usertype} AND ft.topicid = ".intval($id))->num_rows > 0);
+	public function get_categories_for_user_assoc($user_id = 0) {
+		$categories = $this->get_categories_for_usertype(0, $user_id);
+		$out = array();
+		foreach($categories as $category)
+			$out[$category->id] = $category->title;
+		return $out;
 	}
 	
-	public function acl_category_reply($id, $usertype) {
-		return ($this->db->query("SELECT forumcategoryid FROM forumcategory WHERE forumsecuritylevel <= {$usertype} AND forumcategoryid = ".intval($id))->num_rows > 0);
+	public function acl($user_id, $category_id, $right = 'read') {
+		// Kolla först för alla användare, sen för den specifika
+		return $this->acl_check(0, $category_id, $right) || $this->acl_check($user_id, $category_id, $right);
 	}
 	
-	public function acl_category_new($id, $usertype) {
-		return ($this->db->query("SELECT forumcategoryid FROM forumcategory WHERE GREATEST(forumwritelevel, forumsecuritylevel) <= {$usertype} AND forumcategoryid = ".intval($id))->num_rows > 0);
-	}	
+	protected function acl_check($user_id, $category_id, $right) {
+		return $this->db->where(array('user_id' => $user_id, 'category_id' => $category_id, $right => 1))->count_all_results('acl') > 0;
+	}
+	
+	public function get_category_acl($category_id) {
+		return $this->db->where('category_id', $category_id)->get('acl')->result();
+	}
 	
 	public function create_topic(stdClass $new_topic) {
 		$topic = new stdClass();
@@ -140,6 +156,7 @@ class ForumModel extends AutoModel {
 				f.sticky, 
 				f.locked, 
 				f.is_event,
+				f.is_wiki,
 				f.topicid AS id, 
 				f.topicdate AS created,
 				MIN(fm.messageid) AS first_post,
@@ -182,6 +199,8 @@ class ForumModel extends AutoModel {
 				$topic->classes['sticky'] = 'sticky';
 			if($topic->is_event)
 				$topic->classes['is_event'] = 'is_event';
+			if($topic->is_wiki)
+				$topic->classes['is_wiki'] = 'is_wiki';
 			if($topic->replies == 0)
 				$topic->classes['no-replies'] = 'no-replies';
             
@@ -339,6 +358,6 @@ class ForumModel extends AutoModel {
 	}
 	
 	public function topic_is_wiki($topic_id) {
-		return FALSE;
+		return $this->db->where(array('topicid' => $topic_id, 'is_wiki' => 1))->count_all_results('forumtopics') > 0;
 	}
 }

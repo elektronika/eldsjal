@@ -9,7 +9,7 @@ class Quicklinks extends Widget {
 		$this->quicklinks[] = array('href' => '/random', 'title' => 'Slumpa!');
 		
 		$news_forum_id = $this->settings->get('news_widget_forum');
-		if($this->models->forum->acl_category_new($news_forum_id, $this->session->usertype()))
+		if($this->models->forum->acl($this->session->userId(), $news_forum_id, 'create'))
 			$this->quicklinks[] = array('href' => '/forum/new/'.$news_forum_id, 'title' => 'Publicera nyhet');
 		
 		if($this->session->isAdmin()) {
