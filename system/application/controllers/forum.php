@@ -40,6 +40,7 @@ class Forum extends MY_Controller {
 		$this->view->cur_page = $cur_page;
 		$this->view->is_last_page = (bool) ($topic->replies - $cur_page < $posts_per_page);
 		$this->view->user_can_reply = ($topic->locked != 1) && $this->acl_reply($id);
+		$this->view->is_logged_in = $this->session->isLoggedIn();
 		$this->view->breadcrumbs[] = array('href' => '/forum', 'title' => 'Forum');
 		$this->view->breadcrumbs[] = array('href' => '/forum/category/'.$topic->forumCategoryID, 'title' => $topic->forumCategoryName);
 		

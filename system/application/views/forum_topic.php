@@ -15,7 +15,15 @@
 <p class="notice">Sugen på att peta in en pinne till i brasan? Bläddra till sista sidan om du vill skriva ett inlägg!</p>
 	<?php endif; ?>
 <?php else: ?>
-<p class="notice">Visst vore det kul att vara med och tjöta? Bli medlem vetja!</p>	
+	<?php if($is_logged_in): ?>
+		<?php if($topic->locked): ?>
+			<p class="notice">Tji fick du, den här tråden är låst! Iväg och spamma nån annanstans vetja! :)</p>						
+		<?php else: ?>
+			<p class="notice">Sorry, du har inte tillräckligt med lattjolajbanrättigheter för att kunna svara i den här tråden.</p>			
+		<?php endif; ?>
+	<?php else: ?>
+		<p class="notice">Visst vore det kul att vara med och tjöta? Bli medlem vetja!</p>	
+	<?php endif; ?>
 <?php endif; ?>
 
 <?php end_region(); ?>
