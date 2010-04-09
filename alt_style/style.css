@@ -219,6 +219,8 @@ thead {
 .sticky.new .topic-subject { background-image: url('icons/error_add.png'); }
 .is_event .topic-subject { background-image: url('icons/date.png'); }
 .is_event.new .topic-subject { background-image: url('icons/date_add.png'); }
+.is_wiki .topic-subject { background-image: url('icons/page_white_text.png'); }
+.is_wiki.new .topic-subject { background-image: url('icons/page_white_add.png'); }
 
 .topic-replies, .category-threads {
 	text-align: center;
@@ -784,4 +786,11 @@ a.thumbnail {
 
 .page-user-view-2959 #region-content {
 	background: transparent url('/images/vattenpipa.gif') no-repeat top right;
+}
+
+/* Intro-sidan */
+
+.page-welcome {
+	background: #1A0601;
+	text-align: center;
 }
