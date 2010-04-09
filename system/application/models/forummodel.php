@@ -77,6 +77,37 @@ class ForumModel extends AutoModel {
 		return $this->db->where('category_id', $category_id)->get('acl')->result();
 	}
 	
+	public function get_default_acl($category_id) {
+		$acl = $this->db->where('category_id', $category_id)->where('user_id', 0)->get('acl')->row();
+		if( ! isset($acl->user_id))
+			$acl = (object) array('user_id' => 0, 'category_id' => $category_id, 'read' => FALSE, 'create' => FALSE, 'reply' => FALSE, 'admin' => FALSE);
+		return $acl;
+	}
+	
+	public function get_user_acls($category_id) {
+		return $this->db
+			->select('acl.*, users.username, users.userid')
+			->join('users', 'acl.user_id = users.userid')
+			->where('category_id', $category_id)
+			->where('user_id !=', 0)
+			->get('acl')->result();
+	}
+	
+	public function set_acl($user_id, $category_id, $read = FALSE, $create = FALSE, $reply = FALSE, $admin = FALSE) {
+		$this->db->where('category_id', $category_id)->where('user_id', $user_id)->delete('acl');
+		if($read)
+			$this->db->insert('acl', 
+				array(
+					'user_id' => $user_id, 
+					'category_id' => $category_id,
+					'read' => $read,
+					'create' => $create,
+					'reply' => $reply,
+					'admin' => $admin
+				)
+			);
+	}
+	
 	public function create_topic(stdClass $new_topic) {
 		$topic = new stdClass();
 		$topic->topicname = $new_topic->title;

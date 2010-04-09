@@ -3,7 +3,7 @@
 echo form_open("/forum/new/$category->forumCategoryId"); 
 echo input('text', 'title', 'Rubrik');
 echo textarea('body', 'Inlägg');
-echo form_label(form_checkbox('is_wiki', '1').'Gör till wiki-tråd (så alla kan redigera första inlägget)', 'is_wiki');
+// echo form_label(form_checkbox('is_wiki', '1').'Gör till wiki-tråd (så alla kan redigera första inlägget)', 'is_wiki');
 echo form_fieldset('Kalenderlattjolajban');
 echo form_label(form_checkbox('is_event', '1', $is_event).' Visa i kalendern', 'is_event');
 echo form_label('Datum', 'date');

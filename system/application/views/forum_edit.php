@@ -4,8 +4,8 @@
 echo form_open($form_action); 
 if($is_first_post) echo input('text', 'title', 'Rubrik', $topic->title);
 echo textarea('body', 'Inlägg', rqForm($post->body));
-if($is_first_post)
-	echo form_label(form_checkbox('is_wiki', '1', $topic->is_wiki).'Gör till wiki-tråd (så alla kan redigera första inlägget)', 'is_wiki');
+// if($is_first_post)
+// 	echo form_label(form_checkbox('is_wiki', '1', $topic->is_wiki).'Gör till wiki-tråd (så alla kan redigera första inlägget)', 'is_wiki');
 if($is_moderator && $is_first_post) {
 	echo form_fieldset('Moderatorsfunktioner');
 	echo form_label(form_checkbox('locked', '1', $topic->locked).'Låst tråd', 'locked');

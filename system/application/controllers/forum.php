@@ -10,7 +10,7 @@ class Forum extends MY_Controller {
 			$this->view->sublinks[] = array('href' => '/forum/admin', 'title' => 'Hantera kategorier');
 	}
 	
-	public function acl_topic($id) {
+	public function acl_topic($id = 0) {
 		$category_id = $this->models->forum->get_topic_by_id((int) $id)->category_id;
 		return $this->models->forum->acl($this->session->userId(), $category_id);
 	}
@@ -111,7 +111,7 @@ class Forum extends MY_Controller {
 			$this->view->sublinks[] = array('href' => '/forum/admin/'.$category->forumCategoryId, 'title' => 'Administrera kategori');
 	}
 	
-	public function acl_category($category_id) {
+	public function acl_category($category_id = 0) {
 		return $this->models->forum->acl($this->session->userId(), (int) $category_id);
 	}
 	
@@ -158,7 +158,7 @@ class Forum extends MY_Controller {
 		}
 	}
 	
-	public function acl_new($id) {
+	public function acl_new($id = 0) {
 		return $this->session->isloggedin() && $this->models->forum->acl($this->session->userId(), (int) $id, 'create');
 	}
 	
@@ -301,17 +301,47 @@ class Forum extends MY_Controller {
 	// }
 	
 	public function get_admin($category_id) {
-		$this->view->page_title = 'Administrera kategori';
-		$this->view->template = 'inputgrid';
+		$category = $this->models->forum->get_category_by_id((int) $category_id);
+		$this->view->page_title = 'Administrera kategorin '.$category->forumCategoryName;
 		$this->view->form_action = '/forum/admin/'.(int) $category_id;
-		$this->view->items = $this->models->forum->get_category_acl((int) $category_id);
+		$this->view->default_acl = $this->models->forum->get_default_acl((int) $category_id);
+		$this->view->user_acls = $this->models->forum->get_user_acls((int) $category_id);
+		$this->view->sublinks[] = array('title' => 'Tillbaka till kategorin', 'href' => '/forum/category/'.(int) $category_id);
 	}
 	
-	public function post_admin($category_id) {
+	public function post_admin($category_id) {		
+		// Sätt default-ACL'en
+		$this->models->forum->set_acl(0, (int) $category_id, 
+			isset($_POST['default_acl']['read']), 
+			isset($_POST['default_acl']['create']), 
+			isset($_POST['default_acl']['reply']));
 		
+		// Pytsa dit ACL'en för varje användare
+		foreach($_POST['user_acls'] as $user_id => $acl)
+			$this->models->forum->set_acl((int) $user_id, (int) $category_id,
+				isset($_POST['user_acls'][$user_id]['read']),
+				isset($_POST['user_acls'][$user_id]['create']),
+				isset($_POST['user_acls'][$user_id]['reply']),
+				isset($_POST['user_acls'][$user_id]['admin']));
+		
+		// Lägg till ACL för användaren, om den finns
+		if(isset($_POST['new_acl']['username']) && ! empty($_POST['new_acl']['username'])) {
+			$user = $this->db->select('userid')->where('username', $this->input->xss_clean($_POST['new_acl']['username']))->get('users')->row();
+			if(isset($user->userid))
+				$this->models->forum->set_acl($user->userid, (int) $category_id, 
+					isset($_POST['new_acl']['read']), 
+					isset($_POST['new_acl']['create']), 
+					isset($_POST['new_acl']['reply']), 
+					isset($_POST['new_acl']['admin']));
+			else
+				$this->session->message('Sorry, ingen användare matchade det användarnamnet.', 'warning');
+		}
+		
+		$this->session->message('Sidärja, då vart det uppdaterat. Snajsigt!');
+		$this->redirect('/forum/admin/'.(int) $category_id);
 	}
 	
-	public function acl_admin($category_id) {
-		return $this->models->forum->acl($this->session->userId(), (int) $category_id, 'admin');
+	public function acl_admin($category_id = 0) {
+		return $this->session->isAdmin() || $this->models->forum->acl($this->session->userId(), (int) $category_id, 'admin');
 	}
 }

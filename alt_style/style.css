@@ -175,12 +175,12 @@ label {
 }
 
 /* Style för nya forumet */
-#forum-topics, #forum-categories, #messages {
+#forum-topics, #forum-categories, #forum-user-rights, #messages {
 	border: hidden;
 	border-collapse: collapse;
 }
 
-#forum-topics td, #forum-categories td, #messages td {
+#forum-topics td, #forum-categories td, #forum-user-rights td, #messages td {
 	padding: 9px;
 	padding-top: 10px;
 	border: 1px solid #C9C2C1;
