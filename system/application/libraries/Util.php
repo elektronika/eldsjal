@@ -189,7 +189,9 @@ class CI_Util {
 	}
 	
 	public function trail($text, $security = 0) {
-		if($this->CI->session->isloggedin())
-			$this->CI->models->whatsup->set($this->CI->session->username().' '.$text, $this->CI->session->userid(), 'random', $security);
+		if($this->CI->session->isloggedin()) {
+			$user = (object) array('userid' => $this->CI->session->userId(), 'username' => $this->CI->session->username());
+			$this->CI->models->whatsup->set(userlink($user).' '.$text, $this->CI->session->userid(), 'random', $security);
+		}
 	}
 }
