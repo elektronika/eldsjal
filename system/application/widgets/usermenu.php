@@ -32,8 +32,7 @@ class Usermenu extends Widget {
 		if($this->session->isAdmin()) {
 			$this->items[] = (object) array('href' => '/admin/settings', 'title' => 'Inställningar', 'class' => 'admin-settings');
 			$this->items[] = (object) array('href' => '/admin/board', 'title' => 'Rättigheter', 'class' => 'admin-permissions');
-			$logs = $this->db->query('SELECT COUNT(*) AS count FROM log')->row()->count;
-			$this->items[] = (object) array('href' => '/admin/log', 'title' => 'Logg'.$this->counter($logs), 'class' => 'admin-log');			
+			$this->items[] = (object) array('href' => '/admin/log', 'title' => 'Logg'.$this->alert_counter('log'), 'class' => 'admin-log');			
 		}
 			
 		$this->items[] = (object) array('href' => '/user/'.$this->session->userid().'/edit', 'title' => 'Inställningar', 'class' => 'settings');

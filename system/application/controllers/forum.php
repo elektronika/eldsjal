@@ -160,7 +160,7 @@ class Forum extends MY_Controller {
 	}
 	
 	public function acl_new($id = 0) {
-		return $this->session->isloggedin() && $this->acl->check($category_id, 'create');
+		return $this->session->isloggedin() && $this->acl->check($id, 'create');
 	}
 	
 	public function get_edit($post_id) {
