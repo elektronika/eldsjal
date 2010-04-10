@@ -5,17 +5,14 @@ class Usermenu extends Widget {
 		
 		$this->items[] = (object) array('href' => '/user/'.$this->session->userid(), 'title' => 'Hem', 'class' => 'home');
 		
-		$gb_count = $this->db->query("SELECT COUNT(unread) AS count FROM guestbook WHERE touserid = ".$this->session->userId()." AND unread = 1")->row()->count;
-		$this->items[] = (object) array('href' => '/guestbook/view/'.$this->session->userid(), 'title' => 'Gästbok'.$this->counter($gb_count), 'class' => $gb_count ? 'guestbook new' : 'guestbook');
+		$this->items[] = (object) array('href' => '/guestbook/view/'.$this->session->userid(), 'title' => 'Gästbok'.$this->alert_counter('guestbook'), 'class' => $this->alert_counter('guestbook') ? 'guestbook new' : 'guestbook');
 		
-		$msg_count = $this->db->query("SELECT COUNT(readmessage) AS count FROM messages WHERE userid = ".$this->session->userId()." AND readmessage = 0")->row()->count;
-		$this->items[] = (object) array('href' => '/messages', 'title' => 'Meddelanden'.$this->counter($msg_count), 'class' => $msg_count ? 'messages new' : 'messages');
+		$this->items[] = (object) array('href' => '/messages', 'title' => 'Meddelanden'.$this->alert_counter('message'), 'class' => $this->alert_counter('message') ? 'messages new' : 'messages');
 		$this->items[] = (object) array('href' => '/forum', 'title' => 'Forum', 'class' => 'forum');		
 		$this->items[] = (object) array('href' => '/gallery', 'title' => 'Bilder', 'class' => 'gallery');		
 		$this->items[] = (object) array('href' => '/people', 'title' => 'Folk', 'class' => 'people');
 		$this->items[] = (object) array('href' => '/thoughts', 'title' => 'Tankar', 'class' => 'thoughts');
 		
-		// $event_count = $this->db->query("SELECT COUNT(calendarnotifyid) AS count FROM calendarnotify WHERE userid = ".$this->session->userId())->row()->count;
 		$event_count = 0;
 		$this->items[] = (object) array('href' => '/calendar', 'title' => 'Kalender'.$this->counter($event_count), 'class' => $event_count ? 'events new' : 'events');
 
@@ -47,5 +44,9 @@ class Usermenu extends Widget {
 	
 	protected function counter($number) {
 		return $number > 0 ? " <span class='counter'>($number)</span>" : '';
+	}
+	
+	protected function alert_counter($type) {
+		return $this->counter($this->alerts->count($type));
 	}
 }

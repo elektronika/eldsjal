@@ -22,7 +22,6 @@ class UserModel extends AutoModel {
 			->join('locations', 'city = locationid', 'left')
 			->join('users AS fadder', 'fadder.userid = users.approvedby', 'left')
 			->get('users')->row();
-		unset($user->password);
 		
 		$user->birthday = mktime(0, 0, 0, $user->born_month, $user->born_date, $user->born_year);
 
@@ -49,7 +48,7 @@ class UserModel extends AutoModel {
 	}
 	
 	public function get_restricted_fields() {
-		$fields = array('userid', 'lastLogin', 'lastSeen', 'fourlast', 'member', 'slug', 'redirect', 'born_year', 'born_month', 'born_date', 'userType', 'register_date', 'approvedBy', 'eldsjalFind', 'reset_key', 'deleted', 'hasimage');
+		$fields = array('userid', 'lastLogin', 'lastSeen', 'fourlast', 'member', 'slug', 'redirect', 'born_year', 'born_month', 'born_date', 'userType', 'register_date', 'approvedBy', 'eldsjalFind', 'reset_key', 'deleted', 'hasimage', 'salt', 'password');
 		return array_combine($fields, $fields);
 	}
 	
