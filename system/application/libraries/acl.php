@@ -2,9 +2,9 @@
 
 class Acl {	
 	protected $rights = array();
-	protected $is_loaded = FALSE;
+	protected $loaded = FALSE;
 	
-	protected function __get($var) {
+	public function __get($var) {
 		return get_instance()->$var;
 	}
 	
@@ -13,13 +13,21 @@ class Acl {
 	}
 	
 	protected function check_right($context_id, $right) {
-		if( ! $this->is_loaded)
-			$this->load_rights($this->session->userId());
-			
-		return isset($this->rights[$context_id][$right]) ? $this->rights[$context_id][$right] : FALSE;
+		return isset($this->load()->rights[$context_id][$right]) ? $this->rights[$context_id][$right] : FALSE;
 	}
 	
-	protected function load_rights($user_id) {
+	protected function load() {
+		if( ! $this->loaded) {
+			$rights = $this->db->where('user_id', $this->session->userId())->or_where('user_id', 0)->get('acl')->result();
+			foreach($rights as $right)
+				foreach(array('read', 'create', 'reply', 'admin') as $action)
+					$this->set($right->category_id, $action, $right->$action);
+		}
 		
+		return $this;
+	}
+	
+	protected function set($category_id, $right, $value){
+		$this->rights[$category_id][$right] = isset($this->rights[$category_id][$right]) ? max($this->rights[$category_id][$right], $value) : $value;
 	}
 }

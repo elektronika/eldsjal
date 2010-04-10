@@ -53,9 +53,4 @@ class MessageModel extends AutoModel {
 	public function count_messages_to_user($user_id) {
 		return $this->db->select('COUNT(*) AS count', FALSE)->where('userid', $user_id)->where('reply_to IS NULL')->get('messages')->row()->count;
 	}
-	
-	// Borde egentligen kombineras ihop med alertsena när dom kommer
-	// public function mark_as_read($message_id) {
-	// 	return $this->db->update('messages', array('readmessage' => 1), array('messageid' => $message_id));
-	// }
 }

@@ -12,7 +12,7 @@ class Forum extends MY_Controller {
 	
 	public function acl_topic($id = 0) {
 		$category_id = $this->models->forum->get_topic_by_id((int) $id)->category_id;
-		return $this->models->forum->acl($this->session->userId(), $category_id);
+		return $this->acl->check($category_id);
 	}
 	
 	public function get_topic($id) {
@@ -59,7 +59,7 @@ class Forum extends MY_Controller {
 	
 	public function acl_reply($id) {
 		$category_id = $this->models->forum->get_topic_by_id((int) $id)->category_id;
-		return $this->session->isloggedin() && $this->models->forum->acl($this->session->userId(), $category_id, 'reply');
+		return $this->session->isloggedin() && $this->acl->check($category_id, 'reply');
 	}
 
 	public function post_topic($id) {
@@ -113,7 +113,7 @@ class Forum extends MY_Controller {
 	}
 	
 	public function acl_category($category_id = 0) {
-		return $this->models->forum->acl($this->session->userId(), (int) $category_id);
+		return $this->acl->check($category_id);
 	}
 	
 	public function get_new($id) {
@@ -160,7 +160,7 @@ class Forum extends MY_Controller {
 	}
 	
 	public function acl_new($id = 0) {
-		return $this->session->isloggedin() && $this->models->forum->acl($this->session->userId(), (int) $id, 'create');
+		return $this->session->isloggedin() && $this->acl->check($category_id, 'create');
 	}
 	
 	public function get_edit($post_id) {
@@ -223,7 +223,8 @@ class Forum extends MY_Controller {
 
 	public function acl_edit($post_id) {
 		// Kolla om användaren äger posten, har extra rättigheter eller är admin
-		return $this->session->isAdmin() || $this->models->forum->topic_is_wiki((int) $post_id) || $this->models->forum->post_creator((int) $post_id) == $this->session->userId();
+		$category_id = 0;
+		return $this->models->forum->topic_is_wiki((int) $post_id) || $this->models->forum->post_creator((int) $post_id) == $this->session->userId() || $this->acl->check($category_id, 'admin');
 	}
 
 	public function get_delete($post_id) {
@@ -258,7 +259,8 @@ class Forum extends MY_Controller {
 
 	public function acl_delete($post_id) {
 		// Kolla om användaren äger posten, har extra rättigheter eller är admin
-		return $this->session->isAdmin() || $this->models->forum->post_creator($post_id) == $this->session->userId();
+		$category_id = 0;
+		return $this->models->forum->post_creator($post_id) == $this->session->userId() || $this->acl->check($category_id, 'admin');
 	}
 	
 	public function get_random() {
@@ -280,26 +282,6 @@ class Forum extends MY_Controller {
 		$page = floor($previous / $per_page) * $per_page;
 		$this->redirect("/forum/topic/{$post->topic_id}/page:{$page}#post-{$post->id}");
 	}
-	
-	// public function get_admin() {
-	// 	$this->view->items = $this->db->order_by('forumCategorySortOrder', 'asc')->get('forumcategory')->result();
-	// 	$this->view->page_title = 'Forumskategorier';
-	// 	$this->view->template = 'inputgrid';
-	// 	$this->view->form_action = '/forum/admin';
-	// }
-	// 
-	// public function post_admin() {
-	// 	// $this->db->empty_table('board');
-	// 	// foreach($_POST['items'] as $item)
-	// 	// 	if( ! empty($item['rights']))
-	// 	// 		$this->db->insert('board', $item);
-	// 	$this->session->message('Sådärja!');
-	// 	$this->redirect('/forum/admin');
-	// }
-	// 
-	// public function acl_admin() {
-	// 	return $this->session->isAdmin();
-	// }
 	
 	public function get_admin($category_id) {
 		$category = $this->models->forum->get_category_by_id((int) $category_id);
@@ -343,6 +325,6 @@ class Forum extends MY_Controller {
 	}
 	
 	public function acl_admin($category_id = 0) {
-		return $this->session->isAdmin() || $this->models->forum->acl($this->session->userId(), (int) $category_id, 'admin');
+		return $this->acl->check((int) $category_id, 'admin');
 	}
 }

@@ -12,7 +12,7 @@
 
 
 $hook['post_controller_constructor'][] = array(
-                                'class'    => 'ACL',
+                                'class'    => '',
                                 'function' => 'checkAclHook',
                                 'filename' => 'ACL.php',
                                 'filepath' => 'hooks'
