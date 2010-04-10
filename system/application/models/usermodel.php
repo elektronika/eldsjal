@@ -54,8 +54,8 @@ class UserModel extends AutoModel {
 	}
 	
 	public function set_password($userId, $password) {
-		// Här ska det in lite roliga salt-funktioner och sånt. Myspys!
-		$this->db->update('users', array('password' => $password), array('userid' => $userId));
+		$salt = $this->generate_salt($userId);
+		$this->db->update('users', array('password' => $this->session->hash($password, $salt)), array('userid' => $userId));
 	}
 	
 	public function artList($user_id) {
@@ -80,7 +80,13 @@ class UserModel extends AutoModel {
 	}
 	
 	public function get_salt_for_username($username) {
-		return NULL;
+		return $this->db->where('username', $username)->get('users')->row()->salt;
+	}
+	
+	public function generate_salt($user_id) {
+		$salt = md5(microtime());
+		$this->db->update('users', array('salt' => $salt), array('userid' => $user_id));
+		return $salt;
 	}
 	
 	public function check_password($username, $password) {

@@ -136,10 +136,17 @@ class MY_Session extends CI_Session {
 	}
 
 	public function authenticate($username, $password) {
-		$salt = $this->object->models->user->get_salt_for_username($username);
+		$user = $this->object->db->select('userid, salt')->where('username', $username)->get('users')->row();
+		if(empty($user))
+			return FALSE;
+		
+		// Om det inte finns något salt så lagras användarens lösenord i klartext, set_password hashar det så allt blir som det ska.
+		if(is_null($user->salt))
+			$this->object->models->user->set_password($user->userid, $password);
+			
 		$user = $this->object->db
 			->where('username', $username)
-			->where('password', $this->hash($password, $salt))
+			->where('password', $this->hash($password, $user->salt))
 			->get('users')->row();
 
 		if(isset($user->userId)) {
@@ -155,8 +162,8 @@ class MY_Session extends CI_Session {
 		}		
 	}
 
-	protected function hash($password, $salt) {
-		return $password; // *rysa*
+	public function hash($password, $salt) {
+		return md5($password.$salt);
 	}
 
 	public function checkPassword($password) {
