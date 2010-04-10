@@ -39,7 +39,8 @@ class Messages extends MY_Controller {
 		if($this->form_validation->run() == FALSE) {
 			$this->get_new($user_id);
 		} else {
-			$message_id = $this->models->message->add($this->input->post('title'), $this->input->post('body'), $this->session->userId(), $user_id);
+			$message_id = $this->models->message->add($this->input->post('title'), $this->input->post('body'), $this->session->userId(), (int) $user_id);
+			$this->alerts->add('message', (int) $user_id, (int) $message_id);
 			$this->session->message('Meddelandet skickat!');
 			$this->redirect('/messages/view/'.$message_id);
 		}
@@ -51,8 +52,7 @@ class Messages extends MY_Controller {
 		
 		$messages = $this->models->message->get_conversation((int) $message_id);
 		foreach($messages as $message)
-			if( ! $message->is_read && $message->userid != $this->session->userid())
-				$this->models->message->mark_as_read($message->id);
+			$this->alerts->remove('message', $this->session->userId(), $message->id);
 		
 		$this->view->items = $messages;
 		$this->view->page_title = current($this->view->items)->title;
@@ -68,8 +68,9 @@ class Messages extends MY_Controller {
 			$this->get_view($message_id);
 		} else {
 			$message = $this->models->message->get_by_id((int) $message_id);
-			$user_id = $message->userId == $this->session->userId() ? $message->messageFrom : $this->session->userId();
+			$user_id = $message->userId == $this->session->userId() ? $message->messageFrom : $message->userId;
 			$this->models->message->add('', $this->input->post('body'), $this->session->userId(), $user_id, (int) $message_id);
+			$this->alerts->add('message', $user_id, (int) $message_id);
 			$this->session->message('Meddelandet skickat!');
 			$this->redirect('/messages/view/'.$message_id);
 		}	

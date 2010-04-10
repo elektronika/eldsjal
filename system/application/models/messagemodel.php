@@ -15,9 +15,10 @@ class MessageModel extends AutoModel {
 	
 	public function get_messages_to($user_id, $offset, $limit) {
 		$messages = $this->db
-			->select('messageid AS id, messagetopic AS title, reply_to, messagedate AS created, receiver.username AS receiver_name, receiver.userid AS receiver_id, sender.username AS sender_name, sender.userid AS sender_id, readmessage AS is_read')
+			->select('messageid AS id, messagetopic AS title, reply_to, messagedate AS created, receiver.username AS receiver_name, receiver.userid AS receiver_id, sender.username AS sender_name, sender.userid AS sender_id, IF(alerts.id IS NULL, 1, 0) AS is_read')
 			->join('users AS receiver', 'receiver.userid = messages.userid')
 			->join('users AS sender', 'sender.userid = messages.messagefrom')
+			->join('alerts', 'messages.messageid = alerts.item_id AND alerts.user_id = '.$user_id, 'left')
 			->where('messages.userid', $user_id)
 			->where('reply_to IS NULL')
 			->or_where('messages.messagefrom', $user_id)
@@ -37,7 +38,7 @@ class MessageModel extends AutoModel {
 	
 	public function get_conversation($message_id) {
 		return $this->db
-			->select('messagetopic AS title, message AS body, messagedate AS created, messagefrom AS userid, username, readmessage AS is_read, messageid AS id')
+			->select('messagetopic AS title, message AS body, messagedate AS created, messagefrom AS userid, username, readmessage AS is_read, messageid AS id, hasimage')
 			->join('users', 'users.userid = messages.messagefrom')
 			->where('messageid', $message_id)
 			->or_where('reply_to', $message_id)
@@ -54,7 +55,7 @@ class MessageModel extends AutoModel {
 	}
 	
 	// Borde egentligen kombineras ihop med alertsena när dom kommer
-	public function mark_as_read($message_id) {
-		return $this->db->update('messages', array('readmessage' => 1), array('messageid' => $message_id));
-	}
+	// public function mark_as_read($message_id) {
+	// 	return $this->db->update('messages', array('readmessage' => 1), array('messageid' => $message_id));
+	// }
 }

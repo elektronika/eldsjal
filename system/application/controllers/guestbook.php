@@ -39,7 +39,8 @@ class Guestbook extends MY_Controller {
 		
 		// Markera alla som lästa när man kollar i sin egna gästbok
 		if($this->session->userId() == $user->userid)
-			$this->models->guestbook->mark_all_as_read($user->userid);
+			$this->alerts->remove('guestbook', $user->userid);
+			
 		if($user->userid == $this->session->userId())
 			$this->util->trail("kollar i sin egen gästbok");
 		else
@@ -54,6 +55,7 @@ class Guestbook extends MY_Controller {
 		} else {
 			$user = $this->models->user->get_by_id((int) $user_id);
 			$this->models->guestbook->add($this->input->post('body'), $this->session->userId(), $user->userid);
+			$this->alerts->add('guestbook', $user->userid);
 			$this->session->message('Mysigt, nu har du lämnat ett litet avtryck. :)');
 			$this->redirect('/guestbook/view/'.$user_id);
 		}

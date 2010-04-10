@@ -98,8 +98,10 @@ class Calendar extends MY_Controller {
 			$this->get_message($topic_id);
 		} else {		
 			$users = $this->models->event->get_attendees((int) $topic_id);
-			foreach($users as $user)
-				$this->models->message->add($this->input->post('title'), $this->input->post('body'), $this->session->userId(), $user->userid);
+			foreach($users as $user) {
+				$message_id = $this->models->message->add($this->input->post('title'), $this->input->post('body'), $this->session->userId(), $user->userid);				
+				$this->alerts->add('message', $user->userid, $message_id);
+			}
 			$this->session->message('Massmeddelande skickat!');
 			$this->redirect('/calendar/attendees/'.$topic_id);
 		}
