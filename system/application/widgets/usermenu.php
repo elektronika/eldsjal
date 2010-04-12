@@ -26,7 +26,7 @@ class Usermenu extends Widget {
 			}
 		}
 		
-		if($this->session->hasPrivilege('wisdomadmin'))
+		if($this->acl->check($this->settings->get('wisdom_category')))
 			$this->items[] = (object) array('href' => '/admin/wisdom', 'title' => 'Visheter', 'class' => 'wisdom');
 			
 		if($this->session->isAdmin()) {
