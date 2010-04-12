@@ -112,14 +112,6 @@ class Calendar extends MY_Controller {
 		return $topic->creator == $this->session->userid() || $this->session->isAdmin();
 	}
 	
-	function get_history() {
-		$this->dwootemplate->display('calendar_history.tpl');
-	}
-	
-	function acl_history() {
-		return $this->session->isLoggedIn();
-	}
-	
 	function get_signup($event_id) {
 		$this->models->event->signup($event_id, $this->session->userId());
 		$this->session->message('*gilla* Syns där!');
@@ -127,7 +119,8 @@ class Calendar extends MY_Controller {
 	}
 	
 	function acl_signup($event_id) {
-		return $this->session->isloggedin() && $this->models->forum->acl_topic($event_id, $this->session->usertype());
+		$category_id = $this->models->forum->get_topic_by_id((int) $event_id)->category_id;
+		return $this->session->isloggedin() && $this->acl->check($category_id);
 	}
 	
 	function get_signoff($event_id) {
@@ -137,6 +130,7 @@ class Calendar extends MY_Controller {
 	}
 	
 	function acl_signoff($event_id) {
-		return $this->session->isloggedin() && $this->models->forum->acl_topic($event_id, $this->session->usertype());
+		$category_id = $this->models->forum->get_topic_by_id((int) $event_id)->category_id;
+		return $this->session->isloggedin() && $this->acl->check($category_id);
 	}
 }
