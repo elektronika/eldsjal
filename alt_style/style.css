@@ -779,18 +779,24 @@ a.thumbnail {
 }
 
 /* moonfia's giraff */
-
 .page-user-view-2984 #region-content {
 	background: transparent url('/images/giraff.gif') no-repeat top right;
 }
 
+/* footfall's vattenpipa */
 .page-user-view-2959 #region-content {
 	background: transparent url('/images/vattenpipa.gif') no-repeat top right;
 }
 
 /* Intro-sidan */
-
 .page-welcome {
 	background: #1A0601;
 	text-align: center;
+}
+
+/* Sysslar-med-checkboxarna */
+#usertags label {
+	width: 25%;
+	float: left;
+	clear: none;
 }

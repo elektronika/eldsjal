@@ -44,6 +44,10 @@ form_open_multipart($form_action)
 .form_dropdown('city', $locations, $user->city)
 .input('text', 'inhabitance', 'Stadsdel/ort', $user->inhabitance)
 .form_fieldset_close()
+.form_fieldset('Sysslar med', array('id' => 'usertags'));
+foreach($tags as $id => $tag)
+	echo form_label(form_checkbox("tags[{$id}]", $id, isset($user_tags[$id])).$tag);
+echo form_fieldset_close()
 .submit('Spara!')
 .form_close();
 ?>

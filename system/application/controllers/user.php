@@ -50,12 +50,14 @@ class User extends MY_Controller {
 	}
 	
 	public function get_edit($user_id) {
-		$user = $this->models->user->get_by_id($user_id);
+		$user = $this->models->user->get_by_id((int) $user_id);
 		$user = $this->models->user->add_address_info($user);
 		$this->view->page_title = $user->first_name.' "'.$user->username.'" '.$user->last_name;
 		$this->view->user = $user;
+		$this->view->tags = $this->models->tag->get_all_assoc(FALSE);
+		$this->view->user_tags = $this->models->user->artList((int) $user_id);
 		$this->view->locations = $this->models->location->get_all_assoc();
-		$this->view->sublinks = $this->models->user->sublinks($user_id, 'settings');
+		$this->view->sublinks = $this->models->user->sublinks((int) $user_id, 'settings');
 		$this->view->form_action = '/user/'.$user_id.'/edit';
 	}
 	
@@ -130,6 +132,9 @@ class User extends MY_Controller {
 				$this->models->user->delete_image($user->userid);
 			else
 				$this->handle_image($user);
+			
+			// Sysslar med
+			$this->models->user->set_art_list($user->userid, $_POST['tags']);
 			
 			$this->session->message('Uppdaterat. Ja jävlar vad uppdaterat!');
 			$this->redirect('/user/'.$user->userid);

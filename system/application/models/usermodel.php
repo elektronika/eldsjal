@@ -60,14 +60,20 @@ class UserModel extends AutoModel {
 	public function artList($user_id) {
 		$artlist = array();
 		$does = $this->db
-			->select('artname')
+			->select('artname, artlist.artid')
 			->where('userid', $user_id)
 			->join('artlist', 'userartlist.artid = artlist.artid')
 			->get('userartlist')->result();
 		foreach($does as $do)
-			$artlist[] = $do->artname;
+			$artlist[$do->artid] = $do->artname;
 		
 		return $artlist;
+	}
+	
+	public function set_art_list($user_id, $art_list) {
+		$this->db->where('userid', $user_id)->delete('userartlist');
+		foreach($art_list as $art)
+			$this->db->insert('userartlist', array('userid' => $user_id, 'artid' => $art));
 	}
 	
 	public function has_images($user_id) {

@@ -1,11 +1,13 @@
 <?php
 class TagModel extends AutoModel {
-	public function get_all() {
+	public function get_all($for_images = TRUE) {
+		if( ! $for_images)
+			$this->db->where('image_only !=', 1);
 		return $this->db->select('artid AS id, artname AS tag, slug')->get('artlist')->result();
 	}
 	
-	public function get_all_assoc() {
-		$tags = $this->get_all();
+	public function get_all_assoc($for_images = TRUE) {
+		$tags = $this->get_all($for_images);
 		$out = array();
 		foreach($tags as $tag)
 			$out[$tag->id] = $tag->tag;
