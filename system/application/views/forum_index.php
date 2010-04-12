@@ -12,7 +12,7 @@
 	<tr class="<?php echo implode(' ', $cat->classes); ?><?php echo nth(2) ? ' odd' : ' even'; ?>">
 		<td class="category-title"><a href="<?php echo $cat->href; ?>"><?php echo $cat->title; ?><span> - <?php echo $cat->description; ?></span></td>
 		<td class="category-threads"><?php echo $cat->threads; ?></td>
-		<td class="category-updated"><?php echo fuzzytime($cat->updated, '', ' sedan'); ?></td>
+		<td class="category-updated"><?php echo is_null($cat->updated) ? '-' : fuzzytime($cat->updated, '', ' sedan'); ?></td>
 	</tr>
 <?php endforeach; ?>
 	</tbody>
