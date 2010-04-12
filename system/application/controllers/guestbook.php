@@ -28,7 +28,8 @@ class Guestbook extends MY_Controller {
 				$post->actions[] = array('href' => '/guestbook/delete/'.$post->guestbookId, 'title' => 'Radera', 'class' => 'delete');
 		}
 		$this->view->template = 'list';
-		$this->view->before = guestbook_form($user->userid);
+		if($user_id != $this->session->userId())
+			$this->view->before = guestbook_form($user->userid);
 		$this->view->item_function = 'post';
 		$this->view->items = $posts;
 		$this->view->page_title = $user->username.'s gästbok';
