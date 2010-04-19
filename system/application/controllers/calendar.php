@@ -8,8 +8,9 @@ class Calendar extends MY_Controller {
 		$this->view->sublinks[] = array('href' => '/calendar/browse/'.date('Y/m'), 'title' => 'Visa denna månaden');
 		$this->view->sublinks[] = array('href' => '/calendar/browse/'.date('Y'), 'title' => 'Visa detta året');
 		$this->view->sublinks[] = array('href' => '/calendar/browse/', 'title' => 'Visa alla kommande');
-		if($this->session->isLoggedIn())
-			$this->view->sublinks[] = array('href' => '/forum/new/2?event=1', 'title' => 'Skapa event!');
+		$category_id = 2;
+		if($this->session->isloggedin() && $this->acl->check($category_id, 'create'))
+			$this->view->sublinks[] = array('href' => '/forum/new/'.$category_id.'/?event=1', 'title' => 'Skapa event!');
     }
 
 	function get_browse($year = NULL, $month = NULL, $day = NULL) {
