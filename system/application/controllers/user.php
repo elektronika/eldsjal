@@ -4,6 +4,10 @@ class User extends MY_Controller {
 		$user = $this->models->user->get_by_id((int) $user_id);
 		$user->does = $this->models->user->artList($user->userid);
 		
+		// De här grejerna ska ligga separat sen. Måste.
+		if($user->userid == 4757)
+			$user->does[] = 'Rosa velour';
+		
 		// Det här måste göras snyggare... -_-
 		$props = array();
 		$props[] = (object) array('title' => 'Ålder', 'value' => age($user->birthday).' år'.(date('m-d') == date('m-d', $user->birthday) ? ' - Fyller år idag!' : ''));
