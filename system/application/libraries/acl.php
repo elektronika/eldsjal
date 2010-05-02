@@ -2,6 +2,7 @@
 
 class Acl {	
 	protected $rights = array();
+	protected $by_right = array();
 	protected $loaded = FALSE;
 	
 	public function __get($var) {
@@ -29,5 +30,14 @@ class Acl {
 	
 	protected function set($category_id, $right, $value){
 		$this->rights[$category_id][$right] = isset($this->rights[$category_id][$right]) ? max($this->rights[$category_id][$right], $value) : $value;
+		if((bool) $value)
+			$this->by_right[$right][] = $category_id;
+	}
+	
+	public function get_by_right($right = 'read') {
+		if(isset($this->load()->by_right[$right]))
+			return $this->by_right[$right];
+		else
+			return array();
 	}
 }

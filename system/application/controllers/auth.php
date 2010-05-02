@@ -142,6 +142,9 @@ class Auth extends MY_Controller {
 		$this->form_validation->set_rules('born_year', 'År', 'trim|xss_clean|required|callback_not_dash');
 		$this->form_validation->set_rules('born_month', 'Månad', 'trim|xss_clean|required|callback_not_dash');
 		$this->form_validation->set_rules('born_date', 'Dag', 'trim|xss_clean|required|callback_not_dash');
+		$this->form_validation->set_rules('pul', 'PUL', 'trim|xss_clean|callback_required_checkbox');
+		$this->form_validation->set_rules('rules', 'regler', 'trim|xss_clean|callback_required_checkbox');
+		$this->form_validation->set_rules('cookies', 'cookies', 'trim|xss_clean|callback_required_checkbox');
 		
 		$this->form_validation->set_message('matches', 'Stämmer det inte så blir det inte någon ändring här inte!');
 		$this->form_validation->set_message('required', 'Heddu, fylla i är ett måste!');
@@ -149,6 +152,7 @@ class Auth extends MY_Controller {
 		$this->form_validation->set_message('valid_email', 'Meh, en _riktig_ adress!');
 		$this->form_validation->set_message('check_unique_email', 'Tyvärr, den adressen är redan paxad.');
 		$this->form_validation->set_message('not_dash', 'Men du, det låter väl inte så troligt?');
+		$this->form_validation->set_message('required_checkbox', 'Tyvärr, du måste gå med på det för att få vara med. Lite ordning får det trots allt vara. :)');
 		
 		if($this->form_validation->run() == FALSE) {
 			$this->get_register2($user_id, $key);
@@ -163,7 +167,14 @@ class Auth extends MY_Controller {
 			// Den här är duplicerad från users/edit, känns inte så DRY
 			$this->handle_image($user);
 			
-			$this->session->message('Woho, nu är det klart! Det är bara att logga in med dom uppgifterna du har angett. Sen när du blir faddrad så kommer du att få tillgång till ännu mer saker. :)');
+			// Skicka välkomstmeddelandet	
+			$message_from = $this->models->user->get_by_id($this->settings->get('admin_user_id'));
+			$title = 'Hej och välkommen till Eldsjäl!';
+			$body = "Som du säkert förstår så är det här ett automatiskt meddelande, men det kändes bättre än att kanske glömma skicka det manuellt. :)\n\nJag är mer eller mindre (o)ansvarig för den här sidan, så om du har några frågor som gäller den så är det mig du ska vända dig till i första hand. Allt annat står alla för tillsammans. Det är fritt fram att ta så lite eller mycket plats du vill, så känn dig fri att slösurfa runt, spana på sötnosar, starta forumtrådar och lägga upp saker i kalendern.\n\nFramförallt är du välkommen att komma på de träffar och arrangemang som finns i kalendern! Din tid här kommer garanterat att bli trevligare när du har träffat oss utan massor med elektronik emellan. :) Om du inte hittar något i din hemtrakt så är det bara att slänga upp en tråd i forumet, så kanske det händer något.\n\nI vilket fall, se till att snoka runt ordentligt, och var inte rädd att fråga någon som du tror kan veta om du undrar över något.\n\nPöss & kräm!\n\n//{$message_from->username}";
+			$message_id = $this->models->message->add($title, $body, $message_from->userid, $user->user_id);				
+			$this->alerts->add('message', $user->user_id, $message_id);
+			
+			$this->session->message('Woho, nu är det klart! Det är bara att logga in med dom uppgifterna du har angett. Syns där inne! :)');
 			$this->redirect('/main');
 		}
 	}
@@ -184,8 +195,13 @@ class Auth extends MY_Controller {
 		return $this->models->user->check_bad_username($username);
 	}
 	
-	public function not_dash($string) {
-		return $string != '-';
+	public function not_dash($input) {
+		return $input != '-';
+	}
+	
+	// Den här finns bara för att kunna sätta ett specifikt felmeddelande på vissa fält
+	public function required_checkbox($input) {
+		return (bool) $input;
 	}
 	
 	public function handle_image($user) {		

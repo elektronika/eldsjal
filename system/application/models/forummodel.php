@@ -376,6 +376,26 @@ class ForumModel extends AutoModel {
 			LIMIT {$limit}")->result();
 	}
 	
+	public function get_latest_posts_by_categories(Array $categories, $limit = 20) {
+		$imploded_categories = implode(',', $categories);
+		return $this->db->query(
+			"SELECT 
+				fm.*, 
+				fm.posterid AS userid, 
+				fm.topicid AS topicid, 
+				UNIX_TIMESTAMP(fm.messagedate) AS timestamp, 
+				ft.topicname,
+				ft.is_event,
+				fc.forumcategoryname,
+				fc.forumcategoryid
+			FROM forummessages AS fm
+			JOIN forumtopics AS ft ON fm.topicid = ft.topicid
+			JOIN forumcategory AS fc ON ft.forumcategoryid = fc.forumcategoryid
+			WHERE fc.forumcategoryid IN({$imploded_categories})
+			ORDER BY fm.messagedate DESC 
+			LIMIT {$limit}")->result();
+	}
+	
 	public function set_topic_fields($topic_id, Array $fields) {
 		$this->db->update('forumtopics', $fields, array('topicid' => $topic_id));
 	}

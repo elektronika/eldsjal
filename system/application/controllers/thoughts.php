@@ -39,7 +39,8 @@ class Thoughts extends MY_Controller {
 			$this->get_today();
 		} else {
 			$new_thought = (object) $this->input->post_array(array('title', 'body'));
-			$thought_id = $this->models->thought->set_todays_thought($new_thought, $this->session->userId());			
+			$thought_id = $this->models->thought->set_todays_thought($new_thought, $this->session->userId());
+			$this->models->timeline->add($this->session->userId(), 'thought', $thought_id, $new_thought->title, $new_thought->body);
 			$this->redirect('/thoughts/view/'.$thought_id);
 		}
 	}

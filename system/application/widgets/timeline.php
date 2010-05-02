@@ -6,7 +6,9 @@ class Timeline extends Widget {
 		$this->body_length = $this->settings->get('timeline_body_length');
 		$number_of_items = $this->settings->get('timeline_items');
 		
-		foreach($this->models->forum->get_latest_posts($this->session->usertype(), $number_of_items) as $post) {
+		$categories = $this->acl->get_by_right('read');
+		
+		foreach($this->models->forum->get_latest_posts_by_categories($categories, $number_of_items) as $post) {
 			$user_ids[$post->posterId] = $post->posterId;
 			$item = (object) array('type' => 'forum', 'topic_id' => $post->topicId);
 			if($post->is_event)

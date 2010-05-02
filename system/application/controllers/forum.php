@@ -76,6 +76,10 @@ class Forum extends MY_Controller {
 			$new_reply->userid = $this->session->userId();
 			
 			$post_id = $this->models->forum->create_post($new_reply);
+			
+			$topic = $this->models->forum->get_topic_by_id((int) $id);
+			$this->models->timeline->add($this->session->userId(), 'forum_reply', $post_id, $topic->title, $new_reply->body);
+			
 			$page = floor($this->models->forum->count_posts_in_topic($id) / $this->settings->get('forum_posts_per_page')) * $this->settings->get('forum_posts_per_page');
 			$this->session->message('Inlägg sparat!');
 			$this->redirect('/forum/topic/'.$id.'/page:'.$page.'#post-'.$post_id);
