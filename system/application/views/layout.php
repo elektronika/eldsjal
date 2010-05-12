@@ -63,8 +63,8 @@ else
 				eldsjal.org <a href="/development"><?php echo $revision_name; ?></a>
 		</div>
 		<div id="footer-text">
-			Det &auml;r ej till&aring;tet att kopiera, sprida eller vidaref&ouml;rmedla information fr&aring;n Eldsj&auml;l	F&ouml;reningen Eldsj&auml;l  (C) 2005 - <?php echo date('Y');?><br>
-			eldsjal.org drivs av f&ouml;reningen Eldsj&auml;l utan st&ouml;d fr&aring;n Ungdomsstyrelsen
+			Det &auml;r ej till&aring;tet att kopiera, sprida eller vidaref&ouml;rmedla information fr&aring;n Eldsj&auml;l	F&ouml;reningen Altkonst  (C) 2005 - <?php echo date('Y');?><br>
+			eldsjal.org drivs av f&ouml;reningen Altkonst utan st&ouml;d fr&aring;n Ungdomsstyrelsen
 		</div>
 	</div>
 </div>

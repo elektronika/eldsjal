@@ -16,7 +16,7 @@ class Usermenu extends Widget {
 		$event_count = 0;
 		$this->items[] = (object) array('href' => '/calendar', 'title' => 'Kalender'.$this->counter($event_count), 'class' => $event_count ? 'events new' : 'events');
 
-		if($this->session->hasPrivilege('useradmin')) {
+		if($this->acl->check($this->settings->get('fadder_category'))) {
 			$pending = $this->db->query("select count(userid) as users from users where usertype = 0 and email <> ''")->row()->users;
 			$this->items[] = (object) array('href' => '/userAdmin.php', 'title' => 'Ny medlem'.$this->counter($pending), 'class' => 'fadder');
 			
