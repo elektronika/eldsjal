@@ -95,10 +95,13 @@ class UserModel extends AutoModel {
 	}
 	
 	public function check_password($username, $password) {
+		$salt = $this->db->where('username', $username)->get('users')->row()->salt;
 		$user = $this->db
 			->where('username', $username)
-			->where('password', $password)
+			->where('password', $this->session->hash($password, $salt))
+			->where('deleted', 0)
 			->get('users')->row();
+
 		return isset($user->userId);
 	}
 	
@@ -182,6 +185,10 @@ class UserModel extends AutoModel {
 	
 	public function has_fadder($user_id) {
 		return $this->db->select('approvedby')->where('userid', $user_id)->get('users')->row()->approvedby > 0;
+	}
+	
+	public function is_deleted($user_id) {
+		return $this->db->select('deleted')->where('userid', $user_id)->get('users')->row()->deleted > 0;
 	}
 	
 	public function privacy_level($user_id) {

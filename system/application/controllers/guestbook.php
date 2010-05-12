@@ -50,12 +50,14 @@ class Guestbook extends MY_Controller {
 	
 	public function post_view($user_id) {
 		$this->form_validation->set_rules('body', 'Gästboksmeddelande', 'trim|xss_clean|required');
+		$this->form_validation->set_rules('prefix', 'Prefix', 'trim|xss_clean'); //Specialfält för att ange t ex att det är en bildkommentar
 		$this->form_validation->set_message('required', 'Om du inte har något att säga så kan du lika gärna låta bli. :)');
 		if($this->form_validation->run() == FALSE) {
 			$this->get_view($user_id);
 		} else {
 			$user = $this->models->user->get_by_id((int) $user_id);
-			$this->models->guestbook->add($this->input->post('body'), $this->session->userId(), $user->userid);
+			$prefix = $this->input->post('prefix') && $this->input->post('prefix') != '' ? $this->input->post('prefix')."\n" : '';
+			$this->models->guestbook->add($prefix.$this->input->post('body'), $this->session->userId(), $user->userid);
 			$this->alerts->add('guestbook', $user->userid);
 			$this->session->message('Mysigt, nu har du lämnat ett litet avtryck. :)');
 			$this->redirect('/guestbook/view/'.$user_id);

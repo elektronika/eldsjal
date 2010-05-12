@@ -51,7 +51,7 @@ class People extends MY_Controller {
 		if($query = $this->input->get('query'))
 			$items->like('username', $query)->or_like('first_name', $query)->or_like('last_name', $query);
 			
-		$items = $items->get('users', 20)->result();
+		$items = $items->where('deleted', 0)->get('users', 20)->result();
 		
 		// Om man bara hittar en person så kan man lika gärna visa den. Lika bra, fast bättre.
 		if(count($items) == 1)

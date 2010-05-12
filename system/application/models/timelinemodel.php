@@ -22,6 +22,6 @@ class TimelineModel extends AutoModel {
 			'created' => is_null($created) ? time() : $created,
 			'category_id' => $category
 		));
-		return $this->db->insert_db();
+		return $this->db->insert_id();
 	}
 }

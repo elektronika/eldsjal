@@ -147,6 +147,7 @@ class MY_Session extends CI_Session {
 		$user = $this->object->db
 			->where('username', $username)
 			->where('password', $this->hash($password, $user->salt))
+			->where('deleted', 0)
 			->get('users')->row();
 
 		if(isset($user->userId)) {

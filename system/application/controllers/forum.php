@@ -58,13 +58,13 @@ class Forum extends MY_Controller {
 	}
 	
 	public function acl_reply($id) {
-		$category_id = $this->models->forum->get_topic_by_id((int) $id)->category_id;
-		return $this->session->isloggedin() && $this->acl->check($category_id, 'reply');
+		$this->category_id = $this->models->forum->get_topic_by_id((int) $id)->category_id;
+		return $this->session->isloggedin() && $this->acl->check($this->category_id, 'reply');
 	}
 
 	public function post_topic($id) {
-		if( ! $this->session->isloggedin())
-			die('Permission denied');
+		$this->category_id = $this->models->forum->get_topic_by_id((int) $id)->category_id;
+		
 		$this->form_validation->set_rules('body', 'Inlägg', 'trim|xss_clean|required');
 		$this->form_validation->set_message('required', 'Men du, är det så bra med tomma inlägg, egentligen?');
 		
@@ -78,7 +78,15 @@ class Forum extends MY_Controller {
 			$post_id = $this->models->forum->create_post($new_reply);
 			
 			$topic = $this->models->forum->get_topic_by_id((int) $id);
-			$this->models->timeline->add($this->session->userId(), 'forum_reply', $post_id, $topic->title, $new_reply->body);
+			
+			if( (bool) $topic->is_event)
+				$item_type = 'event_reply';
+			elseif( (bool) $topic->is_wiki)
+				$item_type = 'wiki_reply';			
+			else
+				$item_type = 'forum_reply';
+			
+			$this->models->timeline->add($this->session->userId(), $item->type, $post_id, $topic->title, $new_reply->body, NULL, $this->category_id);
 			
 			$page = floor($this->models->forum->count_posts_in_topic($id) / $this->settings->get('forum_posts_per_page')) * $this->settings->get('forum_posts_per_page');
 			$this->session->message('Inlägg sparat!');
@@ -157,6 +165,15 @@ class Forum extends MY_Controller {
 				'date_from' => $date_from,
 				'date_to' => $date_to
 			));
+			
+			if((bool) $this->input->post('is_event'))
+				$item_type = 'event_new';
+			elseif((bool) $this->input->post('is_wiki'))
+				$item_type = 'wiki_new';			
+			else
+				$item_type = 'forum_new';
+			
+			$this->models->timeline->add($this->session->userId(), $item_type, $topic_id, $new_topic->title, $new_topic->body, NULL, (int) $id);
 			
 			$this->session->message('Japp, nu är tråden skapad!');
 			$this->redirect('/forum/topic/'.$topic_id);

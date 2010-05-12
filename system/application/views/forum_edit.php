@@ -17,8 +17,10 @@ if($is_moderator && $is_first_post) {
 if($is_first_post) {
 	echo form_fieldset('Kalenderlattjolajban');
 	echo form_label(form_checkbox('is_event', '1', $topic->is_event).'Visa i kalendern', 'is_event');
+	echo '<div class="datepicker">';
 	echo form_label('Datum', 'date');
 	echo datepicker('date_from', $years_ahead, $years_back, $topic->date_from).' - '.datepicker('date_to', $years_ahead, $years_back, $topic->date_to);
+	echo "</div>";
 	echo form_fieldset_close();
 }
 echo submit('Spara!');

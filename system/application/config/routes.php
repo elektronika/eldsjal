@@ -48,6 +48,7 @@ $route['register/(:num)/(:any)'] = 'auth/register2/$1/$2';
 $route['register'] = 'auth/register';
 $route['lostpassword'] = 'auth/lostpassword';
 $route['resetpassword/(:num)/(:any)'] = 'auth/resetpassword/$1/$2';
+$route['deleteaccount/(:num)/(:any)'] = 'user/delete/$1/$2';
 $route['user/(:any)/thoughts/(:any)'] = 'thoughts/user/$1';
 $route['user/(:any)/thoughts'] = 'thoughts/user/$1';
 $route['user/(:any)/images'] = 'gallery/user/$1';

@@ -587,6 +587,6 @@ function wisdom_item($item) { ?>
 	<div class="wisdom"><?php echo rq($item->body); ?><br/><?php echo userlink($item); ?> - <?php echo date('Y-m-d', $item->created); ?> - <a href="/admin/wisdom/<?php echo $item->id; ?>">Redigera</a></div>
 <?php }
 
-function guestbook_form($user_id) {
-	return form_open('/guestbook/view/'.$user_id).textarea('body', 'Gästboksmeddelande').submit('Pytsa in\'ett i gästboka!').form_close();
+function guestbook_form($user_id, $prefix = NULL) {
+	return form_open('/guestbook/view/'.$user_id, NULL, array('prefix' => $prefix)).textarea('body', 'Gästboksmeddelande').submit('Pytsa in\'ett i gästboka!').form_close();
 }

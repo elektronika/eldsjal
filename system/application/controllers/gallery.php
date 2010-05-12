@@ -202,6 +202,7 @@ class Gallery extends MY_Controller {
 		$this->view->sublinks[] = array('href' => '/gallery/random', 'title' => 'Slumpa bild!');
 		$this->view->page_title = $image->title;
 		$this->view->image = $image;
+		$this->view->prefix = "[b]Kommentar till bilden {$image->title}[/b]: ";
 		$this->util->trail('kikar på en bild.');
 	}
 	

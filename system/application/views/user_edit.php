@@ -48,6 +48,9 @@ form_open_multipart($form_action)
 foreach($tags as $id => $tag)
 	echo form_label(form_checkbox("tags[{$id}]", $id, isset($user_tags[$id])).$tag);
 echo form_fieldset_close()
+.form_fieldset('Radera konto')
+.'<p>Om du vill radera ditt konto så fyller du i ditt lösenord här nedanför. Du kommer då att få ett mail med vidare instruktioner.</p>'
+.input('password', 'delete_password','Ditt lösenord')
 .submit('Spara!')
 .form_close();
 ?>
