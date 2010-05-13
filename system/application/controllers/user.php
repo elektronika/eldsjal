@@ -34,7 +34,7 @@ class User extends MY_Controller {
 		$this->view->user = $user;
 		$this->view->page_title = $user->first_name.' "'.$user->username.'" '.$user->last_name;
 		$this->view->sublinks = $this->models->user->sublinks($user->userid, 'presentation');
-		$this->view->display_header = FALSE;
+		$this->widgets->remove('content', 'defaultheader');
 		if($user_id == $this->session->userId())
 			$this->util->trail("tar en kik på sin egna presentation");
 		else
