@@ -18,6 +18,10 @@ Class Widgets {
 		return $this;
 	}
 	
+	public function nonono() {
+		
+	}
+	
 	public function add($region, $widget_name) {
 		$this->widgets[$region][$widget_name] = $widget_name;
 		return $this;
