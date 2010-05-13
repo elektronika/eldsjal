@@ -33,6 +33,7 @@
 </table>
 <?php echo submit(); ?>
 </form>
+<div class="clear">&nbsp;</div>
 <?php end_region(); ?>
 
 <?php require('layout.php'); ?>

@@ -1,4 +1,4 @@
-#wrap {
+#upper-wrap {
 	padding-top: 20px;
 }
 
@@ -39,7 +39,6 @@
 }
 
 /* Longmans egna logga */
-
 .longman #widget-logo h1 {
 	background-image: url('longmanslogo.png');
 	height: 540px;

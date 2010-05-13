@@ -22,7 +22,8 @@ else
 </head>
 <body class="<?php echo $body_class; ?>">
 <div id="wrap">
-	
+
+<div id="upper-wrap">	
 	<div id="header-wrap">
 		<?php widgets('header'); ?>
 	</div> <!-- #header-wrap -->
@@ -35,6 +36,7 @@ else
 			<div class="clear">&nbsp;</div>
 		</div>
 	</div> <!-- #content-wrap -->
+</div> <!-- #upper-wrap -->
 
 	<div id="footer-wrap">
 		<?php widgets('footer'); ?>
