@@ -51,6 +51,7 @@ echo form_fieldset_close()
 .form_fieldset('Radera konto')
 .'<p>Om du vill radera ditt konto så fyller du i ditt lösenord här nedanför. Du kommer då att få ett mail med vidare instruktioner.</p>'
 .input('password', 'delete_password','Ditt lösenord')
+.form_fieldset_close()
 .submit('Spara!')
 .form_close();
 ?>
