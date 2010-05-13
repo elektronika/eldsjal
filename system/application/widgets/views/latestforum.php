@@ -1,4 +1,4 @@
-<h3>Senaste foruminlägg:</h3>
+<h3 class="widget-title">Senaste foruminlägg:</h3>
 <?php 
 	$sql = "select forumcategory.forumcategoryid, forumtopics.topicname, forummessages.message, forummessages.messageid, forumtopics.topicid from forummessages inner join forumtopics on forumtopics.topicid = forummessages.topicid inner join forumcategory on forumcategory.forumcategoryid = forumtopics.forumcategoryid where forumcategory.forumsecuritylevel = 0 order by forummessages.messagedate desc limit 6";
 	$messagess = $this->db->query( $sql )->result_array();

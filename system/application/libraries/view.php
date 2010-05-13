@@ -19,4 +19,8 @@ Class view {
 		extract($this->data);
 		require($this->template_folder.$this->data['template'].'.php');
 	}
+	
+	public function __isset($name) {
+		return isset($this->data[$name]);
+	}
 }

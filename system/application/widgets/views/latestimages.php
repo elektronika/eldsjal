@@ -1,4 +1,4 @@
-<h3>Senaste bilder:</h3>
+<h3 class="widget-title">Senaste bilder:</h3>
 <?php
 $sql = " select imagename, imageid, filetype, width, height from images order by imageuploaddate desc limit 3";
 $images = $this->db->query($sql)->result_array();

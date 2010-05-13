@@ -20,6 +20,10 @@ Class settings {
 		return $this->settings[$key];
 	}
 	
+	public function get_array($key, $separator = ',') {
+		return explode($separator, $this->get($key));
+	}
+	
 	public function delete_all() {
 		$this->CI->db->empty_table('settings');
 	}

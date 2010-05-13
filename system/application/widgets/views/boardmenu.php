@@ -1,4 +1,4 @@
-<h3>Information!</h3>
+<h3 class="widget-title">Information!</h3>
 	&nbsp;&nbsp;<a href="/board">Styrelsen</a><br/>
 	&nbsp;&nbsp;<a href="/board/stadgar" class=a3>Stadgar</a><br/>
 	&nbsp;&nbsp;<a href="/board/celler" class=a3>Celler</a>

@@ -1,4 +1,4 @@
-<h3>Nyheter</h3>
+<h3 class="widget-title">Nyheter</h3>
 <?php foreach( $items as $topic ): ?>
 <div class="news">
 	<h4><a href="/forum/topic/<?php echo $topic->topicid; ?>"><?php echo $topic->topicname; ?></a> <span class="meta"><?php echo timesince(strtotime($topic->messagedate)); ?></span></h4>

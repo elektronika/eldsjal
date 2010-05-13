@@ -1,4 +1,4 @@
-<h3>Nya tankar</h3>
+<h3 class="widget-title">Nya tankar</h3>
 <?php
 $sql = "select diary.diaryid, diary.diarydate, diary.diarytopic, diary.userid, users.username, users.userid, users.hasimage, users.register_date from diary inner join users on diary.userid = users.userid order by diarydate desc limit 6";
 

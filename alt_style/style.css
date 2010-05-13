@@ -40,7 +40,7 @@ h2 {
 	padding-top: 40px;
 }
 
-#header, #footer, #content {
+#region-header, #region-footer, #content {
 	width: 732px;
 	margin: 0 auto;
 	text-align: left;
@@ -54,21 +54,18 @@ h2 {
 	text-align: left;
 }
 
-.sidebar {
-	width: 130px;
-}
-
-#sidebar-left {
+#region-left {
 	float: left;
 	width: 135px;
 }
 
-#sidebar-left .widget {
+#region-left .widget {
 	margin-right: 10px;
 }
 
-#sidebar-right {
+#region-right {
 	float: right;
+	width: 130px;
 }
 
 .sidebar-left #region-content, .sidebar-right #region-content {
@@ -81,13 +78,13 @@ h2 {
 	float: left;
 }
 
-#header h1 {
+#region-header h1 {
 	height: 68px;
 	width: 312px;
 	background: transparent url('banner.png') no-repeat;
 }
 
-#header h1 span {
+#region-header h1 span {
 	display: none;
 }
 
@@ -128,12 +125,12 @@ h2 {
 	clear: both;
 }
 
-#footer {
+#region-footer {
 	color: #333;
 	margin-top: 10px;
 }
 
-#footer a {
+#region-footer a {
 	color: #555;
 }
 
@@ -292,7 +289,7 @@ ul.flat {
 	margin-bottom: 10px;
 }
 
-.widget h3 {
+h3.widget-title {
 	color: black;
 	border-bottom: 1px solid rgb(204, 204, 204);
 	padding: 3px;
@@ -317,6 +314,7 @@ ul.flat {
 
 .teaser h3 {
 	margin-top: 0;
+	color: #666;
 }
 
 .sublinks {

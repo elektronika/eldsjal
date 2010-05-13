@@ -1,4 +1,4 @@
-<h3>Hoppa In</h3>
+<h3 class="widget-title">Hoppa In</h3>
 <form id="login" action="/login" method="post">
 	<?php echo input('text' ,'username', 'Användarnamn', $username); ?>
 	<?php echo input('password' ,'password', 'Lösenord'); ?>

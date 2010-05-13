@@ -1,2 +1,2 @@
-<h3>Utveckling serru!</h3>
+<h3 class="widget-title">Utveckling serru!</h3>
 <p>Här kan du se vad som händer med utvecklingen utav eldsjal.org. Om du är sugen på att hjälpa till så kan du alltid peta på intedinmamma, eller någon annan som verkar tuff.<br/></p><p>Det kanske inte går så fort, och det kanske inte blir så bra, men vi är söta och glada. :)</p>

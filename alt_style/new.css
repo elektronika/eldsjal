@@ -2,11 +2,11 @@
 	padding-top: 20px;
 }
 
-#sidebar-left {
+#region-left {
 	width: 205px;
 }
 
-#header, #footer, #content {
+#region-header, #region-footer, #content {
 	width: 802px;
 }
 
@@ -32,7 +32,7 @@
 	margin-bottom: 70px;
 }
 
-#region-content, #sidebar-right {
+#region-content, #region-right {
 	padding-top: 30px;
 	position: relative;
 	z-index: 2;

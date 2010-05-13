@@ -1,18 +1,19 @@
 <?php
 class TimelineModel extends AutoModel {
 	public function get(Array $categories, $only_new = FALSE, $limit = 20, $offset = 0) {
-		$categories[] = 0;
 		// $items = $this->db
-			// ->select('t.*, t.id AS href')
-			// ->from('timeline AS t');
-			// ->join('users AS u', 't.user_id = u.userid');
-			// ->join('acl AS default_acl', 't.category_id = default_acl.category_id AND default_acl.user_id = 0', 'left')
-			// ->join('acl AS user_acl', "t.category_id = user_acl.category_id AND user_acl.user_id = {$user_id}", 'left')
-			// ->where('GREATEST(IFNULL(user_acl.read, 0), IFNULL(default_acl.read, 0)) >', 0)
-			$result = $this->db->distinct()->order_by('id', 'desc')->where_in('category_id', $categories);
+		// ->select('t.*, t.id AS href')
+		// ->from('timeline AS t');
+		// ->join('users AS u', 't.user_id = u.userid');
+		// ->join('acl AS default_acl', 't.category_id = default_acl.category_id AND default_acl.user_id = 0', 'left')
+		// ->join('acl AS user_acl', "t.category_id = user_acl.category_id AND user_acl.user_id = {$user_id}", 'left')
+		// ->where('GREATEST(IFNULL(user_acl.read, 0), IFNULL(default_acl.read, 0)) >', 0)
+		$categories[] = 0;
+		$result = $this->db->distinct()->order_by('id', 'desc')->where_in('category_id', $categories);
 		if($only_new)
 			$result->where('new', 1);
 		$items = $result->get('timeline', $limit, $offset)->result();
+		
 		foreach($items as &$item) {
 			switch($item->type) {
 				case 'forum_new':

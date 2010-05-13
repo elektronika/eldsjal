@@ -578,9 +578,18 @@ function widget($widget) { ?>
 	</div>
 <?php }
 
-function widgets(Array $names) {
-	foreach($names as $name)
-		widget($name);
+function widgets($region_name) {
+	$widget_names = get_instance()->widgets->get($region_name);
+	if( ! empty($widget_names)) {
+		echo "<div class='region' id='region-{$region_name}'>";
+		foreach($widget_names as $name)
+			widget($name);
+		echo "</div>";
+	}
+}
+
+function has_widgets($region_name) {
+	return count(get_instance()->widgets->get($region_name)) > 0;
 }
 
 function wisdom_item($item) { ?>

@@ -29,11 +29,17 @@ class Widget
 {
     function run($name) {        
         $args = func_get_args();
+		
+		$filename = APPPATH.'widgets/'.$name.EXT;
+        if(file_exists($filename)) {
+	    	require_once $filename;
+	        $name = ucfirst($name);
+	        $widget = new $name();
+		} else {
+			require_once APPPATH.'widgets/static'.EXT;
+			$widget = new StaticWidget();
+		}
         
-        require_once APPPATH.'widgets/'.$name.EXT;
-        $name = ucfirst($name);
-        
-        $widget = new $name();
         call_user_func_array(array(&$widget, 'run'), array_slice($args, 1));
 		$widget->render(strtolower($name), (array) $widget);
     }

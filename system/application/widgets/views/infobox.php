@@ -1,4 +1,4 @@
-<h3>Om Eldsjäl</h3>
+<h3>Om Eldsjäl</h3 class="widget-title">
 <p>Föreningen Eldsjäl är helt utan kopplingar till politiska samt religiösa förbund. Föreningen Eldsjäl handlar om att samla människor med liknande intressen och underlätta för ökat utbyte av erfarenheter, värme och medmänsklighet. Föreningen Eldsjäl verkar för ökad kulturell bredd i hela Norden med fokus på kulturyttringar som inte får stor uppmärksamhet i den allmänna debatten. Föreningen Eldsjäl arbetar aktivt för att motarbeta mobbing, främlingsfientlighet och förtryck.</p>
 
 <p>Eldsjal.org är en tjänst som Föreningen Eldsjäl med stolthet tillhandahåller allmänheten kostnadsfritt, oavsett medlemsskap i föreningen för att sprida våra budskap och aktivt arbeta med våra målsättningar.</p>

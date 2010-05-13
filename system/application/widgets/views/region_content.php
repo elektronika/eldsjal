@@ -1,0 +1,1 @@
+<?php echo region_contents('content'); ?>
