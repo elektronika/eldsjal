@@ -34,7 +34,7 @@ class Acl {
 	protected function set($category_id, $right, $value){
 		$this->rights[$category_id][$right] = isset($this->rights[$category_id][$right]) ? max($this->rights[$category_id][$right], $value) : $value;
 		if((bool) $value)
-			$this->by_right[$right][] = $category_id;
+			$this->by_right[$right][$category_id] = $category_id;
 	}
 	
 	public function get_by_right($right = 'read') {
