@@ -158,6 +158,8 @@ class CI_Util {
 			$out .= 'ungefär en vecka';
 		elseif( $timeDiff < 29 * 24 * 3600 )
 			$out .= round($timeDiff / (7 * 24 * 3600)).' veckor';
+		elseif( $timeDiff < 60 * 24 * 3600 )
+			$out .= 'typ en m&aring;nad';
 		elseif( $timeDiff < 360 * 24 * 3600 )
 			$out .= round($timeDiff / (30 * 24 * 3600)).' m&aring;nader';
 		else
