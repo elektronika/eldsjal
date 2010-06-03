@@ -29,6 +29,7 @@ Class settings {
 	}
 	
 	public function set($key, $value, $user_id = 0) {
+		$this->settings[$key] = $value;
 		$this->CI->db->insert('settings', array('key' => $key, 'value' => $value, 'user_id' => $user_id));
 	}
 	

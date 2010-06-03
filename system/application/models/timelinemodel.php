@@ -17,10 +17,12 @@ class TimelineModel extends AutoModel {
 		foreach($items as &$item) {
 			switch($item->type) {
 				case 'forum_new':
-				case 'forum_reply':
 				case 'event_new':
-				case 'event_reply':
 				case 'wiki_new':
+					$item->href = '/forum/topic/'.$item->item_id;
+					break;
+				case 'forum_reply':
+				case 'event_reply':
 				case 'wiki_reply':
 					$item->href = '/forum/redirecttopost/'.$item->item_id;
 					break;
@@ -50,5 +52,9 @@ class TimelineModel extends AutoModel {
 			'new' => (int) $new
 		));
 		return $this->db->insert_id();
+	}
+	
+	public function delete($item_id, $type) {
+		$this->db->delete('timeline', array('item_id' => $item_id, 'type' => $type));
 	}
 }

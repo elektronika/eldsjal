@@ -307,6 +307,23 @@ h3.widget-title {
 	margin-top: 0;
 }
 
+h3 .right {
+	float: right;
+}
+
+h3 .right a {
+/*	font-weight: normal;*/
+	font-size: 0.9em;
+}
+
+a.current {
+	background: rgb(122, 80, 14);
+	color: white;
+	padding: 1px 3px;
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px;
+}
+
 .widget p, .widget ul, .widget h4 {
 	padding: 3px;
 	margin-top: 0;
@@ -621,9 +638,9 @@ textarea#form-item-body, .form-item-textarea {
 }
 
 #widget-new_timeline .item-thought { background-image: url('icons/lightbulb.png'); }
-#widget-new_timeline .item-forum { background-image: url('icons/comment.png'); }
+#widget-new_timeline .item-forum_new { background-image: url('icons/comment_add.png'); }
 #widget-new_timeline .item-forum_reply { background-image: url('icons/comment.png'); }
-#widget-new_timeline .item-event { background-image: url('icons/date.png'); }
+#widget-new_timeline .item-event_new { background-image: url('icons/date_add.png'); }
 #widget-new_timeline .item-event_reply { background-image: url('icons/date.png'); }
 #widget-new_timeline .item-event_new { background-image: url('icons/date_add.png'); }
 #widget-new_timeline .item-user { background-image: url('icons/user.png'); }

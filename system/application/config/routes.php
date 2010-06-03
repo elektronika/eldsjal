@@ -44,6 +44,7 @@ $route['default_controller'] = "welcome";
 $route['scaffolding_trigger'] = "";
 $route['login'] = 'auth/login';
 $route['logout'] = 'auth/logout';
+$route['main/(:any)'] = 'main/index';
 $route['register/(:num)/(:any)'] = 'auth/register2/$1/$2';
 $route['register'] = 'auth/register';
 $route['lostpassword'] = 'auth/lostpassword';

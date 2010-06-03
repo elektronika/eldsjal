@@ -259,6 +259,7 @@ class Forum extends MY_Controller {
 	public function post_delete($post_id) {
 		$topic_id = $this->models->forum->topic_id_for_post((int) $post_id);
 		$this->models->forum->delete_post((int) $post_id);
+		$this->models->timeline->delete($post_id, 'forum_reply');
 		$this->session->message('Inlägg raderat');
 		$this->redirect('/forum/topic/'.$topic_id);
 		/*
