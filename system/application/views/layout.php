@@ -13,7 +13,7 @@ else
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title><?php echo $site_name; ?> - <?php echo isset($page_title) ? $page_title : $slogan; ?></title>
-	<?php foreach($css as $stylesheet): ?>
+	<?php $css[] = 'alt_style/new.css'; foreach($css as $stylesheet): ?>
 	<link rel="stylesheet" href="/<?php echo $stylesheet.'?'.filemtime($stylesheet); ?>" type="text/css"/>
 	<?php endforeach; ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -31,8 +31,11 @@ else
 	<div id="content-wrap" class="<?php echo $sidebar_class; ?>">
 		<div id="content">
 			<?php widgets('left'); ?>
+			<div id="right-columns">
+			<?php widgets('highlight'); ?>
 			<?php widgets('content'); ?>
 			<?php widgets('right'); ?>
+			</div>
 			<div class="clear">&nbsp;</div>
 		</div>
 	</div> <!-- #content-wrap -->

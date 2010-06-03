@@ -185,7 +185,8 @@ class MY_Session extends CI_Session {
 	public function getMessages() {
 		$messages = array();
 		foreach($this->messageTypes as $type)
-			$messages[$type] = $this->flashdata($type);
+			if($this->flashdata($type) != '')
+				$messages[$type] = $this->flashdata($type);
 		return $messages;
 	}
 	

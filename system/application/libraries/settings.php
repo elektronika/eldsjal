@@ -30,6 +30,7 @@ Class settings {
 	
 	public function set($key, $value, $user_id = 0) {
 		$this->settings[$key] = $value;
+		$this->CI->db->delete('settings', array('key' => $key, 'user_id' => $user_id));
 		$this->CI->db->insert('settings', array('key' => $key, 'value' => $value, 'user_id' => $user_id));
 	}
 	

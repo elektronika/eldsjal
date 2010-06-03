@@ -23,6 +23,9 @@ class Acl {
 			foreach($rights as $right)
 				foreach(array('read', 'create', 'reply', 'admin') as $action)
 					$this->set($right->category_id, $action, $right->$action);
+		
+			if($this->session->isLoggedIn())
+				$this->set(-1, 'read', TRUE);
 		}
 		
 		return $this;

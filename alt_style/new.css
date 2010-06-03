@@ -1,12 +1,12 @@
 #upper-wrap {
-	padding-top: 20px;
+/*	padding-top: 20px;*/
 }
 
 #region-left {
 	width: 205px;
 }
 
-#region-header, #region-footer, #content {
+#region-footer, #content {
 	width: 802px;
 }
 
@@ -15,12 +15,12 @@
 }
 
 #widget-logo h1 {
-	background: transparent url('new_logo.png') no-repeat center center;
-	width: 270px;
-	height: 248px;
+	background: transparent url('new_logo_shadow.png') no-repeat center center;
+	width: 290px;
+	height: 278px;
 	position: absolute;
-	top: -100px;
-	left: -45px;
+	top: -165px;
+	left: -70px;
 	z-index: 1;
 }
 
@@ -29,11 +29,11 @@
 	display: block;
 	height: 70px;
 	margin-top: 30px;
-	margin-bottom: 70px;
+	margin-bottom: 35px;
 }
 
 #region-content, #region-right {
-	padding-top: 30px;
+/*	padding-top: 30px;*/
 	position: relative;
 	z-index: 2;
 }

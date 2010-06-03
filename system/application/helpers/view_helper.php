@@ -572,11 +572,16 @@ function tagcloud(Array $tags, $prefix) {
 	</div>
 <?php }
 
-function widget($widget) { ?>
+function widget($widget) { 
+	ob_start();
+	widget::run($widget);
+	$result = trim(ob_get_clean());
+	if( ! empty($result)) { ?>
 	<div class="widget" id="widget-<?php echo $widget; ?>">
-		<?php widget::run($widget); ?>
+		<?php echo $result; ?>
 	</div>
-<?php }
+<?php } 
+}
 
 function widgets($region_name) {
 	$widget_names = get_instance()->widgets->get($region_name);

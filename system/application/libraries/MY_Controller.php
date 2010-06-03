@@ -29,12 +29,13 @@ class MY_Controller extends Controller {
 		
 		// Styr upp widgets och sånadäringa prylar
 		if($this->session->isLoggedIn())
-			$this->widgets->set('left', $this->settings->get_array('widgets_left'));
+			$this->widgets->set('left',$this->settings->get_array('widgets_left'));
 		else
-			$this->widgets->set('left', $this->settings->get_array('widgets_left_guest'));
+			$this->widgets->set('left', array('logo', 'loginform', 'randomwisdom')); //$this->settings->get_array('widgets_left_guest')
 		
 		$this->widgets->set('right', $this->settings->get_array('widgets_right'));
-		$this->widgets->set('header', $this->settings->get_array('widgets_header'));
+		// $this->widgets->set('header', $this->settings->get_array('widgets_header'));
+		$this->widgets->add('header', 'topmenu');
 		$this->widgets->set('main', $this->settings->get_array('widgets_main'));
 		$this->widgets->set('footer', $this->settings->get_array('widgets_footer'));
 		$this->widgets->set('content', $this->settings->get_array('widgets_content'));
