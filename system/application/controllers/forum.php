@@ -332,23 +332,26 @@ class Forum extends MY_Controller {
 				isset($_POST['default_acl']['reply']));
 		
 			// Pytsa dit ACL'en för varje användare
-			foreach($_POST['user_acls'] as $user_id => $acl)
+			foreach($_POST['user_acls'] as $user_id => $acl) {
 				$this->models->forum->set_acl((int) $user_id, (int) $category_id,
 					isset($_POST['user_acls'][$user_id]['read']),
 					isset($_POST['user_acls'][$user_id]['create']),
 					isset($_POST['user_acls'][$user_id]['reply']),
 					isset($_POST['user_acls'][$user_id]['admin']));
+					$this->alerts->add('flush', (int) $user_id);
+				}
 		
 			// Lägg till ACL för användaren, om den finns
 			if(isset($_POST['new_acl']['username']) && ! empty($_POST['new_acl']['username'])) {
 				$user = $this->db->select('userid')->where('username', $this->input->xss_clean($_POST['new_acl']['username']))->get('users')->row();
-				if(isset($user->userid))
+				if(isset($user->userid)) {
 					$this->models->forum->set_acl($user->userid, (int) $category_id, 
 						isset($_POST['new_acl']['read']), 
 						isset($_POST['new_acl']['create']), 
 						isset($_POST['new_acl']['reply']), 
 						isset($_POST['new_acl']['admin']));
-				else
+					$this->alerts->add('flush', (int) $user->userid);
+				} else
 					$this->session->message('Sorry, ingen användare matchade det användarnamnet.', 'warning');
 			}
 		

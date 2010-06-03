@@ -5,15 +5,38 @@ Class settings {
 	
 	public function __construct() {
 		$this->CI = get_instance();
-		$this->settings = $this->load($this->CI->session->userid());
+		$this->load($this->CI->session->userid());
 	}
 	
-	protected function load($user_id = 0) {
+	protected function loadFromDatabase($user_id) {
 		$settings = array();
 		$result = $this->CI->db->where('user_id', 0)->or_where('user_id', (int) $user_id)->order_by('user_id', 'asc')->get('settings')->result();
 		foreach($result as $setting)
 			$settings[$setting->key] = $setting->value;
-		return $settings;
+		$this->settings = $settings;
+		$this->saveToCache();
+	}
+	
+	protected function load($user_id) {
+		if( ! $this->loadFromCache())
+			$this->loadFromDatabase($user_id);
+	}
+	
+	protected function loadFromCache() {
+		if($settings = $this->CI->session->userdata('settings_cache')) {
+			$this->settings = $settings;
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+	
+	protected function saveToCache() {
+		$this->CI->session->set_userdata('settings_cache', $this->settings);
+	}
+	
+	public function flush() {
+		$this->loadFromDatabase($this->CI->session->userid());
 	}
 	
 	public function get($key) {
@@ -29,7 +52,10 @@ Class settings {
 	}
 	
 	public function set($key, $value, $user_id = 0) {
-		$this->settings[$key] = $value;
+		if($user_id == $this->CI->session->userId()) {
+			$this->settings[$key] = $value;
+			$this->saveToCache();
+		}
 		$this->CI->db->delete('settings', array('key' => $key, 'user_id' => $user_id));
 		$this->CI->db->insert('settings', array('key' => $key, 'value' => $value, 'user_id' => $user_id));
 	}

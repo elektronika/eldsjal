@@ -4,6 +4,7 @@ class Acl {
 	protected $rights = array();
 	protected $by_right = array();
 	protected $loaded = FALSE;
+	protected $flush = FALSE;
 	
 	public function __get($var) {
 		return get_instance()->$var;
@@ -18,17 +19,42 @@ class Acl {
 	}
 	
 	protected function load() {
-		if( ! $this->loaded) {
-			$rights = $this->db->where('user_id', $this->session->userId())->or_where('user_id', 0)->get('acl')->result();
-			foreach($rights as $right)
-				foreach(array('read', 'create', 'reply', 'admin') as $action)
-					$this->set($right->category_id, $action, $right->$action);
-		
+		if( ! $this->loaded || $this->flush) {
+			if($this->flush || ! $this->loadFromCache())
+				$this->loadFromDatabase();
+			
 			if($this->session->isLoggedIn())
 				$this->set(-1, 'read', TRUE);
 		}
 		
 		return $this;
+	}
+	
+	protected function loadFromCache() {
+		if($rights = $this->session->userdata('acl_cache')) {
+			$this->setRights($rights);
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+	
+	protected function saveToCache(Array $rights) {
+		$this->session->set_userdata('acl_cache', $rights);
+	}
+	
+	protected function loadFromDatabase() {
+		$rights = $this->db->where('user_id', $this->session->userId())->or_where('user_id', 0)->get('acl')->result();
+		$this->setRights($rights);
+		$this->saveToCache($rights);
+	}
+	
+	protected function setRights(Array $rights) {
+		foreach($rights as $right)
+			foreach(array('read', 'create', 'reply', 'admin') as $action)
+				$this->set($right->category_id, $action, $right->$action);
+				
+		$this->loaded = TRUE;
 	}
 	
 	protected function set($category_id, $right, $value){
@@ -42,5 +68,13 @@ class Acl {
 			return $this->by_right[$right];
 		else
 			return array();
+	}
+	
+	public function flush() {
+		$this->rights = array();
+		$this->by_right = array();
+		$this->loaded = FALSE;
+		$this->flush = TRUE;
+		return $this;
 	}
 }

@@ -57,8 +57,12 @@ class Admin extends MY_Controller {
 	public function post_settings() {
 		$this->settings->delete_all();
 		foreach($_POST['items'] as $setting)
-			if( ! empty($setting['key']))
+			if( ! empty($setting['key'])) {
 				$this->settings->set($setting['key'], $setting['value'], $setting['user_id']);
+				if($setting['user_id'] != 0)
+					$this->alerts->add('flush', $setting['user_id']);
+			}
+		$this->alerts->add('flush');
 		$this->session->message('Jaru, nu är inställningarna ändrade med.');
 		$this->redirect('/admin/settings');
 	}
@@ -185,5 +189,11 @@ class Admin extends MY_Controller {
 	
 	public function acl_wisdom() {
 		return $this->acl->check($this->settings->get('wisdom_category'));
+	}
+	
+	public function get_flush() {
+		$this->acl->flush();
+		$this->settings->flush();
+		$this->view->template = 'layout';
 	}
 }

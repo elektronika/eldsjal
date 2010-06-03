@@ -9,6 +9,13 @@ class MY_Controller extends Controller {
 		// Lite profiler kanske?
 		if($this->settings->get('enable_profiler'))
 			$this->show_profiler = TRUE;
+			
+		// Alerts för cache etc
+		if($this->alerts->count('flush')) {
+			$this->acl->flush();
+			$this->settings->flush();
+			$this->alerts->remove('flush');
+		}
 		
 		// Mekka bra-att-ha-variabler i viewen
 		$this->view->template = $this->router->fetch_class().'_'.str_replace(array('get_', 'post_'), '', $this->router->fetch_method());
