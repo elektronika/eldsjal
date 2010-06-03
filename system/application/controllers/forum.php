@@ -312,38 +312,49 @@ class Forum extends MY_Controller {
 		$this->view->default_acl = $this->models->forum->get_default_acl((int) $category_id);
 		$this->view->user_acls = $this->models->forum->get_user_acls((int) $category_id);
 		$this->view->sublinks[] = array('title' => 'Tillbaka till kategorin', 'href' => '/forum/category/'.(int) $category_id);
+		$this->view->category = (object) array('title' => $category->forumCategoryName, 'body' => $category->forumCategoryDesc);
 	}
 	
 	public function post_admin($category_id) {		
-		// Sätt default-ACL'en
-		$this->models->forum->set_acl(0, (int) $category_id, 
-			isset($_POST['default_acl']['read']), 
-			isset($_POST['default_acl']['create']), 
-			isset($_POST['default_acl']['reply']));
+		$this->form_validation->set_rules('title', 'Namn', 'trim|xss_clean|required');
+		$this->form_validation->set_rules('body', 'Beskrivning', 'trim|xss_clean|required');
+		$this->form_validation->set_message('required', 'Något måste det stå, annars blir det galet.');	
 		
-		// Pytsa dit ACL'en för varje användare
-		foreach($_POST['user_acls'] as $user_id => $acl)
-			$this->models->forum->set_acl((int) $user_id, (int) $category_id,
-				isset($_POST['user_acls'][$user_id]['read']),
-				isset($_POST['user_acls'][$user_id]['create']),
-				isset($_POST['user_acls'][$user_id]['reply']),
-				isset($_POST['user_acls'][$user_id]['admin']));
+		if ($this->form_validation->run() == FALSE) {
+			$this->get_admin($category_id);
+		} else {
+			$this->db->update('forumcategory', array('forumCategoryName' => $this->input->post('title'), 'forumCategoryDesc' => $this->input->post('body')), array('forumCategoryId' => (int) $category_id));
+			
+			// Sätt default-ACL'en
+			$this->models->forum->set_acl(0, (int) $category_id, 
+				isset($_POST['default_acl']['read']), 
+				isset($_POST['default_acl']['create']), 
+				isset($_POST['default_acl']['reply']));
 		
-		// Lägg till ACL för användaren, om den finns
-		if(isset($_POST['new_acl']['username']) && ! empty($_POST['new_acl']['username'])) {
-			$user = $this->db->select('userid')->where('username', $this->input->xss_clean($_POST['new_acl']['username']))->get('users')->row();
-			if(isset($user->userid))
-				$this->models->forum->set_acl($user->userid, (int) $category_id, 
-					isset($_POST['new_acl']['read']), 
-					isset($_POST['new_acl']['create']), 
-					isset($_POST['new_acl']['reply']), 
-					isset($_POST['new_acl']['admin']));
-			else
-				$this->session->message('Sorry, ingen användare matchade det användarnamnet.', 'warning');
+			// Pytsa dit ACL'en för varje användare
+			foreach($_POST['user_acls'] as $user_id => $acl)
+				$this->models->forum->set_acl((int) $user_id, (int) $category_id,
+					isset($_POST['user_acls'][$user_id]['read']),
+					isset($_POST['user_acls'][$user_id]['create']),
+					isset($_POST['user_acls'][$user_id]['reply']),
+					isset($_POST['user_acls'][$user_id]['admin']));
+		
+			// Lägg till ACL för användaren, om den finns
+			if(isset($_POST['new_acl']['username']) && ! empty($_POST['new_acl']['username'])) {
+				$user = $this->db->select('userid')->where('username', $this->input->xss_clean($_POST['new_acl']['username']))->get('users')->row();
+				if(isset($user->userid))
+					$this->models->forum->set_acl($user->userid, (int) $category_id, 
+						isset($_POST['new_acl']['read']), 
+						isset($_POST['new_acl']['create']), 
+						isset($_POST['new_acl']['reply']), 
+						isset($_POST['new_acl']['admin']));
+				else
+					$this->session->message('Sorry, ingen användare matchade det användarnamnet.', 'warning');
+			}
+		
+			$this->session->message('Sidärja, då vart det uppdaterat. Snajsigt!');
+			$this->redirect('/forum/admin/'.(int) $category_id);
 		}
-		
-		$this->session->message('Sidärja, då vart det uppdaterat. Snajsigt!');
-		$this->redirect('/forum/admin/'.(int) $category_id);
 	}
 	
 	public function acl_admin($category_id = 0) {

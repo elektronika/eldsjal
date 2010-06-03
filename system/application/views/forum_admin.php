@@ -1,6 +1,10 @@
 <?php region('content'); ?>
 <div class="inputgrid">
 <?php echo form_open($form_action); ?>
+<fieldset><legend>Kategori</legend>
+<?php echo input('text', 'title', 'Kategorinamn', $category->title); ?>
+<?php echo textarea('body', 'Kategoribeskrivning', $category->body); ?>
+</fieldset>
 <fieldset><legend>Rättigheter</legend>
 <p>Bocka ur "Läsa" för en person för att radera alla dess rättigheter. Vill du lägga till en person så fyller du i användarnamnet i den tomma rutan längst ner. Om alla har rättighet att t ex skapa trådar så spelar det inte någon roll om en enskild användare har den rättigheten.</p>
 <table id="forum-user-rights">
