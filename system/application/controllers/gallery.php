@@ -249,6 +249,7 @@ class Gallery extends MY_Controller {
 		$this->db->delete('imageartlist', array('imageid' => $image->id));
 		@unlink($this->settings->get('gallery_folder').$image->id.'.'.$this->settings->get('default_image_extension'));
 		@unlink($this->settings->get('gallery_folder').'tn_'.$image->id.'.'.$this->settings->get('default_image_extension'));
+		$this->models->timeline->remove($image->id, 'image');
 		$this->session->message('Poff botta!');
 		$this->redirect('/gallery');
 	}
