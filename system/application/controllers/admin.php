@@ -192,8 +192,71 @@ class Admin extends MY_Controller {
 	}
 	
 	public function get_flush() {
-		$this->acl->flush();
-		$this->settings->flush();
-		$this->view->template = 'layout';
+		$this->alerts->add('flush', $this->session->userId());
+		$this->redirect('/main');
+	}
+	
+	public function get_massmail() {
+		$this->view->page_title = 'Massmail';
+		$this->view->from_email = $this->settings->get('email_from');
+		$this->view->from_name = $this->settings->get('email_from_name');
+	}
+	
+	public function post_massmail() {
+		$this->load->library('form_validation');
+		
+		$this->form_validation->set_rules('title', 'Ämne', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('from_email', 'Från', 'trim|required|valid_email|xss_clean');
+		$this->form_validation->set_rules('from_name', 'Från', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('body', 'Meddelande', 'trim|required|xss_clean');
+		
+		$this->form_validation->set_message('required', 'Måste fyllas i. Jättemåste.');
+		$this->form_validation->set_message('valid_email', 'Sorry, det måste vara en riktig adress.');
+		
+		if( ! $this->form_validation->run() === TRUE) {
+			$this->get_massmail();
+		} else {
+			$this->load->library('email');
+			$this->email->initialize(array('bcc_batch_mode' => TRUE));
+			$emails = array();
+			$success_count = 0;
+			$fail_count = 0;
+			
+			if( ! $this->input->post('broadcast')) {
+				$emails[] = $this->models->user->get_by_id($this->session->userId())->email;
+			} else {				
+				// Hämta alla adresser
+				$users = $this->db->select('email')->get('users')->result();
+				
+				// Validera adresser
+				foreach($users as $user)
+					if($this->form_validation->valid_email(trim($user->email)))
+						$emails[] = trim($user->email);
+			}
+
+			// And off we go!
+			
+			$count = count($emails);
+			
+			$this->email->from($this->input->post('from_email'), $this->input->post('from_name'));
+
+			$this->email->subject($this->input->post('title'));
+			$this->email->message($this->input->post('body'));
+			
+			foreach($emails as $email) {
+				$this->email->to($email);
+				if($this->email->send())
+					$success_count++;
+				else
+					$fail_count++;
+			}
+			
+			$this->session->message('Av '.$count.' mail lyckades '.$success_count);
+			$this->redirect('/admin/massmail');
+		}
+	}
+	
+	public function acl_massmail() {
+		return $this->session->isAdmin();
 	}
 }

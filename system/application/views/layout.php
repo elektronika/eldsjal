@@ -13,7 +13,7 @@ else
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title><?php echo $site_name; ?> - <?php echo isset($page_title) ? $page_title : $slogan; ?></title>
-	<?php $css = array('alt_style/style.css'); foreach($css as $stylesheet): ?>
+	<?php foreach($css as $stylesheet): ?>
 	<link rel="stylesheet" href="/<?php echo $stylesheet.'?'.filemtime($stylesheet); ?>" type="text/css"/>
 	<?php endforeach; ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>

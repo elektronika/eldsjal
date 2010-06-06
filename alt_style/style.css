@@ -546,6 +546,7 @@ span.userimage {
 .usermenu .admin-settings { background-image: url('icons/application_form_edit.png'); }
 .usermenu .admin-permissions { background-image: url('icons/lock.png'); }
 .usermenu .admin-log { background-image: url('icons/error.png'); }
+.usermenu .admin-massmail { background-image: url('icons/transmit.png'); }
 .usermenu .board { background-image: url('icons/information.png'); }
 
 /* Extramarginalen för att separera delar av menyn */
