@@ -1,7 +1,7 @@
 <?php
 class Calendar extends MY_Controller {
 	function get_index() {
-		$this->view->upcoming = $this->models->event->get_upcoming(5, $this->session->usertype());
+		$this->view->upcoming = $this->models->event->get_upcoming($this->acl->get_by_right('read'), 5);
 		$this->view->attending = $this->models->event->get_upcoming_by_attendance($this->session->userId());
 		$this->view->page_title = 'Kalendern';
 		$this->view->sublinks[] = array('href' => '/calendar/browse/'.date('Y/m/j'), 'title' => 'Visa idag');
@@ -17,7 +17,7 @@ class Calendar extends MY_Controller {
 		if( ! is_null($year)) {
 			$timestamp_start = $this->util->timestamp_start($year, $month, $day);
 			$timestamp_end = $this->util->timestamp_end($year, $month, $day);
-			$events = $this->models->event->get_interval($timestamp_start, $timestamp_end, $this->session->usertype());
+			$events = $this->models->event->get_interval($timestamp_start, $timestamp_end, $this->acl->get_by_right('read'));
 			$this->view->sublinks[] = array('href' => '/calendar/browse', 'title' => 'Visa i en lång lista istället');
 			
 			$this->view->year = $year;
@@ -46,7 +46,7 @@ class Calendar extends MY_Controller {
 	}
 
 	function get_upcoming() {
-		$this->view->items = $this->models->event->get_upcoming(NULL, $this->session->usertype());
+		$this->view->items = $this->models->event->get_upcoming($this->acl->get_by_right('read'));
 		$this->view->template = 'list';
 		$this->view->page_title = 'Kommande i kalendern';
 		$this->view->sublinks[] = array('href' => '/calendar/browse/'.date('Y/m/j'), 'title' => 'Visa idag');

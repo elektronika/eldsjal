@@ -1,14 +1,14 @@
 <?php
 class EventModel extends AutoModel {
-	public function get_upcoming($limit = NULL, $userlevel = 0) {
+	public function get_upcoming(Array $categories, $limit = NULL) {
 		$events =  $this->db
 			->select("ft.topicname AS title, ft.topicid AS id, ft.date_from, ft.topicdate AS created, DATE(FROM_UNIXTIME(ft.date_from)) AS body, u.userid, u.username, CONCAT('/forum/topic/', ft.topicid) AS href", FALSE)
 			->from('forumtopics AS ft')
 			->join('users AS u', 'u.userid = ft.topicposterid')
-			->join('forumcategory AS fc', 'ft.forumcategoryid = fc.forumcategoryid')
+			// ->join('forumcategory AS fc', 'ft.forumcategoryid = fc.forumcategoryid')
 			// ->join('locations AS l', 'e.locationid = l.locationid')
 			->where('ft.date_from >=', time())
-			->where('fc.forumsecuritylevel <=', $userlevel)
+			->where_in('ft.forumcategoryid', $categories)
 			->order_by('ft.date_from ASC');
 		
 		if( ! is_null($limit))
@@ -29,16 +29,16 @@ class EventModel extends AutoModel {
 			->get()->result();
 	}
 	
-	public function get_interval($timestamp_start, $timestamp_end, $userlevel = 0) {
+	public function get_interval($timestamp_start, $timestamp_end, Array $categories) {
 		return $this->db
 			->select("ft.topicname AS title, ft.topicid AS id, ft.date_from, ft.date_to, ft.topicdate AS created, u.userid, u.username, DATE(FROM_UNIXTIME(ft.date_from)) AS body, CONCAT('/forum/topic/', ft.topicid) AS href", FALSE)
 			->from('forumtopics AS ft')
 			->join('users AS u', 'ft.topicposterid = u.userid')
-			->join('forumcategory AS fc', 'ft.forumcategoryid = fc.forumcategoryid')
+			// ->join('forumcategory AS fc', 'ft.forumcategoryid = fc.forumcategoryid')
 			// ->join('locations AS l', 'e.locationid = l.locationid')
 			->where('date_from >= ', $timestamp_start)
 			->where('date_from <=', $timestamp_end)
-			->where('fc.forumsecuritylevel <=', $userlevel)
+			->where_in('ft.forumcategoryid', $categories)
 			->where('is_event', 1)
 			->order_by('date_from', 'asc')
 			->order_by('date_to', 'asc')
