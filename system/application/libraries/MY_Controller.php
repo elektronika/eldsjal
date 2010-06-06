@@ -35,6 +35,8 @@ class MY_Controller extends Controller {
 		$this->view->body_class = implode(' ', array_filter(array_unique($body_classes)));
 		
 		// Styr upp widgets och sånadäringa prylar
+		
+		// Egentligen borde settings-systemet känna av om man är inloggad eller inte, men vafan.
 		if($this->session->isLoggedIn())
 			$this->widgets->set('left',$this->settings->get_array('widgets_left'));
 		else

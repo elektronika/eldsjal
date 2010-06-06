@@ -53,7 +53,8 @@ class Acl {
 		foreach($rights as $right)
 			foreach(array('read', 'create', 'reply', 'admin') as $action)
 				$this->set($right->category_id, $action, $right->$action);
-				
+		
+		$this->flush = FALSE;		
 		$this->loaded = TRUE;
 	}
 	
@@ -75,6 +76,7 @@ class Acl {
 		$this->by_right = array();
 		$this->loaded = FALSE;
 		$this->flush = TRUE;
+		$this->load();
 		return $this;
 	}
 }

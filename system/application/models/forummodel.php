@@ -2,6 +2,13 @@
 class ForumModel extends AutoModel {
 	public function get_categories_for_usertype($usertype = 0, $user_id = 0, $last_visit = NULL, $right = 'read') {
 		// WOHO, nästan vettigt normaliserat! :D
+		
+		/*
+			Ehm, den här metoden borde egentligen ta en array med kategori-id'n. Att göra sig beroende av ACL-libbet är lite dumt i längden.
+		*/
+		
+		$acls = $this->acl->get_by_right('read');
+		
 		$categories = $this->db->query(
 			"SELECT
 				fc.forumCategoryName AS title,
@@ -17,16 +24,12 @@ class ForumModel extends AutoModel {
 			LEFT JOIN forumtracks AS fts
 				ON ft.topicid = fts.topic_id 
 				AND fts.user_id = {$user_id}
-			LEFT JOIN acl AS default_acl
-				ON fc.forumCategoryId = default_acl.category_id
-				AND default_acl.user_id = 0
-			LEFT JOIN acl AS user_acl
-				ON fc.forumCategoryId = user_acl.category_id
-				AND user_acl.user_id = {$user_id}
-			WHERE GREATEST(IFNULL(user_acl.{$right}, 0), IFNULL(default_acl.{$right}, 0)) > 0
-			GROUP BY ft.forumcategoryid
+			WHERE fc.forumcategoryid IN (".implode(',',$acls).")
+			GROUP BY fc.forumcategoryid
 			ORDER BY fc.forumcategorysortorder"
 		)->result();
+		
+		// WHERE GREATEST(IFNULL(user_acl.{$right}, 0), IFNULL(default_acl.{$right}, 0)) > 0
 				
 		if(is_null($last_visit))
 			$last_visit = time();

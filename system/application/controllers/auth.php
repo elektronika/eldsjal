@@ -12,6 +12,8 @@ class Auth extends MY_Controller {
 				$this->session->message('Inloggad och klar!');
 				$this->util->trail('loggade precis in');
 				
+				$this->alerts->add('flush', $this->session->userId());
+				
 				if($this->input->post('cookie'))
 					setcookie("username", $this->input->post('username'), time()+60*60*24*30);
 				else

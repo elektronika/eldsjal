@@ -2,8 +2,10 @@
 	<span class="left">Senaste färskaste!</span> 
 	<?php if($show_filter): ?>
 		<span class="right">
-			<a<?php if($timeline_filter == 'all') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=all">Visa nytt + svar</a> 
-			<a<?php if($timeline_filter == 'new') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=new">Visa bara nytt</a>
+			Visa: 
+			<a<?php if($timeline_filter == 'all') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=all">nytt + svar</a> 
+			<a<?php if($timeline_filter == 'new') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=new">bara nytt</a>
+			<?php /* <a<?php if($timeline_filter == 'local') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=local">nära mig</a> */ ?>
 		</span>
 	<?php endif;?>
 </h3>

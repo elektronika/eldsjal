@@ -1,4 +1,7 @@
 <?php region('content'); ?>
+<p class="forum-category-body">
+	<?php echo $category->forumCategoryDesc; ?>
+</p>
 <table id="forum-topics">
 	<thead>
 		<tr>
