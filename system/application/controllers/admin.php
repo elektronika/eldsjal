@@ -203,6 +203,7 @@ class Admin extends MY_Controller {
 	}
 	
 	public function post_massmail() {
+		die('Näe, vi väntar nog lite med den här funktionen');
 		$this->load->library('form_validation');
 		
 		$this->form_validation->set_rules('title', 'Ämne', 'trim|required|xss_clean');
@@ -226,7 +227,7 @@ class Admin extends MY_Controller {
 				$emails[] = $this->models->user->get_by_id($this->session->userId())->email;
 			} else {				
 				// Hämta alla adresser
-				$users = $this->db->select('email')->get('users')->result();
+				$users = $this->db->select('email')->where('newsletter', 1)->get('users')->result();
 				
 				// Validera adresser
 				foreach($users as $user)
@@ -234,24 +235,18 @@ class Admin extends MY_Controller {
 						$emails[] = trim($user->email);
 			}
 
-			// And off we go!
-			
-			$count = count($emails);
-			
+			// And off we go!		    
+			$this->email->to($this->input->post('from_email'));
+			$this->email->bcc($emails);
 			$this->email->from($this->input->post('from_email'), $this->input->post('from_name'));
-
 			$this->email->subject($this->input->post('title'));
 			$this->email->message($this->input->post('body'));
+			if($this->email->send())
+				$success_count++;
+			else
+				$fail_count++;
 			
-			foreach($emails as $email) {
-				$this->email->to($email);
-				if($this->email->send())
-					$success_count++;
-				else
-					$fail_count++;
-			}
-			
-			$this->session->message('Av '.$count.' mail lyckades '.$success_count);
+			$this->session->message('Av '.count($emails).' mail lyckades '.$success_count);
 			$this->redirect('/admin/massmail');
 		}
 	}

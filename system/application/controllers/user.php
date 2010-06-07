@@ -125,7 +125,7 @@ class User extends MY_Controller {
 			// Ehm, ja, egentligen borde väl mer utav det här ske i user-modellen. Men wtf.
 			
 			// Users-tabellen
-			$fields = array('username', 'email', 'presentation', 'privacy', 'first_name', 'last_name', 'msn', 'icq', 'webpage', 'city', 'inhabitance', 'public_email');
+			$fields = array('username', 'email', 'presentation', 'privacy', 'first_name', 'last_name', 'msn', 'icq', 'webpage', 'city', 'inhabitance', 'public_email', 'newsletter');
 			$data = (object) $this->input->post_array($fields);
 			$data->yahoo = $this->input->post('phone');
 			$this->db->update('users', $data, array('userid' => $user->userid));

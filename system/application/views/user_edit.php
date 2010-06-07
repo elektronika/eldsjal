@@ -6,6 +6,7 @@ form_open_multipart($form_action)
 .'<p>För att kunna ändra någon utav dessa uppgifterna så måste du fylla i ditt lösenord.</p>'
 .input('text', 'username', 'Användarnamn', $user->username)
 .input('text', 'email', 'E-mail, visas inte på presentationen', $user->email)
+.form_label(form_checkbox('newsletter', 1, $user->newsletter).'Ja, det är ok att ni skickar information som rör Eldsjäl till min e-mailadress.')
 .input('password', 'old_password', 'Ditt lösenord')
 .input('password', 'new_password', 'Nytt lösenord')
 .input('password', 'new_password_confirm', 'Nytt lösenord igen')
