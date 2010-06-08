@@ -10,7 +10,7 @@ class New_timeline extends Widget {
 				unset($categories[$cat_id]);
 		
 		if(isset($_GET['timeline_filter']) && $this->session->isLoggedIn())
-			if(in_array($_GET['timeline_filter'], array('all', 'new', 'location')))
+			if(in_array($_GET['timeline_filter'], array('all', 'new', 'local')))
 				$this->settings->set('timeline_filter', $_GET['timeline_filter'], $this->session->userId());
 		
 		$show_only_new = $this->settings->get('timeline_filter') == 'new';
