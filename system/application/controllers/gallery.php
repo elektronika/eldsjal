@@ -134,7 +134,7 @@ class Gallery extends MY_Controller {
 				$image = (object) $this->input->post_array(array('title', 'body', 'private'));
 				$image_id = $this->models->image->save($image);
 				
-				$this->models->timeline->add($this->session->userId(), 'image', $image_id, $image->title, $image->body);
+				$this->models->timeline->add($this->session->userId(), 'image', $image_id, $image->title, $image->body, TRUE, NULL, 0, $this->session->userdata('location'));
 
 				// Byt namn på originalfilen
 				$original_file = $this->settings->get('original_image_folder').$image_id.$upload_data['file_ext'];

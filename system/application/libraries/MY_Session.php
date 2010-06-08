@@ -151,16 +151,28 @@ class MY_Session extends CI_Session {
 			->get('users')->row();
 
 		if(isset($user->userId)) {
-			$this->set_userdata('userid', $user->userId);
-			$this->set_userdata('username', $user->username);
-			$this->set_userdata('usertype', $user->userType);
-			$this->set_userdata('lastlogin', $this->object->util->assureTimestamp($user->lastLogin));
+			$this->load();
 			$this->object->db->update('users', array('ping' => time(), 'lastlogin' => $this->object->util->mysql_date()), array('userid' => $user->userId));
 
 			return true;
 		} else {
 			return false;
 		}		
+	}
+	
+	protected function load($user = NULL) {
+		if(is_null($user))
+			$user = $this->object->db->where('userid', $this->userId())->get('users')->row();
+		
+		$this->set_userdata('userid', $user->userId);
+		$this->set_userdata('username', $user->username);
+		$this->set_userdata('usertype', $user->userType);
+		$this->set_userdata('location', $user->city);
+		$this->set_userdata('lastlogin', $this->object->util->assureTimestamp($user->lastLogin));
+	}
+	
+	public function flush() {
+		$this->load();
 	}
 
 	public function hash($password, $salt) {

@@ -14,6 +14,7 @@ class MY_Controller extends Controller {
 		if($this->alerts->count('flush')) {
 			$this->acl->flush();
 			$this->settings->flush();
+			$this->session->flush();
 			$this->alerts->remove('flush');
 		}
 		

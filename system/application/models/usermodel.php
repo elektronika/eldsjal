@@ -138,7 +138,7 @@ class UserModel extends AutoModel {
 	}
 	
 	public function get_by_birthday($month, $day) {
-		return $this->db->select('userid, username, slug')->where(array('born_month' => $month, 'born_date' => $day))->get('users')->result();
+		return $this->db->select('userid, username, ping')->where(array('born_month' => $month, 'born_date' => $day))->get('users')->result();
 	}
 	
 	public function get_latest_logins($limit = 10) {
@@ -228,9 +228,11 @@ class UserModel extends AutoModel {
 		$this->db->delete('user_favorites', array('user_id' => $user_id, 'favorite_id' => $favorite_id));
 	}
 	
-	public function get_favorites($user_id, $only_online = FALSE) {
+	public function get_favorites($user_id, $only_online = FALSE, $location = FALSE) {
 		if($only_online)
 			$this->db->where('ping >', (time() - $this->settings->get('online_timeout')));
+		if($location)
+			$this->db->where('city', $location);
 		return $this->db->select('username, userid, ping')->where('user_id', $user_id)->join('users', 'userid = favorite_id')->order_by('ping', 'desc')->get('user_favorites')->result();
 	}
 }

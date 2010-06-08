@@ -1,6 +1,6 @@
 <?php
 class TimelineModel extends AutoModel {
-	public function get(Array $categories, $only_new = FALSE, $limit = 20, $offset = 0) {
+	public function get(Array $categories, $only_new = FALSE, $location = FALSE, $limit = 20, $offset = 0) {
 		// $items = $this->db
 		// ->select('t.*, t.id AS href')
 		// ->from('timeline AS t');
@@ -12,6 +12,8 @@ class TimelineModel extends AutoModel {
 		$result = $this->db->distinct()->order_by('id', 'desc')->where_in('category_id', $categories);
 		if($only_new)
 			$result->where('new', 1);
+		if($location)
+			$result->where('location', $location);
 		$items = $result->get('timeline', $limit, $offset)->result();
 		
 		foreach($items as &$item) {
@@ -39,7 +41,7 @@ class TimelineModel extends AutoModel {
 		return $items;
 	}
 	
-	public function add($user_id, $type, $item_id, $title, $body, $new = TRUE, $created = NULL, $category = 0) {
+	public function add($user_id, $type, $item_id, $title, $body, $new = TRUE, $created = NULL, $category = 0, $location = NULL) {
 		$this->db->delete('timeline', array('item_id' => $item_id, 'type' => $type));
 		$this->db->insert('timeline', array(
 			'user_id' => $user_id,
@@ -49,6 +51,7 @@ class TimelineModel extends AutoModel {
 			'body' => $body,
 			'created' => is_null($created) ? time() : $created,
 			'category_id' => $category,
+			'location' => $location,
 			'new' => (int) $new
 		));
 		return $this->db->insert_id();

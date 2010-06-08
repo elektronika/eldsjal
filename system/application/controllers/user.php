@@ -164,6 +164,8 @@ class User extends MY_Controller {
 				$this->session->message('Uppdaterat. Ja jävlar vad uppdaterat!');
 			}
 			
+			$this->alerts->add('flush', $user->userid);
+			
 			$this->redirect('/user/'.$user->userid);
 		}
 	}
