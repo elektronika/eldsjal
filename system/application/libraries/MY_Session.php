@@ -151,7 +151,7 @@ class MY_Session extends CI_Session {
 			->get('users')->row();
 
 		if(isset($user->userId)) {
-			$this->load();
+			$this->load($user);
 			$this->object->db->update('users', array('ping' => time(), 'lastlogin' => $this->object->util->mysql_date()), array('userid' => $user->userId));
 
 			return true;
