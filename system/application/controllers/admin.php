@@ -254,4 +254,29 @@ class Admin extends MY_Controller {
 	public function acl_massmail() {
 		return $this->session->isAdmin();
 	}
+	
+	public function get_convertfriends() {
+		$friendships = $this->db->get('friends')->result();
+		
+		foreach($friendships as $friendship) {
+			$this->models->user->add_favorite($friendship->user_id, $friendship->friend_id);
+			$this->models->user->add_favorite($friendship->friend_id, $friendship->user_id);
+		}
+	}
+	
+	public function acl_convertfriends() {
+		return $this->session->isAdmin();
+	}
+	
+	public function get_flushall() {
+		$users = $this->db->select('userid')->get('users')->result();
+		foreach($users as $user)
+			$this->alerts->add('flush', $user->userid);
+		$this->session->message(count($users).' användare flushade!');
+		$this->redirect('/main');
+	}
+	
+	public function acl_flushall() {
+		return $this->session->isAdmin();
+	}
 }

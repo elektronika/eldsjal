@@ -61,7 +61,6 @@ class People extends MY_Controller {
 			$item->body = truncate(remove_tags($item->body), 110);
 			$item->birthday = mktime(0, 0, 0, $item->born_month, $item->born_date, $item->born_year);
 			$item->username = $item->first_name.' "'.$item->username.'" '.$item->last_name;
-			$item->online = ($item->ping > (time() - $this->settings->get('online_timeout')));
 		}
 		
 		$locations = $this->models->location->get_all_assoc();

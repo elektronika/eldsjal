@@ -34,6 +34,7 @@ class Usermenu extends Widget {
 			$this->items[] = (object) array('href' => '/admin/log', 'title' => 'Logg'.$this->alert_counter('log'), 'class' => 'admin-log');			
 			$this->items[] = (object) array('href' => '/admin/massmail', 'title' => 'Massmail', 'class' => 'admin-massmail');			
 			$this->items[] = (object) array('href' => '/admin/messages', 'title' => 'Systemmeddelanden', 'class' => 'admin-messages');			
+			$this->items[] = (object) array('href' => '/admin/flushall', 'title' => 'Flusha alla', 'class' => 'admin-flushall');			
 		}
 
 		$this->items[] = (object) array('href' => '/user/'.$this->session->userid().'/edit', 'title' => 'Inställningar', 'class' => 'settings');

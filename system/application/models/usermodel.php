@@ -228,7 +228,9 @@ class UserModel extends AutoModel {
 		$this->db->delete('user_favorites', array('user_id' => $user_id, 'favorite_id' => $favorite_id));
 	}
 	
-	public function get_favorites($user_id) {
+	public function get_favorites($user_id, $only_online = FALSE) {
+		if($only_online)
+			$this->db->where('ping >', (time() - $this->settings->get('online_timeout')));
 		return $this->db->select('username, userid, ping')->where('user_id', $user_id)->join('users', 'userid = favorite_id')->order_by('ping', 'desc')->get('user_favorites')->result();
 	}
 }

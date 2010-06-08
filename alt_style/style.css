@@ -552,6 +552,7 @@ span.online {
 .usermenu .admin-log { background-image: url('icons/error.png'); }
 .usermenu .admin-massmail { background-image: url('icons/transmit.png'); }
 .usermenu .admin-messages { background-image: url('icons/email_edit.png'); }
+.usermenu .admin-flushall { background-image: url('icons/wand.png'); }
 .usermenu .board { background-image: url('icons/information.png'); }
 
 /* Extramarginalen för att separera delar av menyn */
