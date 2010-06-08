@@ -138,6 +138,7 @@ class Forum extends MY_Controller {
 		$this->view->is_event = $this->input->get('event');
 		$this->view->years_ahead = $this->settings->get('calendar_years_ahead');
 		$this->view->years_back = 0;
+		$this->view->locations = array('0' => '-') + $this->models->location->get_all_assoc();
 	}
 	
 	public function post_new($id) {
@@ -163,7 +164,8 @@ class Forum extends MY_Controller {
 				'is_event' => (int) $this->input->post('is_event'),
 				'is_wiki' => (int) $this->input->post('is_wiki'),
 				'date_from' => $date_from,
-				'date_to' => $date_to
+				'date_to' => $date_to,
+				'location_id' => (int) $this->input->post('location')
 			));
 			
 			if((bool) $this->input->post('is_event'))
@@ -199,6 +201,7 @@ class Forum extends MY_Controller {
 		$this->view->years_back = 0;
 		$this->view->breadcrumbs[] = array('href' => '/forum', 'title' => 'Forum');
 		$this->view->breadcrumbs[] = array('href' => '/forum/category/'.$topic->forumCategoryID, 'title' => $topic->forumCategoryName);		
+		$this->view->locations = array('0' => '-') + $this->models->location->get_all_assoc();
 	}
 	
 	public function post_edit($post_id) {
@@ -232,7 +235,8 @@ class Forum extends MY_Controller {
 					'is_event' => (int) $this->input->post('is_event'),
 					'date_from' => $date_from,
 					'date_to' => $date_to,
-					'is_wiki' => (int) $this->input->post('is_wiki')
+					'is_wiki' => (int) $this->input->post('is_wiki'),
+					'location_id' => (int) $this->input->post('location')
 				));
 			}
 			if($post->body != $this->input->post('body'))

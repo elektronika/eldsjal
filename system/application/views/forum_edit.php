@@ -22,6 +22,10 @@ if($is_first_post) {
 	echo datepicker('date_from', $years_ahead, $years_back, $topic->date_from).' - '.datepicker('date_to', $years_ahead, $years_back, $topic->date_to);
 	echo "</div>";
 	echo form_fieldset_close();
+	echo form_fieldset('Plats');
+	echo form_label('Plats/område');
+	echo form_dropdown('location', $locations, $topic->location_id);
+	echo form_fieldset_close();
 }
 echo submit('Spara!');
 ?>

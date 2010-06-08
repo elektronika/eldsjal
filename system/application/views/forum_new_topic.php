@@ -11,6 +11,10 @@ echo form_label('Datum', 'date');
 echo datepicker('date_from', $years_ahead, $years_back).' - '.datepicker('date_to', $years_ahead, $years_back);
 echo '</div>';
 echo form_fieldset_close();
+echo form_fieldset('Plats');
+echo form_label('Plats/område');
+echo form_dropdown('location', $locations);
+echo form_fieldset_close();
 echo submit('Hit it!');
 ?>
 </form>
