@@ -118,6 +118,7 @@ class Forum extends MY_Controller {
 		$this->util->trail('kikar runt i forumkategorin '.$category->forumCategoryName, $category->forumSecurityLevel);
 		$this->view->page_title = $category->forumCategoryName;
 		$this->view->breadcrumbs[] = array('href' => '/forum', 'title' => 'Forum');
+		$this->view->administrators = $this->models->user->get_by_ids($this->acl->get_users_by_right((int) $id, 'admin'));
 		if($this->acl_new($id))
 			$this->view->sublinks[] = array('href' => '/forum/new/'.$category->forumCategoryId, 'title' => 'Ny tråd');
 		if($this->acl_admin($id))

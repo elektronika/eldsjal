@@ -166,6 +166,8 @@ class Auth extends MY_Controller {
 			
 			$this->models->user->set_password((int) $user_id, $this->input->post('new_password'));
 			
+			$this->models->timeline->add($user->user_id, 'user', $user->user_id, $user->first_name.' "'.$user->username.'" '.$user->last_name, $user->presentation, TRUE, NULL, -1, $user->city);
+			
 			// Den här är duplicerad från users/edit, känns inte så DRY
 			$this->handle_image($user);
 			

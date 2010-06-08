@@ -31,6 +31,9 @@ class People extends MY_Controller {
 		if($this->input->get('online'))
 			$items->where('ping >', (time() - $this->settings->get('online_timeout')));
 		
+		if($this->input->get('faddrar'))
+			$items->join('acl', 'acl.user_id = users.userid AND acl.category_id = '.$this->settings->get('fadder_category'));
+		
 		if($city = $this->input->get('city'))
 			if($city != 'all')
 				$items->where('city', (int) $city);
@@ -76,6 +79,7 @@ class People extends MY_Controller {
 			.form_dropdown('sort_by', $sort_options, $this->input->get('sort_by'))
 			.form_label(form_checkbox('online', 1, $this->input->get('online')).'Visa bara folk som är online', 'does')
 			.form_label(form_checkbox('faddrade', 1, $this->input->get('faddrade')).'Visa bara folk som har en fadder', 'faddrade')
+			.form_label(form_checkbox('faddrar', 1, $this->input->get('faddrar')).'Visa bara faddrar', 'faddrar')
 			.submit('GE MIG DOM!')
 			.form_close();
 					

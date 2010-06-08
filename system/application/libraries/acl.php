@@ -79,4 +79,12 @@ class Acl {
 		$this->load();
 		return $this;
 	}
+	
+	public function get_users_by_right($category_id, $right = 'read') {
+		$users = $this->db->where('category_id', $category_id)->where($right, 1)->get('acl')->result();
+		$out = array();
+		foreach($users as $user)
+			$out[$user->user_id] = $user->user_id;
+		return $out;
+	}
 }

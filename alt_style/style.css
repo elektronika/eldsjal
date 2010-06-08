@@ -229,6 +229,7 @@ label {
 #forum-topics, #forum-categories, #forum-user-rights, #messages {
 	border: hidden;
 	border-collapse: collapse;
+	clear: both;
 }
 
 #forum-topics td, #forum-categories td, #forum-user-rights td, #messages td {
@@ -290,6 +291,20 @@ thead {
 
 .category-updated {
 	white-space: nowrap;
+}
+
+.forum-category-body .left {
+	float: left;
+	width: 75%;
+}
+
+.forum-category-body .right {
+	float: right;
+	width: 25%;
+}
+
+.forum-category-body .right h3 {
+	margin: 0;
 }
 
 .message-counterpart { background-image: url('icons/email_open.png'); }
@@ -948,7 +963,7 @@ a.thumbnail {
 }
 
 /* Userfavorites-widgeten */
-#widget-userfavorites span a {
+#widget-userfavorites li span a {
 	display: none;
 	color: #999;
 }

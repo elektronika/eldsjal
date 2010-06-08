@@ -1,7 +1,19 @@
 <?php region('content'); ?>
-<p class="forum-category-body">
-	<?php echo $category->forumCategoryDesc; ?>
-</p>
+<div class="forum-category-body">
+	<div class="left">
+		<p><?php echo $category->forumCategoryDesc; ?></p>
+	</div>
+	<div class="right">
+	<?php if( ! empty($administrators)): ?>
+		<h3>Vi bossar lite extra här:</h3>
+		<ul class="flat">
+			<?php foreach($administrators as $user): ?>
+				<li><?php echo userlink($user); ?></li>
+			<?php endforeach;?>
+		</ul>
+	<?php endif; ?>
+	</div>
+</div>
 <table id="forum-topics">
 	<thead>
 		<tr>

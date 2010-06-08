@@ -34,6 +34,10 @@ class UserModel extends AutoModel {
 		return $user;
 	}
 	
+	public function get_by_ids(Array $ids) {
+		return ! empty($ids) ? $this->db->select('userid, username, ping')->where_in('userid', $ids)->get('users')->result() : array();
+	}
+	
 	public function get_by_slug($slug) {
 		return $this->get_by_id($this->user_id_for_slug($slug));
 	}
@@ -150,7 +154,8 @@ class UserModel extends AutoModel {
 		
 		$sublinks['presentation'] = array('href' => '/user/'.$user_id, 'title' => 'Presentation');
 		$sublinks['guestbook'] = array('href' => '/guestbook/view/'.$user_id, 'title' => 'Gästbok');
-		$sublinks['message'] = array('href' => '/messages/new/'.$user_id, 'title' => 'Meddelande');
+		if($this->session->userid() != $user_id)
+			$sublinks['message'] = array('href' => '/messages/new/'.$user_id, 'title' => 'Meddelande');
 		if($this->has_images($user_id))
 			$sublinks['gallery'] = array('href' => '/gallery/user/'.$user_id, 'title' => 'Bilder');
 		if($this->has_thoughts($user_id))
