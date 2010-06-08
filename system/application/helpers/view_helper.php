@@ -550,6 +550,10 @@ function natural_implode($array, $and = 'and') {
 }
 
 function thumbnail($image) {
+	if( ! isset($image->imageId) && isset($image->item_id)) {
+		$image->imageId = $image->item_id;
+		$image->imageName = $image->title;
+	}
 	return "<a href='/gallery/view/{$image->imageId}' class='thumbnail image-{$image->imageId}' style='background-image: url(\"/uploads/galleryImages/tn_{$image->imageId}.jpg\")' title='{$image->imageName}'> </a>";
 }
 

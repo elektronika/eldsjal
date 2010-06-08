@@ -675,6 +675,7 @@ textarea#form-item-body, .form-item-textarea {
 	padding-left: 22px;
 	background: transparent url('icons/bullet_black.png') no-repeat center left;
 	margin-bottom: 5px;
+	clear: both;
 }
 
 #widget-new_timeline a span {
@@ -690,7 +691,15 @@ textarea#form-item-body, .form-item-textarea {
 #widget-new_timeline .item-event_reply { background-image: url('icons/date.png'); }
 #widget-new_timeline .item-event_new { background-image: url('icons/date_add.png'); }
 #widget-new_timeline .item-user { background-image: url('icons/user.png'); }
-#widget-new_timeline .item-image { background-image: url('icons/image.png'); }
+#widget-new_timeline .item-image { background: none; padding: 0; padding-bottom: 5px;}
+
+#widget-new_timeline .item-image a.item-link { display: block; padding: 10px; }
+
+#widget-new_timeline .thumbnail {
+	margin-right: 10px;
+	height: 50px;
+	width: 50px;
+}
 
 /* Kalendern */
 .day {
