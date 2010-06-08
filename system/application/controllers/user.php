@@ -327,4 +327,24 @@ class User extends MY_Controller {
 	public function acl_delete($user_id, $key) {
 		return $this->models->user->validate_reset_key($user_id, $key);
 	}
+	
+	public function get_fav($user_id) {
+		$this->models->user->add_favorite($this->session->userId(), (int) $user_id);
+		$this->session->message('Nuså, favvat och klart!');
+		$this->redirect('/user/'.$user_id);
+	}
+	
+	public function acl_fav($user_id) {
+		return $this->session->isLoggedIn();
+	}
+	
+	public function get_unfav($user_id) {
+		$this->models->user->remove_favorite($this->session->userId(), (int) $user_id);
+		$this->session->message('Baklängsfavvat vare här!');
+		$this->redirect('/user/'.$user_id);
+	}
+	
+	public function acl_unfav($user_id) {
+		return $this->session->isLoggedIn();
+	}
 }

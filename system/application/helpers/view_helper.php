@@ -98,10 +98,19 @@ function actions($actions = NULL, $icons_only = FALSE) {
 }
 
 function userlink($user) {
+	static $ping_timeout = NULL;
+
 	if(isset($user->deleted) && $user->deleted)
 		return "<span class='user deleted'>{$user->username}</span>";
-	else
-		return '<a href="/user/'.$user->userid.'" class="user u'.$user->userid.'" title="'.$user->username.'">'.$user->username.'</a>';
+	else {
+		if(isset($user->ping)) {
+			if(is_null($ping_timeout))
+				$ping_timeout = get_instance()->settings->get('online_timeout');
+			$online = isset($user->ping) ? (time() - $user->ping < $ping_timeout ? ' online' : ' offline') : '';
+		} else
+			$online = '';
+		return '<a href="/user/'.$user->userid.'" class="user u'.$user->userid.$online.'" title="'.$user->username.'">'.$user->username.'</a>';		
+	}
 }
 
 function pager($pager) {

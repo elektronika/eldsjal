@@ -270,7 +270,8 @@ class ForumModel extends AutoModel {
 				u.username, 
 				u.userid,
 				u.deleted,
-				u.hasimage
+				u.hasimage,
+				u.ping
 			FROM forummessages AS f 
 			JOIN users AS u 
 				ON u.userid = f.posterid 

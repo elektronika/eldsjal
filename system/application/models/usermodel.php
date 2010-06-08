@@ -157,6 +157,8 @@ class UserModel extends AutoModel {
 			$sublinks['thoughts'] = array('href' => '/thoughts/user/'.$user_id, 'title' => 'Tankar');
 		if($this->session->userid() == $user_id || $this->session->isAdmin())
 			$sublinks['settings'] = array('href' => '/user/'.$user_id.'/edit', 'title' => 'Inställningar');
+		if($this->session->userid() != $user_id)
+			$sublinks['fav'] = array('href' => '/user/'.$user_id.'/fav', 'title' => 'Favva!');
 		if($this->session->isAdmin())
 			$sublinks['admin'] = array('href' => '/user/'.$user_id.'/admin', 'title' => 'Admin');
 			
@@ -216,5 +218,17 @@ class UserModel extends AutoModel {
 	
 	public function mark_as_confirmed($user_id) {
 		$this->db->update('users', array('confirmed' => 1), array('userid' => $user_id));
+	}
+	
+	public function add_favorite($user_id, $favorite_id) {
+		$this->db->insert('user_favorites', array('user_id' => $user_id, 'favorite_id' => $favorite_id));
+	}
+	
+	public function remove_favorite($user_id, $favorite_id) {
+		$this->db->delete('user_favorites', array('user_id' => $user_id, 'favorite_id' => $favorite_id));
+	}
+	
+	public function get_favorites($user_id) {
+		return $this->db->select('username, userid, ping')->where('user_id', $user_id)->join('users', 'userid = favorite_id')->order_by('ping', 'desc')->get('user_favorites')->result();
 	}
 }

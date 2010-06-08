@@ -38,7 +38,7 @@ class MessageModel extends AutoModel {
 	
 	public function get_conversation($message_id) {
 		return $this->db
-			->select('messagetopic AS title, message AS body, messagedate AS created, messagefrom AS userid, username, readmessage AS is_read, messageid AS id, hasimage')
+			->select('messagetopic AS title, message AS body, messagedate AS created, messagefrom AS userid, username, ping, readmessage AS is_read, messageid AS id, hasimage')
 			->join('users', 'users.userid = messages.messagefrom')
 			->where('messageid', $message_id)
 			->or_where('reply_to', $message_id)

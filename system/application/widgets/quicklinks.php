@@ -2,6 +2,7 @@
 class Quicklinks extends Widget {
 	public function run() {
 		$this->user = $this->models->user->get_by_id($this->session->userId());
+		unset($this->user->ping);
 		$this->quicklinks = array();
 		$this->quicklinks[] = array('href' => '/thoughts/today', 'title' => 'Skriv tanke');
 		$this->quicklinks[] = array('href' => '/forum/new/2?event=1', 'title' => 'Skapa event');

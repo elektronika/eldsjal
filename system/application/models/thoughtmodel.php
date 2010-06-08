@@ -44,7 +44,7 @@ class ThoughtModel extends AutoModel {
 	
 	public function get_by_id($id) {
 		return $this->db
-			->select('u.username, u.userid, d.diarytopic AS title, d.diary AS body, d.diarydate AS created')
+			->select('u.username, u.userid, u.ping, d.diarytopic AS title, d.diary AS body, d.diarydate AS created')
 			->from('diary AS d')
 			->join('users AS u', 'd.userid = u.userid')
 			->where('diaryid', intval($id))
@@ -67,7 +67,7 @@ class ThoughtModel extends AutoModel {
 		else
 			$page = 0;
 		$thoughts_per_page = $this->settings->get('thoughts_per_page'); // Borde inte vara där
-		return $this->db->query("SELECT diary.diaryid AS id, diary.diarytopic AS title, diary.diary AS body, diary.diarydate AS created, users.username, users.userid, CONCAT('/thoughts/view/', diaryid) AS href FROM diary JOIN users on diary.userid = users.userid ORDER BY diary.diarydate DESC LIMIT {$page}, {$thoughts_per_page}")->result();
+		return $this->db->query("SELECT diary.diaryid AS id, diary.diarytopic AS title, diary.diary AS body, diary.diarydate AS created, users.username, users.userid, users.ping, CONCAT('/thoughts/view/', diaryid) AS href FROM diary JOIN users on diary.userid = users.userid ORDER BY diary.diarydate DESC LIMIT {$page}, {$thoughts_per_page}")->result();
 	}
 	
 	public function total_amount() {
