@@ -948,13 +948,22 @@ a.thumbnail {
 }
 
 /* Userfavorites-widgeten */
-#widget-userfavorites a.delete {
+#widget-userfavorites span a {
+	display: none;
 	color: #999;
+}
+
+#widget-userfavorites li:hover span a {
+	display: inline;
+}
+
+#widget-userfavorites a:hover {
+	color: black;
+	text-decoration: none;
 }
 
 #widget-userfavorites a.delete:hover {
 	color: red;
-	text-decoration: none;
 }
 
 /* Extragrejer, måste ligga sist! */
