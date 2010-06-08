@@ -134,7 +134,7 @@ h2 {
 	color: #947433;
 }
 
-#navbar a:hover, #navbar a.selected {
+#navbar a:hover, #navbar a.active {
 	background: #D3AF3F;
 	text-decoration: none;
 }
