@@ -347,8 +347,9 @@ class ForumModel extends AutoModel {
 		$this->reindex_thread($this->topic_id_for_post($post_id));
 	}
 	
-	public function get_random_topic($userlevel) {
-		return $this->db->query("SELECT ft.topicid FROM forumtopics AS ft JOIN forumcategory AS fc ON ft.forumcategoryid = fc.forumcategoryid WHERE fc.forumsecuritylevel <= {$userlevel} ORDER BY RAND() LIMIT 1")->row()->topicid;
+	public function get_random_topic(Array $categories) {
+		$categories = implode(',', $categories);
+		return $this->db->query("SELECT topicid FROM forumtopics WHERE forumcategoryid IN ({$categories}) ORDER BY RAND() LIMIT 1")->row()->topicid;
 	}
 	
 	public function delete_post($post_id) {
@@ -361,24 +362,24 @@ class ForumModel extends AutoModel {
 		return $this->db->where('messageid', $post_id)->get('forummessages')->row()->posterId;
 	}
 	
-	public function get_latest_posts($usertype = 0, $limit = 20) {
-		return $this->db->query(
-			"SELECT 
-				fm.*, 
-				fm.posterid AS userid, 
-				fm.topicid AS topicid, 
-				UNIX_TIMESTAMP(fm.messagedate) AS timestamp, 
-				ft.topicname,
-				ft.is_event,
-				fc.forumcategoryname,
-				fc.forumcategoryid
-			FROM forummessages AS fm
-			JOIN forumtopics AS ft ON fm.topicid = ft.topicid
-			JOIN forumcategory AS fc ON ft.forumcategoryid = fc.forumcategoryid
-			WHERE fc.forumsecuritylevel <= {$usertype}
-			ORDER BY fm.messagedate DESC 
-			LIMIT {$limit}")->result();
-	}
+	// public function get_latest_posts($usertype = 0, $limit = 20) {
+	// 	return $this->db->query(
+	// 		"SELECT 
+	// 			fm.*, 
+	// 			fm.posterid AS userid, 
+	// 			fm.topicid AS topicid, 
+	// 			UNIX_TIMESTAMP(fm.messagedate) AS timestamp, 
+	// 			ft.topicname,
+	// 			ft.is_event,
+	// 			fc.forumcategoryname,
+	// 			fc.forumcategoryid
+	// 		FROM forummessages AS fm
+	// 		JOIN forumtopics AS ft ON fm.topicid = ft.topicid
+	// 		JOIN forumcategory AS fc ON ft.forumcategoryid = fc.forumcategoryid
+	// 		WHERE fc.forumsecuritylevel <= {$usertype}
+	// 		ORDER BY fm.messagedate DESC 
+	// 		LIMIT {$limit}")->result();
+	// }
 	
 	public function get_latest_posts_by_categories(Array $categories, $limit = 20) {
 		$imploded_categories = implode(',', $categories);

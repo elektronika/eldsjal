@@ -291,7 +291,7 @@ class Forum extends MY_Controller {
 	}
 	
 	public function get_random() {
-		$topic_id = $this->models->forum->get_random_topic($this->session->usertype());
+		$topic_id = $this->models->forum->get_random_topic($this->acl->get_by_right('read'));
 		$this->redirect('/forum/topic/'.$topic_id);
 	}
 	
