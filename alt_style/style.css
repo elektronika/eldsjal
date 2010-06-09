@@ -370,8 +370,14 @@ h3.widget-title {
 	margin-top: 0;
 }
 
+h3 {
+	position: relative;
+}
+
 h3 .right {
-	float: right;
+	position: absolute;
+	bottom: 4px;
+	right: 0;
 	font-size: 0.9em;
 }
 
@@ -692,6 +698,7 @@ textarea#form-item-body, .form-item-textarea {
 	background: transparent url('icons/bullet_black.png') no-repeat center left;
 	margin-bottom: 5px;
 	clear: both;
+	float: left;
 }
 
 #widget-new_timeline a span {
@@ -709,7 +716,15 @@ textarea#form-item-body, .form-item-textarea {
 #widget-new_timeline .item-user { background-image: url('icons/user.png'); }
 #widget-new_timeline .item-image { background: none; padding: 0; padding-bottom: 5px;}
 
-#widget-new_timeline .item-image a.item-link { display: block; padding: 10px; }
+#widget-new_timeline .item-image .item-link { display: block; padding: 10px; }
+
+#widget-new_timeline li.nobreak {
+	clear: none;
+}
+
+#widget-new_timeline .nobreak .item-link{
+	display: none;
+}
 
 #widget-new_timeline .thumbnail {
 	margin-right: 10px;

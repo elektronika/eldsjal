@@ -1,6 +1,6 @@
 <?php
 class Usermenu extends Widget {
-	public function run() {
+	public function run() {		
 		$this->items = array();
 
 		$this->items[] = (object) array('href' => '/user/'.$this->session->userid(), 'title' => 'Hem', 'class' => 'home');
