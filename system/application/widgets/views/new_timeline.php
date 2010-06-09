@@ -5,6 +5,7 @@
 			<a<?php if($timeline_filter == 'all') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=all">nytt + svar</a> 
 			<a<?php if($timeline_filter == 'new') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=new">bara nytt</a>
 			<a<?php if($timeline_filter == 'local') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=local">lokalt</a>
+			<a<?php if($timeline_filter == 'favorites') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=favorites">favvosar</a>
 		</span>
 	<?php endif;?>
 </h3>
@@ -14,8 +15,6 @@
 	if($item->type == 'image') {
 		$next = next($items);
 		prev($items);
-		$prev = prev($items);
-		next($items);
 		if($next->type == 'image' && $next->user_id == $item->user_id) {
 			$break = 'nobreak';
 		} else

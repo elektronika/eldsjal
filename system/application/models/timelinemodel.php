@@ -1,6 +1,6 @@
 <?php
 class TimelineModel extends AutoModel {
-	public function get(Array $categories, $only_new = FALSE, $location = FALSE, $limit = 20, $offset = 0) {
+	public function get($limit = 20, $offset = 0) {
 		// $items = $this->db
 		// ->select('t.*, t.id AS href')
 		// ->from('timeline AS t');
@@ -8,13 +8,14 @@ class TimelineModel extends AutoModel {
 		// ->join('acl AS default_acl', 't.category_id = default_acl.category_id AND default_acl.user_id = 0', 'left')
 		// ->join('acl AS user_acl', "t.category_id = user_acl.category_id AND user_acl.user_id = {$user_id}", 'left')
 		// ->where('GREATEST(IFNULL(user_acl.read, 0), IFNULL(default_acl.read, 0)) >', 0)
-		$categories[] = 0;
-		$result = $this->db->distinct()->order_by('id', 'desc')->where_in('category_id', $categories);
-		if($only_new)
-			$result->where('new', 1);
-		if($location)
-			$result->where('location', $location);
-		$items = $result->get('timeline', $limit, $offset)->result();
+		// $categories[] = 0;
+		// $result = $this->db->distinct()->order_by('id', 'desc')->where_in('category_id', $categories);
+		$this->query->distinct()->order_by('id', 'desc');
+		// if($only_new)
+		// 	$result->where('new', 1);
+		// if($location)
+		// 	$result->where('location', $location);
+		$items = parent::get($limit, $offset);
 		
 		foreach($items as &$item) {
 			switch($item->type) {
@@ -39,6 +40,27 @@ class TimelineModel extends AutoModel {
 			}
 		}
 		return $items;
+	}
+	
+	public function by_categories(Array $categories) {
+		$categories[] = 0;
+		$this->query->where_in('category_id', $categories);
+		return $this;
+	}
+	
+	public function by_users(Array $user_ids) {
+		$this->query->where_in('user_id', $user_ids);
+		return $this;
+	}
+	
+	public function by_location($location_id) {
+		$this->query->where('location', $location_id);
+		return $this;
+	}
+	
+	public function only_new() {
+		$this->query->where('new', 1);
+		return $this;
 	}
 	
 	public function add($user_id, $type, $item_id, $title, $body, $new = TRUE, $created = NULL, $category = 0, $location = NULL) {

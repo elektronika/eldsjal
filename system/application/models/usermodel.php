@@ -238,6 +238,10 @@ class UserModel extends AutoModel {
 			$this->db->where('ping >', (time() - $this->settings->get('online_timeout')));
 		if($location)
 			$this->db->where('city', $location);
-		return $this->db->select('username, userid, ping')->where('user_id', $user_id)->join('users', 'userid = favorite_id')->order_by('ping', 'desc')->get('user_favorites')->result();
+		$users = $this->db->select('username, userid, ping')->where('user_id', $user_id)->join('users', 'userid = favorite_id')->order_by('ping', 'desc')->get('user_favorites')->result();
+		$out = array();
+		foreach($users as $user)
+			$out[$user->userid] = $user;
+		return $out;
 	}
 }

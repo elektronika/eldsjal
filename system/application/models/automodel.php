@@ -15,6 +15,8 @@ class AutoModel extends Model {
 			$this->table = strtolower(str_replace('Model', '', get_class($this)));
 		else
 			$this->table = $table;
+		
+		$this->query =& $this->db;
 	}
 	
 	// public function __call($method, $arguments) {
@@ -31,30 +33,45 @@ class AutoModel extends Model {
 	}
 	
 	public function all() {
-		return $this->util->remapLoop($this->query->get($this->table)->result(), $this->remap);
+		return $this->get();
 	}
 	
 	public function one() {
-		return $this->util->remap($this->query->get($this->table, 1)->row(), $this->remap);
+		return $this->prepare($this->query->get($this->table, 1)->row());
 	}
 	
-	public function save($object) {
+	public function get($limit = NULL, $offset = 0) {
+		return $this->prepare_loop($this->query->get($this->table, $limit, $offset)->result());
+	}
+	
+	public function save(stdClass $object) {
 		$key = $this->key;
 		$object = $this->util->reverse_remap($object, $this->remap);
 		if(isset($object->$key))
-			$this->update($object);
+			return $this->update($object);
 		else
-			$this->create($object);
+			return $this->create($object);
 	}
 	
-	public function update($object) {
+	public function update(stdClass $object) {
 		$key = $this->key;
 		$this->db->update($this->table, $object, array($key => $object->$key));
+		return $object->$key;
 	}
 	
-	public function create($object) {
+	public function create(stdClass $object) {
 		$this->db->insert($this->table, $object);
 		return $this->db->insert_id();
+	}
+	
+	protected function prepare(stdClass $object) {
+		return $object;
+	}
+	
+	protected function prepare_loop(Array $objects) {
+		foreach($objects as $key => $object)
+			$objects[$key] = $this->prepare($object);
+		return $objects;
 	}
 	
 	protected function remap_field($field) {
