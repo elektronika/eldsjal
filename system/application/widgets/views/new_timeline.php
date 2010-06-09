@@ -14,6 +14,8 @@
 	if($item->type == 'image') {
 		$next = next($items);
 		prev($items);
+		$prev = prev($items);
+		next($items);
 		if($next->type == 'image' && $next->user_id == $item->user_id) {
 			$break = 'nobreak';
 		} else

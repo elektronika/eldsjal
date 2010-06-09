@@ -699,6 +699,7 @@ textarea#form-item-body, .form-item-textarea {
 	margin-bottom: 5px;
 	clear: both;
 	float: left;
+	width: 100%;
 }
 
 #widget-new_timeline a span {
@@ -717,6 +718,10 @@ textarea#form-item-body, .form-item-textarea {
 #widget-new_timeline .item-image { background: none; padding: 0; padding-bottom: 5px;}
 
 #widget-new_timeline .item-image .item-link { display: block; padding: 10px; }
+
+#widget-new_timeline .item-image {
+	width: auto;
+}
 
 #widget-new_timeline li.nobreak {
 	clear: none;
