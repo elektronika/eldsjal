@@ -13,7 +13,7 @@
 			<span>
 				<a title="Gästbok" href="/guestbook/view/<?php echo $item->userid; ?>">GB</a>
 				<a title="Meddelande" href="/messages/new/<?php echo $item->userid; ?>">PM</a>
-				<a title="Bilder" href="/gallery/user:<?php echo $item->userid; ?>">B</a>
+				<a title="Bilder" href="/gallery/user/<?php echo $item->userid; ?>">B</a>
 				<a title="Tankar" href="/thoughts/user/<?php echo $item->userid; ?>">T</a>
 				<a class="delete" title="Sluta favorita" href="/user/<?php echo $item->userid; ?>/unfav">X</a>
 			</span>

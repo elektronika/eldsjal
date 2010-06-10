@@ -34,6 +34,41 @@ class UserModel extends AutoModel {
 		return $user;
 	}
 	
+	protected function prepare(stdClass $user) {
+		$user->birthday = mktime(0, 0, 0, $user->born_month, $user->born_date, $user->born_year);
+		$user = $this->util->remap($user, $this->remap);
+		// Det här kommer från något lattjolajban på edit-sidan. Tydligen fukkas telefon-fältet upp på någe vänster. Jaja.
+		if( ! isset($user->phone))
+			$user->phone = '';
+		return $user;
+	}
+	
+	public function by_ids(Array $ids) {
+		if( ! empty($ids))
+			$this->query->where_in('userid', $ids);
+		return $this;
+	}
+	
+	public function by_id($id) {
+		$this->query->where('userid', $id);
+		return $this;
+	}
+	
+	public function by_birthday($month, $day) {
+		$this->query->where(array('born_month' => $month, 'born_date' => $day));
+		return $this;
+	}
+	
+	public function join_fadder() {
+		$this->query->select('fadder.userid AS fadder_id, fadder.username AS fadder_name')->join('users AS fadder', 'fadder.userid = users.approvedby', 'left');
+		return $this;
+	}
+	
+	public function join_location() {
+		$this->query->join('locations', 'city = locationid', 'left');
+		return $this;	
+	}
+	
 	public function get_by_ids(Array $ids) {
 		return ! empty($ids) ? $this->db->select('userid, username, ping')->where_in('userid', $ids)->get('users')->result() : array();
 	}

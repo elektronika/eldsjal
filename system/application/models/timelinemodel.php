@@ -1,45 +1,35 @@
 <?php
 class TimelineModel extends AutoModel {
-	public function get($limit = 20, $offset = 0) {
-		// $items = $this->db
-		// ->select('t.*, t.id AS href')
-		// ->from('timeline AS t');
-		// ->join('users AS u', 't.user_id = u.userid');
-		// ->join('acl AS default_acl', 't.category_id = default_acl.category_id AND default_acl.user_id = 0', 'left')
-		// ->join('acl AS user_acl', "t.category_id = user_acl.category_id AND user_acl.user_id = {$user_id}", 'left')
-		// ->where('GREATEST(IFNULL(user_acl.read, 0), IFNULL(default_acl.read, 0)) >', 0)
-		// $categories[] = 0;
-		// $result = $this->db->distinct()->order_by('id', 'desc')->where_in('category_id', $categories);
+	public function __construct() {
+		parent::__construct();
 		$this->query->distinct()->order_by('id', 'desc');
-		// if($only_new)
-		// 	$result->where('new', 1);
-		// if($location)
-		// 	$result->where('location', $location);
-		$items = parent::get($limit, $offset);
-		
-		foreach($items as &$item) {
-			switch($item->type) {
-				case 'forum_new':
-				case 'event_new':
-				case 'wiki_new':
-					$item->href = '/forum/topic/'.$item->item_id;
-					break;
-				case 'forum_reply':
-				case 'event_reply':
-				case 'wiki_reply':
-					$item->href = '/forum/redirecttopost/'.$item->item_id;
-					break;
-				case 'thought':
-					$item->href = '/thoughts/view/'.$item->item_id;
-					break;
-				case 'image':
-					$item->href = '/gallery/view/'.$item->item_id;
-					break;
-				default:
-					$item->href = '/object/view'.$item->item_id;
-			}
+	}
+	
+	public function prepare(stdClass $object) {
+		switch($object->type) {
+			case 'forum_new':
+			case 'event_new':
+			case 'wiki_new':
+				$object->href = '/forum/topic/'.$object->item_id;
+				break;
+			case 'forum_reply':
+			case 'event_reply':
+			case 'wiki_reply':
+				$object->href = '/forum/redirecttopost/'.$object->item_id;
+				break;
+			case 'thought':
+				$object->href = '/thoughts/view/'.$object->item_id;
+				break;
+			case 'image':
+				$object->href = '/gallery/view/'.$object->item_id;
+				break;
+			case 'user':
+				$object->href = '/user/'.$object->item_id;
+				break;
+			default:
+				$object->href = '/object/view'.$object->item_id;
 		}
-		return $items;
+		return $object;
 	}
 	
 	public function by_categories(Array $categories) {
