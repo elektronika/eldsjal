@@ -2,10 +2,9 @@
 	<span class="left">Senaste färskaste!</span> 
 	<?php if($show_filter): ?>
 		<span class="right">
-			<a<?php if($timeline_filter == 'all') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=all">nytt + svar</a> 
-			<a<?php if($timeline_filter == 'new') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=new">bara nytt</a>
-			<a<?php if($timeline_filter == 'local') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=local">lokalt</a>
-			<a<?php if($timeline_filter == 'favorites') echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=favorites">favvosar</a>
+			<?php foreach($filters as $key => $name): ?>
+			<a<?php if($filter == $key) echo ' class="current"'; ?> href="<?php echo $url; ?>?timeline_filter=<?php echo $key; ?>"><?php echo $name; ?></a> 
+			<?php endforeach; ?>
 		</span>
 	<?php endif;?>
 </h3>

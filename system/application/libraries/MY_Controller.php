@@ -35,6 +35,13 @@ class MY_Controller extends Controller {
 		}
 		$this->view->body_class = implode(' ', array_filter(array_unique($body_classes)));
 		
+		// JS-variabler
+		$this->view->js->isLoggedIn = $this->session->isLoggedIn();
+		if($this->session->isLoggedin()) {
+			$this->view->js->userId = $this->session->userId();
+			$this->view->js->username = $this->session->username();
+		}
+		
 		// Styr upp widgets och sånadäringa prylar
 		
 		// Egentligen borde settings-systemet känna av om man är inloggad eller inte, men vafan.

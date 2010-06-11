@@ -1,5 +1,12 @@
 <?php
 class New_timeline extends Widget {
+	public $filters = array();
+	public $filter = 'all';
+		
+	public function __construct() {
+		$this->filters = array('all' => 'allt', 'new' => 'nyskapat', 'local' => 'lokalt', 'favorites' => 'favvosar');
+	}
+	
 	public function run() {
 		$this->body_length = $this->settings->get('timeline_body_length');
 		$number_of_items = $this->settings->get('timeline_items');
@@ -10,16 +17,16 @@ class New_timeline extends Widget {
 				unset($categories[$cat_id]);
 		
 		if(isset($_GET['timeline_filter']) && $this->session->isLoggedIn())
-			if(in_array($_GET['timeline_filter'], array('all', 'new', 'local', 'favorites')))
+			if(in_array($_GET['timeline_filter'], array_keys($this->filters)))
 				$this->settings->set('timeline_filter', $_GET['timeline_filter'], $this->session->userId());
 
-		$filter = $this->settings->get('timeline_filter');
+		$this->filter = $this->settings->get('timeline_filter');
 		// Fulhack pga att CI's db-lib inte gillar parallella queries. Crazy.
-		if($filter == 'favorites')
+		if($this->filter == 'favorites')
 			$favorites = array_keys($this->models->user->get_favorites($this->session->userId()));
 		$timeline = $this->models->timeline->by_categories($categories);
 		
-		switch($filter) {
+		switch($this->filter) {
 			case 'new':
 				$timeline->only_new();
 				break;
@@ -32,7 +39,6 @@ class New_timeline extends Widget {
 		}
 			
 		$this->items = $timeline->get($number_of_items);
-		$this->timeline_filter = $filter;
 		$this->url = $this->uri->ruri_string();
 		$this->show_filter = $this->session->isLoggedIn();
 	}

@@ -27,6 +27,7 @@ class Auth extends MY_Controller {
 	
 	public function get_logout() {
 		// Gör auth-grejen baklänges
+		$this->db->delete('history', array('userid' => $this->session->userId()));
 		$this->session->logout();
 		$this->session->message('Utloggad och klar!');
 		$this->redirect('/main');

@@ -2,7 +2,7 @@
 class Board extends MY_Controller {
 	public function __construct() {
 		parent::__construct();
-		$this->view->widgets['right'] = array('boardmenu');
+		$this->widgets->add('right', 'boardmenu');
 	}
 	
     public function get_index() {

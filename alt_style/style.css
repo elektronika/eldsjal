@@ -717,9 +717,9 @@ textarea#form-item-body, .form-item-textarea {
 #widget-new_timeline .item-user { background-image: url('icons/user.png'); }
 #widget-new_timeline .item-image { background: none; padding: 0; padding-bottom: 5px;}
 
-#widget-new_timeline .item-image .item-link { display: block; padding: 10px; }
+#widget-new_timeline .item-image .item-link { display: block; margin: 10px 0; }
 
-#widget-new_timeline .item-image {
+#widget-new_timeline .item-image.nobreak {
 	width: auto;
 }
 

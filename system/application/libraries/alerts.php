@@ -8,8 +8,15 @@ class Alerts {
 		return get_instance()->$var;
 	}
 	
-	public function count($type = 'all') {
-		return $type == 'all' ? $this->count_all() : $this->count_type($type);
+	public function count($type = FALSE) {
+		return $type ? $this->count_type($type) : $this->count_all();
+	}
+	
+	public function count_by_type() {
+		$out = array();
+		foreach($this->alerts as $type => $alerts)
+			$out[$type] = count($alerts);
+		return $out;
 	}
 	
 	protected function count_type($type) {

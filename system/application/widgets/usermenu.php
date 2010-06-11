@@ -44,10 +44,10 @@ class Usermenu extends Widget {
 	}
 
 	protected function counter($number) {
-		return $number > 0 ? " <span class='counter'>($number)</span>" : '';
+		return $number > 0 ? "($number)" : '';
 	}
 
 	protected function alert_counter($type) {
-		return $this->counter($this->alerts->count($type));
+		return " <span class='counter' id='alert-counter-{$type}'>".$this->counter($this->alerts->count($type)).'</span>';
 	}
 }

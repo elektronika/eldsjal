@@ -46,7 +46,9 @@ else
 	</div> <!-- #footer-wrap -->
 	
 </div> <!-- #wrap -->
-
+<script type="text/javascript" charset="utf-8">
+	var appData = <?php echo json_encode($js); ?>;
+</script>
 <script type="text/javascript" src="/jquery.min.js"></script>
 <script type="text/javascript" src="http://www.google-analytics.com/urchin.js"></script>
 <script type="text/javascript" src="/scripts.js"></script>
