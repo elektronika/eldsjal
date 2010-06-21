@@ -1,5 +1,12 @@
 <?php
-class Auth extends MY_Controller {	
+class Auth extends MY_Controller {
+	protected $show_in_maintenance_mode = TRUE;
+	
+	public function get_login() {
+		$this->widgets->set('content', array('loginform'));
+		$this->view->template = 'layout';
+	}
+	
 	public function post_login() {
 		// Gör auth-grejen		
 		$this->form_validation->set_rules('username', NULL, 'trim|xss_clean|required');

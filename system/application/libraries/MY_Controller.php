@@ -2,6 +2,7 @@
 class MY_Controller extends Controller {
 	public $redirect = FALSE;
 	public $show_profiler = FALSE;
+	protected $show_in_maintenance_mode = FALSE;
 	
 	public function __construct() {		
 		parent::Controller();
@@ -9,6 +10,12 @@ class MY_Controller extends Controller {
 		// Lite profiler kanske?
 		if($this->settings->get('enable_profiler'))
 			$this->show_profiler = TRUE;
+		
+		// Är sajten i maintenance mode?
+		if($this->settings->get('maintenance_mode') && ! $this->show_in_maintenance_mode) {
+			$this->redirect('/');
+			die();
+		}
 			
 		// Alerts för cache etc
 		if($this->alerts->count('flush')) {

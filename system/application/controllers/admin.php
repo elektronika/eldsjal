@@ -1,5 +1,7 @@
 <?php
 class Admin extends MY_Controller {
+	protected $show_in_maintenance_mode = TRUE;
+	
 	// public function acl_controller() {
 	// 	return $this->session->isAdmin();
 	// }
@@ -255,18 +257,18 @@ class Admin extends MY_Controller {
 		return $this->session->isAdmin();
 	}
 	
-	public function get_convertfriends() {
-		$friendships = $this->db->get('friends')->result();
-		
-		foreach($friendships as $friendship) {
-			$this->models->user->add_favorite($friendship->user_id, $friendship->friend_id);
-			$this->models->user->add_favorite($friendship->friend_id, $friendship->user_id);
-		}
-	}
-	
-	public function acl_convertfriends() {
-		return $this->session->isAdmin();
-	}
+	// public function get_convertfriends() {
+	// 	$friendships = $this->db->get('friends')->result();
+	// 	
+	// 	foreach($friendships as $friendship) {
+	// 		$this->models->user->add_favorite($friendship->user_id, $friendship->friend_id);
+	// 		$this->models->user->add_favorite($friendship->friend_id, $friendship->user_id);
+	// 	}
+	// }
+	// 
+	// public function acl_convertfriends() {
+	// 	return $this->session->isAdmin();
+	// }
 	
 	public function get_flushall() {
 		$users = $this->db->select('userid')->get('users')->result();
@@ -278,5 +280,9 @@ class Admin extends MY_Controller {
 	
 	public function acl_flushall() {
 		return $this->session->isAdmin();
+	}
+	
+	public function get_maintenance() {
+		$this->view->template = 'maintenance_mode';
 	}
 }

@@ -1001,6 +1001,38 @@ a.thumbnail {
 	color: red;
 }
 
+/* layout_plain */
+#region-header #widget-logo h1 {
+	position: static;
+	z-index: 1;
+}
+
+.layout-plain #upper-wrap {
+	margin-bottom: 20px;
+	background: #EAB652;
+	border-bottom: 1px solid #D3AF3F;
+}
+
+/* Tillfälligt avbrott-sidan */
+body.page-admin-maintenance {
+	background: transparent url('brus.jpg');
+	height: 100%;
+	width: 100%;
+}
+
+.page-admin-maintenance div {
+	background: transparent url('avbrott.jpg') no-repeat center center;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.page-admin-maintenance h1 {
+	display: none;
+}
+
 /* Extragrejer, måste ligga sist! */
 
 /* moonfia's giraff */
