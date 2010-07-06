@@ -2,10 +2,12 @@
 Class settings {
 	protected $CI;	
 	protected $settings;
+	protected $user_id;
+	protected $loaded = FALSE;
 	
 	public function __construct() {
 		$this->CI = get_instance();
-		$this->load($this->CI->session->userid());
+		$this->user_id = $this->CI->session->userid();
 	}
 	
 	protected function loadFromDatabase($user_id) {
@@ -14,17 +16,20 @@ Class settings {
 		foreach($result as $setting)
 			$settings[$setting->key] = $setting->value;
 		$this->settings = $settings;
+		$this->loaded = TRUE;
 		$this->saveToCache();
 	}
 	
-	protected function load($user_id) {
-		if( ! $this->loadFromCache())
-			$this->loadFromDatabase($user_id);
+	protected function load() {
+		if( ! $this->loaded && ! $this->loadFromCache())
+			$this->loadFromDatabase($this->user_id);
+		return $this;
 	}
 	
 	protected function loadFromCache() {
 		if($settings = $this->CI->session->userdata('settings_cache')) {
 			$this->settings = $settings;
+			$this->loaded = TRUE;
 			return TRUE;
 		} else {
 			return FALSE;
@@ -40,7 +45,7 @@ Class settings {
 	}
 	
 	public function get($key) {
-		return $this->settings[$key];
+		return $this->load()->settings[$key];
 	}
 	
 	public function get_array($key, $separator = ',') {

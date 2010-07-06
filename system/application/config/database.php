@@ -37,10 +37,10 @@
 $active_group = "default";
 $active_record = TRUE;
 
-$db['default']['hostname'] = "localhost";
-$db['default']['username'] = "eldsjal";
-$db['default']['password'] = "wTYpSC9YRsPdp6U8";
-$db['default']['database'] = "eldsjal";
+$db['default']['hostname'] = "do";
+$db['default']['username'] = "not";
+$db['default']['password'] = "use";
+$db['default']['database'] = "this";
 $db['default']['dbdriver'] = "mysql";
 $db['default']['dbprefix'] = "";
 $db['default']['pconnect'] = TRUE;

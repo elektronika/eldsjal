@@ -25,11 +25,10 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
-class Widget
-{
+class Widget {
     function run($name) {        
-        $args = func_get_args();
-		
+        // $args = func_get_args();
+
 		$filename = APPPATH.'widgets/'.$name.EXT;
         if(file_exists($filename)) {
 	    	require_once $filename;
@@ -40,7 +39,8 @@ class Widget
 			$widget = new StaticWidget();
 		}
         
-        call_user_func_array(array(&$widget, 'run'), array_slice($args, 1));
+        // call_user_func_array(array(&$widget, 'run'), array_slice($args, 1));
+		$widget->run();
 		$widget->render(strtolower($name), (array) $widget);
     }
     
@@ -49,9 +49,9 @@ class Widget
         include APPPATH.'widgets/views/'.$view.EXT;
     }
 
-    function load($object) {
-        $this->$object =& load_class(ucfirst($object));
-    }
+    // function load($object) {
+    //     $this->$object =& load_class(ucfirst($object));
+    // }
 
     function __get($var) {
         static $ci;

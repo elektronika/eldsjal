@@ -1,22 +1,21 @@
 <?php
-if ( ! class_exists('Model')) {
-	load_class('Model', FALSE);
-}
-
-class AutoModel extends Model {
+class AutoModel {
 	protected $table;
 	protected $key = 'id';
 	protected $remap = array();
 	protected $query = NULL;
 	
 	public function __construct($table = NULL) {
-		parent::Model();
 		if(is_null($table))
 			$this->table = strtolower(str_replace('Model', '', get_class($this)));
 		else
 			$this->table = $table;
 		
 		$this->query =& $this->db;
+	}
+	
+	public function __get($var) {
+		return get_instance()->$var;
 	}
 	
 	// public function __call($method, $arguments) {

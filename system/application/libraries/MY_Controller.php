@@ -7,6 +7,18 @@ class MY_Controller extends Controller {
 	public function __construct() {		
 		parent::Controller();
 		
+		// Kolla om allt är installerat och så
+		/*
+			TODO Bygg installer, så man kan starta allt från grunden
+		*/
+		if( ! file_exists('system/application/dsn')) {
+			show_error('Not installed!');
+			die();
+		} else {
+			$dsn = file_get_contents('system/application/dsn');
+			$this->load->database($dsn, FALSE, TRUE);
+		}		
+		
 		// Lite profiler kanske?
 		if($this->settings->get('enable_profiler'))
 			$this->show_profiler = TRUE;

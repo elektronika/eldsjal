@@ -25,7 +25,7 @@ $hook['post_controller_constructor'][] = array(
                                 'filepath' => 'hooks'
                                 );
 
-							$hook['display_override'][] = array(
+$hook['display_override'][] = array(
 								'class' => '',
 								'function' => 'auto_render',
 								'filename' => 'auto_render.php',
