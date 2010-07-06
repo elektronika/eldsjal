@@ -1,3 +1,4 @@
+<?php if( ! empty($items)): ?>
 <h3 class="widget-title">Nyheter</h3>
 <?php foreach( $items as $topic ): ?>
 <div class="news">
@@ -6,3 +7,4 @@
 </div>
 <?php endforeach; ?>
 <p><a href='/forum/category/19'>Mer nyheter &raquo;</a></p>
+<?php endif; ?>

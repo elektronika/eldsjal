@@ -25,6 +25,7 @@ class Acl {
 			
 			if($this->session->isLoggedIn())
 				$this->set(-1, 'read', TRUE);
+			$this->set(0, 'read', TRUE);
 		}
 		
 		return $this;

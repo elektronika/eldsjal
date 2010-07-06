@@ -1,3 +1,4 @@
+<?php if( ! empty($items) || $show_filter): ?>
 <h3 class="widget-title">
 	<span class="left">Senaste färskaste!</span> 
 	<?php if($show_filter): ?>
@@ -27,3 +28,4 @@
 	</li>
 <?php endforeach; ?>
 </ul>
+<?php endif; ?>

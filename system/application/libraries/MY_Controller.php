@@ -16,7 +16,7 @@ class MY_Controller extends Controller {
 			die();
 		} else {
 			$dsn = file_get_contents('system/application/dsn');
-			$this->load->database($dsn, FALSE, TRUE);
+			$this->load->database($dsn);
 		}		
 		
 		// Lite profiler kanske?
