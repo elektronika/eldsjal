@@ -118,12 +118,12 @@ class Auth extends MY_Controller {
 			
 			$register_key = $this->models->user->create_reset_key((int) $user_id);
 			$register_link = 'http://eldsjal.org/register/'.$user_id.'/'.$register_key;
-			
+						
 			$this->load->library('email');
 			$this->email->to($this->input->post('email'));
 			$this->email->subject('Eldsjäl - skapa nytt konto');
 			$this->email->from($this->settings->get('email_from'), $this->settings->get('email_from_name'));
-			$this->email->message("Hej {$user->username}!\n\nNågon (förhoppningsvis du) har registrerat sig med din mailadress på eldsjal.org. Klicka på länken här nedanför för att fortsätta skapa ditt  konto!\n\n{$register_link}\n\nPuss och välkommen!\n\n//Eldsjäl crew");
+			$this->email->message("Hej!\n\nNågon (förhoppningsvis du) har registrerat sig med din mailadress på eldsjal.org. Klicka på länken här nedanför för att fortsätta skapa ditt  konto!\n\n{$register_link}\n\nPuss och välkommen!\n\n//Eldsjäl crew");
 			$this->email->send();
 			
 			$this->session->message('Nu är ett mail på väg till '.$this->input->post('email').' med info om hur du fortsätter. Dags att höka över inboxen mao!');
@@ -250,6 +250,8 @@ class Auth extends MY_Controller {
 					$this->session->message($error, 'warning');
 			else
 				$this->models->user->mark_as_having_image($user->userid);
+		} else {
+			$this->models->user->delete_image($user->userid);
 		}
 	}
 }
