@@ -3,6 +3,7 @@ class MY_Controller extends Controller {
 	public $redirect = FALSE;
 	public $show_profiler = FALSE;
 	protected $show_in_maintenance_mode = FALSE;
+	protected $check_dsn = TRUE;
 	
 	public function __construct() {		
 		parent::Controller();
@@ -11,9 +12,10 @@ class MY_Controller extends Controller {
 		/*
 			TODO Bygg installer, så man kan starta allt från grunden
 		*/
-		if( ! file_exists('system/application/dsn')) {
+		if($this->check_dsn && ! file_exists('system/application/dsn')) {
 			show_error('Not installed!');
 			die();
+			$this->redirect('/install');
 		} else {
 			$dsn = file_get_contents('system/application/dsn');
 			$this->load->database($dsn);
