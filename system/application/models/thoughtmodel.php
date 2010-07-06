@@ -1,7 +1,6 @@
 <?php
 class ThoughtModel extends AutoModel {
 	public function __construct() {
-		parent::__construct();
 		$this->table = 'diary';
 		$this->remap = array(
 			'diaryId' => 'id',
@@ -44,7 +43,7 @@ class ThoughtModel extends AutoModel {
 	
 	public function get_by_id($id) {
 		return $this->db
-			->select('u.username, u.userid, u.ping, d.diarytopic AS title, d.diary AS body, d.diarydate AS created')
+			->select('u.username, u.userid, u.ping, u.hasimage, d.diarytopic AS title, d.diary AS body, d.diarydate AS created')
 			->from('diary AS d')
 			->join('users AS u', 'd.userid = u.userid')
 			->where('diaryid', intval($id))

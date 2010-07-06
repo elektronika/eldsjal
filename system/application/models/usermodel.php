@@ -3,7 +3,6 @@ class UserModel extends AutoModel {
 	protected $remap = array();
 	
 	public function __construct() {
-		parent::__construct();
 		$this->remap = array(
 			'userId' => 'userid',
 			'yahoo' => 'phone',

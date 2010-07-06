@@ -3,7 +3,6 @@ class GuestbookModel extends AutoModel {
 	protected $remap = array();
 	
 	public function __construct() {
-		parent::Model();
 		$this->remap = array(
 			'message' => 'body',
 			'fromUserId' => 'userid',

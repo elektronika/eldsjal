@@ -3,7 +3,6 @@ class ImageModel extends AutoModel {
 	protected $remap = array();
 	
 	public function __construct() {
-		parent::Model();
 		$this->remap = array(
 			'imageName' => 'title',
 			'imageDesc' => 'body',
