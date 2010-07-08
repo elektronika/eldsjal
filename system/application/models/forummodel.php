@@ -416,4 +416,9 @@ class ForumModel extends AutoModel {
 	public function topic_is_wiki($topic_id) {
 		return $this->db->where(array('topicid' => $topic_id, 'is_wiki' => 1))->count_all_results('forumtopics') > 0;
 	}
+	
+	public function add_category($title) {
+		$this->db->insert('forumcategory', array('forumcategoryname' => $title));
+		return $this->db->insert_id();
+	}
 }

@@ -7,7 +7,7 @@ class Forum extends MY_Controller {
 		$this->view->sublinks[] = array('href' => '/forum/random', 'title' => 'Slumpad tråd');
 		
 		if($this->session->isAdmin())
-			$this->view->sublinks[] = array('href' => '/forum/admin', 'title' => 'Hantera kategorier');
+			$this->view->sublinks[] = array('href' => '/forum/add_category', 'title' => 'Lägg till forumkategori');
 	}
 	
 	public function acl_topic($id = 0) {
@@ -367,5 +367,28 @@ class Forum extends MY_Controller {
 	
 	public function acl_admin($category_id = 0) {
 		return $this->acl->check((int) $category_id, 'admin');
+	}
+	
+	public function acl_add_category() {
+		return $this->session->isAdmin();
+	}
+	
+	public function get_add_category() {
+		$this->view->page_title = 'Lägg till forumkategori';
+	}
+	
+	public function post_add_category() {
+		$this->load->library('form_validation');
+		
+		$this->form_validation->set_rules('title', 'Namn', 'trim|xss_clean|required');
+		$this->form_validation->set_message('required', 'Något måste den heta hörru.');
+				
+		if($this->form_validation->run() == FALSE) {
+			$this->get_add_category();
+		} else {
+			$category_id = $this->models->forum->add_category($this->input->post('title'));
+			$this->models->forum->set_acl($this->session->userId(), $category_id, TRUE, TRUE, TRUE, TRUE);
+			$this->redirect('/forum/category/'.$category_id);
+		}
 	}
 }
