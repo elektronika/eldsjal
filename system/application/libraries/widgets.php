@@ -1,9 +1,7 @@
 <?php
 Class Widgets {
 	protected $widgets = array();
-	
-	public function __construct() {}
-	
+		
 	public function get($region) {
 		return isset($this->widgets[$region]) ? $this->widgets[$region] : array();
 	}
