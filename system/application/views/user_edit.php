@@ -45,10 +45,11 @@ form_open_multipart($form_action)
 .form_dropdown('city', $locations, $user->city)
 .input('text', 'inhabitance', 'Stadsdel/ort', $user->inhabitance)
 .form_fieldset_close()
-.form_fieldset('Sysslar med', array('id' => 'usertags'));
-foreach($tags as $id => $tag)
-	echo form_label(form_checkbox("tags[{$id}]", $id, isset($user_tags[$id])).$tag);
-echo form_fieldset_close()
+.form_fieldset('Vill lära & kan lära ut')
+.'<p>Här fyller du i de saker du vill lära dig, och kan lära ut. På så vis kan du lättare hitta andra personer som matchar det, vilket är rätt fint. Separera varje ämne med kommatecken, typ så här: "poi, bygga eldkastare, grafitti, snatta godis". Fast utan citationstecknena då såklart. :)</p>'
+.input('text', 'learn', 'Detta vill jag lära mig mer om', $wants_to_learn)
+.input('text', 'teach', 'Detta kan jag lära ut', $wants_to_teach)
+.form_fieldset_close()
 .form_fieldset('Radera konto')
 .'<p>Om du vill radera ditt konto så fyller du i ditt lösenord här nedanför. Du kommer då att få ett mail med vidare instruktioner.</p>'
 .input('password', 'delete_password','Ditt lösenord')

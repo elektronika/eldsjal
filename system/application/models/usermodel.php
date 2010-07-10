@@ -278,4 +278,46 @@ class UserModel extends AutoModel {
 			$out[$user->userid] = $user;
 		return $out;
 	}
+	
+	public function get_tags($user_id, $kind = NULL, $structure_by_kind = FALSE) {
+		$tags = $this->db->where('user_id', $user_id)->join('tags', 'id = tag_id')->get('user_tags')->result();
+		if($structure_by_kind) {
+			$tags_structured = array('teach' => array(), 'learn' => array());
+			foreach($tags as $tag) {
+				$kind = is_null($tag->kind) ? 'tag' : $tag->kind;
+				$tags_structured[$kind][] = $tag->title;
+			}
+			$tags = $tags_structured;
+		}
+		return $tags;
+	}
+	
+	public function set_tags($user_id, $kind, Array $tags) {
+		$this->db->delete('user_tags', array('user_id' => $user_id, 'kind' => $kind));
+		$tag_ids = $this->tag_ids($tags);
+		foreach($tag_ids as $tag_id)
+			$this->db->insert('user_tags', array('user_id' => $user_id, 'kind' => $kind, 'tag_id' => $tag_id));
+	}
+	
+	public function tag_ids(Array $tag_names) {
+		if(empty($tag_names))
+			return array();
+			
+		$tags = $this->db->where_in('title', $tag_names)->get('tags')->result();
+		$tag_ids = array();
+		
+		foreach($tags as $tag)
+			$tag_ids[$tag->title] = $tag->id;
+			
+		$new_tags = array_diff($tag_names, array_keys($tag_ids));
+		foreach($new_tags as $tag)
+			$tag_ids[$tag] = $this->create_tag($tag);
+			
+		return $tag_ids;
+	}
+	
+	public function create_tag($title) {
+		$this->db->insert('tags', array('title' => $title));
+		return $this->db->insert_id();
+	}
 }

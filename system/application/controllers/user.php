@@ -62,7 +62,9 @@ class User extends MY_Controller {
 		$this->view->page_title = $user->first_name.' "'.$user->username.'" '.$user->last_name;
 		$this->view->user = $user;
 		$this->view->tags = $this->models->tag->get_all_assoc(FALSE);
-		$this->view->user_tags = $this->models->user->artList((int) $user_id);
+		$tags = $this->models->user->get_tags((int) $user_id, NULL, TRUE);
+		$this->view->wants_to_learn = implode(', ', $tags['learn']);
+		$this->view->wants_to_teach = implode(', ', $tags['teach']);
 		$this->view->locations = $this->models->location->get_all_assoc();
 		$this->view->sublinks = $this->models->user->sublinks((int) $user_id, 'settings');
 		$this->view->form_action = '/user/'.$user_id.'/edit';
@@ -100,7 +102,9 @@ class User extends MY_Controller {
 		// Grejer som inte måste fyllas i, men som ändå måste kollas på någon vänster
 		$this->form_validation->set_rules('public_email', 'E-mail', 'trim|xss_clean|valid_email');			
 		$this->form_validation->set_rules('msn', 'MSN', 'trim|xss_clean|valid_email');			
-		$this->form_validation->set_rules('webpage', 'Hemsida', 'trim|xss_clean|prep_url');			
+		$this->form_validation->set_rules('webpage', 'Hemsida', 'trim|xss_clean|prep_url');
+		$this->form_validation->set_rules('learn', '', 'trim|xss_clean');		
+		$this->form_validation->set_rules('teach', '', 'trim|xss_clean');		
 		
 		// Radera konto
 		if($this->input->post('delete_password') != '')
@@ -144,8 +148,13 @@ class User extends MY_Controller {
 			else
 				$this->handle_image($user);
 			
-			// Sysslar med
-			$this->models->user->set_art_list($user->userid, $_POST['tags']);
+			// Lära & lära ut
+			$learn_tags = array_filter(array_map('trim', explode(',', $this->input->post('learn'))));
+			$this->models->user->set_tags((int) $user_id, 'learn', $learn_tags);
+			
+			$teach_tags = array_filter(array_map('trim', explode(',', $this->input->post('teach'))));
+			$this->models->user->set_tags((int) $user_id, 'teach', $teach_tags);
+			
 			
 			// Radera konto
 			if($this->input->post('delete_password') != '') {
