@@ -9,14 +9,17 @@ class MY_Controller extends Controller {
 		parent::Controller();
 		
 		// Kolla om allt är installerat och så
-		if($this->check_dsn && ! file_exists('system/application/dsn'))
+		/*
+			TODO Bygg installer, så man kan starta allt från grunden
+		*/
+		if($this->check_dsn && ! file_exists('system/application/dsn')) {
+			show_error('Not installed!');
+			die();
 			$this->redirect('/install');
-		else
-			$this->load->database(file_get_contents('system/application/dsn'));
-		
-		// Slaska igång lite libraries som inte är stenhårt knutna till CI
-		$this->settings = new Settings($this->session->userId());
-		$this->acl = new Acl($this->session->userId(), $this->session->isAdmin());
+		} else {
+			$dsn = file_get_contents('system/application/dsn');
+			$this->load->database($dsn);
+		}		
 		
 		// Lite profiler kanske?
 		if($this->settings->get('enable_profiler'))
