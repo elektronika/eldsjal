@@ -264,7 +264,7 @@ function timeSince( $timestamp, $suffix = ' sedan', $hover = TRUE, $hoverDateFor
 	return $out;
 }
 
-function input($type, $name, $label = '', $value = '', $error = '') {
+function input($type, $name, $label = '', $value = '', $error = '', Array $classes = array()) {
 	$prefix = $suffix = '';
 	
 	if(empty($error) && function_exists('form_error'))
@@ -282,12 +282,14 @@ function input($type, $name, $label = '', $value = '', $error = '') {
 		}
 	}
 	
-	$classes = 'form-item-'.$type;
+	$classes[] = 'form-item-'.$type;
 	
 	if( ! empty($error)) {
 		$suffix .= "<span class='form-error-description'>{$error}</span>";
-		$classes .= ' form-item-error';
+		$classes[] = ' form-item-error';
 	}
+	
+	$classes = implode(' ', $classes);
 	
 	return "{$prefix}<input type='{$type}' name='{$name}' class='{$classes}' value='{$value}' id='form-item-{$name}'/>{$suffix}";
 }

@@ -320,4 +320,12 @@ class UserModel extends AutoModel {
 		$this->db->insert('tags', array('title' => $title));
 		return $this->db->insert_id();
 	}
+	
+	public function search_tags($term, $wildcard = 'both') {
+		$matches = $this->db->like('title', $term, $wildcard)->get('tags')->result();
+		$out = array();
+		foreach($matches as $match)
+			$out[] = $match->title;
+		return $out;
+	}
 }

@@ -61,7 +61,6 @@ class User extends MY_Controller {
 		$user = $this->models->user->add_address_info($user);
 		$this->view->page_title = $user->first_name.' "'.$user->username.'" '.$user->last_name;
 		$this->view->user = $user;
-		$this->view->tags = $this->models->tag->get_all_assoc(FALSE);
 		$tags = $this->models->user->get_tags((int) $user_id, NULL, TRUE);
 		$this->view->wants_to_learn = implode(', ', $tags['learn']);
 		$this->view->wants_to_teach = implode(', ', $tags['teach']);
@@ -149,10 +148,10 @@ class User extends MY_Controller {
 				$this->handle_image($user);
 			
 			// Lära & lära ut
-			$learn_tags = array_filter(array_map('trim', explode(',', $this->input->post('learn'))));
+			$learn_tags = array_filter(array_map('mb_strtolower', array_map('trim', explode(',', $this->input->post('learn')))));
 			$this->models->user->set_tags((int) $user_id, 'learn', $learn_tags);
 			
-			$teach_tags = array_filter(array_map('trim', explode(',', $this->input->post('teach'))));
+			$teach_tags = array_filter(array_map('mb_strtolower', array_map('trim', explode(',', $this->input->post('teach')))));
 			$this->models->user->set_tags((int) $user_id, 'teach', $teach_tags);
 			
 			

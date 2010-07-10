@@ -1033,6 +1033,13 @@ body.page-admin-maintenance {
 	display: none;
 }
 
+/* Styling för autocomplete-rutor */
+.autocomplete-w1 { position:absolute; top:0px; left:0px; margin:6px 0 0 6px;}
+div.autocomplete { border:1px solid #bbb; background:#FFF; cursor:default; text-align:left; max-height:350px; overflow:auto; margin:-6px 6px 6px -6px;}
+.autocomplete .selected { background:#D3AF3F; }
+.autocomplete div { padding:2px 5px; white-space:nowrap; overflow:hidden; }
+.autocomplete strong { font-weight:normal; color:#000; }
+
 /* Extragrejer, måste ligga sist! */
 
 /* moonfia's giraff */

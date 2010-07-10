@@ -4,9 +4,13 @@ urchinTracker();
 
 // Callback-funktion för datan från /json/keepalive
 function handleKeepalive(data) {
-	for(var i in data.alerts) {
-		$('#alert-counter-'+i).text('('+data.alerts[i]+')');
+	for(var counterName in data.alerts) {
+		setAlertCounter(counterName, data.alerts[counterName]);
 	}
+}
+
+function setAlertCounter(counter, value) {
+	$('#alert-counter-'+counter).text('('+value+')');
 }
 
 // Allmän jQuery-mayhem! \:D/
@@ -24,4 +28,17 @@ $(function() {
 	$('input[name=is_event]').change(function() {
 		$('.datepicker').slideToggle('quick');
 	});
+	
+	if($('.autocomplete.tags').size() > 0) {
+		var a = [];
+		var options = { 
+			serviceUrl:'/json/tagsearch/', 
+			delimiter:','
+		};
+		jQuery.getScript('/jquery.autocomplete-min.js', function(data) {
+			$('.autocomplete.tags').each(function(i, input) {
+				a[i] = $(input).autocomplete(options);
+			});
+		});
+	}
 });
