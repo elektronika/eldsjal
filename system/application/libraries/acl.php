@@ -1,17 +1,33 @@
-<?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
-
-class Acl {	
+<?php
+class Acl implements Cacheable {	
 	protected $rights = array();
 	protected $by_right = array();
 	protected $loaded = FALSE;
 	protected $flush = FALSE;
+	protected $user_id;
+	protected $override;
 	
-	public function __get($var) {
-		return get_instance()->$var;
+	public function __construct($user_id = 0, $override = FALSE) {
+		$this->user_id = $user_id;
+		$this->override = FALSE;
+	}
+	
+	public function retrieveCacheData() {
+		return array('rights' => $this->rights, 'by_right' => $this->by_right);
+	}
+	
+	public function injectCacheData(Array $data) {
+		$this->rights = $data['rights'];
+		$this->by_right = $data['by_right'];
+		return $this->loaded = TRUE;
 	}
 	
 	public function check($context_id, $right = 'read') {
-		return $this->session->isAdmin() ? TRUE : $this->check_right($context_id, $right);
+		return $this->override ? TRUE : $this->check_right($context_id, $right);
+	}
+	
+	protected function db() {
+		return get_instance()->db;
 	}
 	
 	protected function check_right($context_id, $right) {
@@ -23,7 +39,7 @@ class Acl {
 			if($this->flush || ! $this->loadFromCache())
 				$this->loadFromDatabase();
 			
-			if($this->session->isLoggedIn())
+			if($this->user_id != 0)
 				$this->set(-1, 'read', TRUE);
 			$this->set(0, 'read', TRUE);
 		}
@@ -32,22 +48,23 @@ class Acl {
 	}
 	
 	protected function loadFromCache() {
-		if($rights = $this->session->userdata('acl_cache')) {
-			$this->setRights($rights);
-			return TRUE;
-		} else {
-			return FALSE;
-		}
+		// if($rights = $this->session->userdata('acl_cache')) {
+		// 	$this->setRights($rights);
+		// 	return TRUE;
+		// } else {
+		// 	return FALSE;
+		// }
+		return FALSE;
 	}
 	
 	protected function saveToCache(Array $rights) {
-		$this->session->set_userdata('acl_cache', $rights);
+		// $this->session->set_userdata('acl_cache', $rights);
 	}
 	
 	protected function loadFromDatabase() {
-		$rights = $this->db->where('user_id', $this->session->userId())->or_where('user_id', 0)->get('acl')->result();
+		$rights = $this->db()->where('user_id', $this->user_id)->or_where('user_id', 0)->get('acl')->result();
 		$this->setRights($rights);
-		$this->saveToCache($rights);
+		// $this->saveToCache($rights);
 	}
 	
 	protected function setRights(Array $rights) {
@@ -82,7 +99,7 @@ class Acl {
 	}
 	
 	public function get_users_by_right($category_id, $right = 'read') {
-		$users = $this->db->where('category_id', $category_id)->where($right, 1)->get('acl')->result();
+		$users = $this->db()->where('category_id', $category_id)->where($right, 1)->get('acl')->result();
 		$out = array();
 		foreach($users as $user)
 			$out[$user->user_id] = $user->user_id;
