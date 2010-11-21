@@ -226,13 +226,13 @@ label {
 }
 
 /* Style för nya forumet */
-#forum-topics, #forum-categories, #forum-user-rights, #messages {
+table {
 	border: hidden;
 	border-collapse: collapse;
 	clear: both;
 }
 
-#forum-topics td, #forum-categories td, #forum-user-rights td, #messages td {
+td {
 	padding: 9px;
 	padding-top: 10px;
 	border: 1px solid #C9C2C1;
@@ -574,6 +574,7 @@ span.online {
 .usermenu .admin-massmail { background-image: url('icons/transmit.png'); }
 .usermenu .admin-messages { background-image: url('icons/email_edit.png'); }
 .usermenu .admin-flushall { background-image: url('icons/wand.png'); }
+.usermenu .admin-console { background-image: url('icons/application_osx_terminal.png'); }
 .usermenu .board { background-image: url('icons/information.png'); }
 
 /* Extramarginalen för att separera delar av menyn */

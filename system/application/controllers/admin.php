@@ -285,4 +285,25 @@ class Admin extends MY_Controller {
 	public function get_maintenance() {
 		$this->view->template = 'maintenance_mode';
 	}
+	
+	public function get_console() {
+		$this->view->page_title = 'SQL-konsol';
+		$this->view->platform = $this->db->platform();
+		$this->view->version = $this->db->version();
+		$this->view->query = '';
+	}
+	
+	public function post_console() {
+		$this->get_console();
+		$query = $this->db->query($this->input->post('query'));
+		$this->view->result = $query->result();
+		$this->view->num_rows = $query->num_rows();
+		$this->view->insert_id = $this->db->insert_id();
+		$this->view->affected_rows = $this->db->affected_rows();
+		$this->view->query = $this->db->last_query();
+	}
+	
+	public function acl_console() {
+		return $this->session->isAdmin();
+	}
 }
