@@ -8,6 +8,6 @@ class MY_Router extends CI_Router {
 	}
 
 	public function fetch_method() {
-		return ($this->method == $this->fetch_class()) ? 'get_index' : $this->method;
+		return ($this->method == $this->fetch_class()) ? strtolower($_SERVER['REQUEST_METHOD']).'_index' : $this->method;
 	}
 }

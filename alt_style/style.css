@@ -1013,6 +1013,10 @@ a.thumbnail {
 	border-bottom: 1px solid #D3AF3F;
 }
 
+body.plain {
+	margin: 100px;
+}
+
 /* Tillfälligt avbrott-sidan */
 body.page-admin-maintenance {
 	background: transparent url('brus.jpg');

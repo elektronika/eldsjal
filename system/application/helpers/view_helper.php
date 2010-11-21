@@ -320,6 +320,10 @@ function submit($value = 'Hit it!') {
 	return input('submit', 'submit', '', $value);
 }
 
+function p($content) {
+	return "<p>{$content}</p>";
+}
+
 function rqForm( $content ) {
 	if( $content != "" ) {
 		$content = str_replace( "&#59;", ";", $content );

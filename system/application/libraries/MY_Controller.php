@@ -1,7 +1,7 @@
 <?php
 class MY_Controller extends Controller {
 	public $redirect = FALSE;
-	public $show_profiler = FALSE;
+	public $show_profiler = TRUE;
 	protected $show_in_maintenance_mode = FALSE;
 	protected $check_dsn = TRUE;
 	
@@ -12,14 +12,15 @@ class MY_Controller extends Controller {
 		/*
 			TODO Bygg installer, så man kan starta allt från grunden
 		*/
-		if($this->check_dsn && ! file_exists('system/application/dsn')) {
-			show_error('Not installed!');
-			die();
-			$this->redirect('/install');
-		} else {
-			$dsn = file_get_contents('system/application/dsn');
-			$this->load->database($dsn);
-		}		
+		if($this->check_dsn) {
+			if( ! file_exists('system/application/dsn')) {
+				$this->redirect('/install/install');
+			} else {
+				$dsn = file_get_contents('system/application/dsn');
+				$this->load->database($dsn);
+				$this->load->library('settings'); //Kräver databas, så kan inte laddas mha autoload.php
+			}
+		} 		
 		
 		// Lite profiler kanske?
 		if($this->settings->get('enable_profiler'))

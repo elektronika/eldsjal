@@ -146,6 +146,10 @@ class DbMigrations extends MY_Controller {
 		$this->load->library('migrations');
 	}
 	
+	public function acl_controller() {
+		return $this->session->isAdmin();
+	}
+	
 	public function get_schema() {
 		$this->redirect = TRUE;
 		$current_schema = $this->migrations->current_schema();
