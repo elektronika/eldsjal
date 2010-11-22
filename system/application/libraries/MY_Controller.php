@@ -9,9 +9,6 @@ class MY_Controller extends Controller {
 		parent::Controller();
 		
 		// Kolla om allt är installerat och så
-		/*
-			TODO Bygg installer, så man kan starta allt från grunden
-		*/
 		if($this->check_dsn) {
 			if( ! file_exists('system/application/dsn')) {
 				$this->redirect('/install/install');

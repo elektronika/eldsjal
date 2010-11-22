@@ -34,25 +34,25 @@ class CI_Util {
 		return date('Y-m-d H:i:s', $timestamp);
 	}
 	
-	/**
-	 * Omvandlar $string till ett URL-vänligt format och returnerar det. ANVÄNDS INTE LÄNGRE.
-	 *
-	 * @param string $string 
-	 * @return string
-	 * @author Johnny Karhinen
-	 */
-	public function slugify($string) {
-		$slug = trim(strtolower($string));
-		$replace = array(
-			'å' => 'ao',
-			'ä' => 'ae',
-			'ö' => 'oe'
-		);
-		$slug = str_replace(array_keys($replace), $replace, $slug);
-		$slug = preg_replace(array('/[^a-z0-9-]/', '/-+/'), '-', $slug);
-		
-		return $slug;
-	}
+	// /**
+	//  * Omvandlar $string till ett URL-vänligt format och returnerar det. ANVÄNDS INTE LÄNGRE.
+	//  *
+	//  * @param string $string 
+	//  * @return string
+	//  * @author Johnny Karhinen
+	//  */
+	// public function slugify($string) {
+	// 	$slug = trim(strtolower($string));
+	// 	$replace = array(
+	// 		'å' => 'ao',
+	// 		'ä' => 'ae',
+	// 		'ö' => 'oe'
+	// 	);
+	// 	$slug = str_replace(array_keys($replace), $replace, $slug);
+	// 	$slug = preg_replace(array('/[^a-z0-9-]/', '/-+/'), '-', $slug);
+	// 	
+	// 	return $slug;
+	// }
 	
 	/**
 	 * Loopar igenom ett objekt/array och mappar om index(en).
@@ -78,9 +78,9 @@ class CI_Util {
 		return $object;
 	}
 	
-	public function reverseRemap($object, Array $map) {
-		return $this->remap($object, array_flip($map));
-	}
+	// public function reverseRemap($object, Array $map) {
+	// 	return $this->remap($object, array_flip($map));
+	// }
 	
 	/**
 	 * Loopar igenom en array och mappar om varje objekt/array.
@@ -173,14 +173,14 @@ class CI_Util {
 		return $out;
 	}
 	
-	public function fuzzyage($timestamp) {
-		$diff = time() - $this->assureTimestamp($timestamp);
-		return floor( round(($diff / 86400) / 365, 1) * 10 ) / 10;
-	}
+	// public function fuzzyage($timestamp) {
+	// 	$diff = time() - $this->assureTimestamp($timestamp);
+	// 	return floor( round(($diff / 86400) / 365, 1) * 10 ) / 10;
+	// }
 	
-	public function nicedate($timestamp) {		
-		return ucfirst(strftime('%Aen den %e %B', $this->assureTimestamp($timestamp)));
-	}
+	// public function nicedate($timestamp) {		
+	// 	return ucfirst(strftime('%Aen den %e %B', $this->assureTimestamp($timestamp)));
+	// }
 	
 	public function shortdate($timestamp) {
 		return date('y-m-d', $this->assureTimestamp($timestamp));

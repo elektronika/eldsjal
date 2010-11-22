@@ -32,10 +32,5 @@ $hook['display_override'][] = array(
 								'filepath' => 'hooks'
 								);
 
-// $hook['pre_controller'][] = array(
-// 								'function' => 'bootstrap_doctrine',
-// 								'filename' => 'doctrine.php',
-// 								'filepath' => 'hooks'
-// 							);
 /* End of file hooks.php */
 /* Location: ./system/application/config/hooks.php */

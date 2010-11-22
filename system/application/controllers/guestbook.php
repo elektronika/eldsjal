@@ -121,16 +121,16 @@ class Guestbook extends MY_Controller {
 		return $this->session->isAdmin() || $this->models->guestbook->is_by_user($post_id, $this->session->userId()) || $this->models->guestbook->is_to_user($post_id, $this->session->userId());
 	}
 	
-	public function post_ajax_add($user_id) {
-		$this->redirect = TRUE;
-		$this->form_validation->set_rules('body', 'Gästboksmeddelande', 'trim|xss_clean|required');
-		$this->form_validation->set_message('required', 'Om du inte har något att säga så kan du lika gärna låta bli. :)');
-		if($this->form_validation->run() == FALSE) {
-			$this->userid = $user_id;
-			$this->template = 'usermenu_guestbook.tpl';
-		} else {
-			$this->models->guestbook->add($this->input->post('body'), $this->session->userId(), $user_id);
-			print 'Gött hörru, nu är det donat!';
-		}
-	}
+	// public function post_ajax_add($user_id) {
+	// 	$this->redirect = TRUE;
+	// 	$this->form_validation->set_rules('body', 'Gästboksmeddelande', 'trim|xss_clean|required');
+	// 	$this->form_validation->set_message('required', 'Om du inte har något att säga så kan du lika gärna låta bli. :)');
+	// 	if($this->form_validation->run() == FALSE) {
+	// 		$this->userid = $user_id;
+	// 		$this->template = 'usermenu_guestbook.tpl';
+	// 	} else {
+	// 		$this->models->guestbook->add($this->input->post('body'), $this->session->userId(), $user_id);
+	// 		print 'Gött hörru, nu är det donat!';
+	// 	}
+	// }
 }
