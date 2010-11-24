@@ -42,6 +42,10 @@ class Messages extends MY_Controller {
 			$message_id = $this->models->message->add($this->input->post('title'), $this->input->post('body'), $this->session->userId(), (int) $user_id);
 			$this->alerts->add('message', (int) $user_id, (int) $message_id);
 			$this->session->message('Meddelandet skickat!');
+			
+			$this->load->library('notifications');
+			$this->notifications->notify((int) $user_id, 'message');
+			
 			$this->redirect('/messages/view/'.$message_id);
 		}
 	}
@@ -72,6 +76,10 @@ class Messages extends MY_Controller {
 			$this->models->message->add('', $this->input->post('body'), $this->session->userId(), $user_id, (int) $message_id);
 			$this->alerts->add('message', $user_id, (int) $message_id);
 			$this->session->message('Meddelandet skickat!');
+			
+			$this->load->library('notifications');
+			$this->notifications->notify((int) $user_id, 'message');
+			
 			$this->redirect('/messages/view/'.$message_id);
 		}	
 	}
