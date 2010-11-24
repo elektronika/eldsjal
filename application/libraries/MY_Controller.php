@@ -10,10 +10,10 @@ class MY_Controller extends Controller {
 		
 		// Kolla om allt är installerat och så
 		if($this->check_dsn) {
-			if( ! file_exists('system/application/dsn')) {
+			if( ! file_exists(APPPATH.'/dsn')) {
 				$this->redirect('/install/install');
 			} else {
-				$dsn = file_get_contents('system/application/dsn');
+				$dsn = file_get_contents(APPPATH.'/dsn');
 				$this->load->database($dsn);
 				$this->load->library('settings'); //Kräver databas, så kan inte laddas mha autoload.php
 			}
