@@ -24,7 +24,7 @@ class MY_Controller extends Controller {
 			$this->show_profiler = TRUE;
 		
 		// Är sajten i maintenance mode?
-		if($this->settings->get('maintenance_mode') && ! $this->show_in_maintenance_mode) {
+		if($this->is_maintenance() && ! $this->show_in_maintenance_mode) {
 			$this->redirect('/');
 			die();
 		}
@@ -80,5 +80,9 @@ class MY_Controller extends Controller {
 		$this->redirect = TRUE;
 		$this->load->helper('url');
 		redirect($url);
+	}
+	
+	protected function is_maintenance() {
+		return file_exists(APPPATH.'maintenance');
 	}
 }

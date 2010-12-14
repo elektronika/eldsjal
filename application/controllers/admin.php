@@ -282,7 +282,15 @@ class Admin extends MY_Controller {
 		return $this->session->isAdmin();
 	}
 	
-	public function get_maintenance() {
+	public function get_maintenance($state = 'off', $key = NULL) {
+		if( ! is_null($key))
+			if($key == $this->settings->get('maintenance_key')) {
+				if($state == 'on')
+					file_put_contents(APPPATH.'maintenance', '');
+				else
+					unlink(APPPATH.'maintenance');
+			}
+
 		$this->view->template = 'maintenance_mode';
 	}
 	

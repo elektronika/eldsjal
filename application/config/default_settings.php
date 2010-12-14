@@ -43,5 +43,6 @@ $config = array(
   array('user_id'=>0,'key'=>'widgets_main','value'=>'messages,content'),
   array('user_id'=>0,'key'=>'widgets_right','value'=>''),
   array('user_id'=>0,'key'=>'widgets_right_front','value'=>'news,birthdays,upcoming'),
-  array('user_id'=>0,'key'=>'wisdom_category','value'=>25)
+  array('user_id'=>0,'key'=>'wisdom_category','value'=>25),
+  array('user_id'=>0,'key'=>'maintenance_key','value'=>'topsecret'),
 );

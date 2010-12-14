@@ -141,6 +141,8 @@ $current->apply($migration)->commit();
 */
 
 class DbMigrations extends MY_Controller {
+	protected $show_in_maintenance_mode = TRUE;
+	
 	public function __construct() {
 		parent::__construct();
 		$this->load->library('migrations');
