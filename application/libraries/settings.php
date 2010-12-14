@@ -1,5 +1,5 @@
 <?php
-Class settings {
+Class Settings {
 	protected $CI;	
 	protected $settings;
 	protected $user_id;
@@ -22,7 +22,7 @@ Class settings {
 	
 	protected function load() {
 		if( ! $this->loaded && ! $this->loadFromCache())
-			$this->loadFromDatabase($this->user_id);
+			$this->loadFromDatabase($this->user_id);		
 		return $this;
 	}
 	
