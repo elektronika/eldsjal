@@ -22,7 +22,7 @@ class Install extends Controller {
 		
 		$this->form_validation->set_rules('dsn', 'DSN', 'trim|xss_clean|required');
 		$this->form_validation->set_rules('admin_email', 'Admin-email', 'trim|xss_clean|required|valid_email');
-		$this->form_validation->set_rules('admin_username', 'Admin-användarnamn', 'trim|xss_clean|required|valid_email');
+		$this->form_validation->set_rules('admin_username', 'Admin-användarnamn', 'trim|xss_clean|required');
 		$this->form_validation->set_rules('admin_first_name', 'Admin-förnamn', 'trim|xss_clean|required');
 		$this->form_validation->set_rules('admin_last_name', 'Admin-efternamn', 'trim|xss_clean|required');
 		$this->form_validation->set_rules('admin_password', 'Admin-lösenord', 'trim|xss_clean|required');
@@ -34,10 +34,13 @@ class Install extends Controller {
 		} else {
 			// Rulla igång bautadasen
 			$this->load->database($this->input->post('dsn'));
-			file_put_contents('system/application/dsn', $this->input->post('dsn'));
+			file_put_contents(APPPATH.'dsn', $this->input->post('dsn'));
 			
 			$this->load->library('migrations');
 			$this->migrations->install();
+			
+			$this->load->library('default_settings');
+			$this->default_settings->install();
 			
 			// Fippla till första användaren, som blir admin
 			$admin_id = $this->models->user->create($this->input->post('admin_email'));
