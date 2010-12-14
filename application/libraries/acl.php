@@ -1,14 +1,10 @@
 <?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Acl {	
+class Acl extends Library {	
 	protected $rights = array();
 	protected $by_right = array();
 	protected $loaded = FALSE;
 	protected $flush = FALSE;
-	
-	public function __get($var) {
-		return get_instance()->$var;
-	}
 	
 	public function check($context_id, $right = 'read') {
 		return $this->session->isAdmin() ? TRUE : $this->check_right($context_id, $right);

@@ -1,13 +1,9 @@
 <?php
-class Migrations {
+class Migrations extends Library {
 	protected $migration_dir;
 
 	public function __construct() {
 		$this->migration_dir = APPPATH.'migrations/';
-	}
-	
-	public function __get($var) {
-		return get_instance()->$var;
 	}
 	
 	public function install() {

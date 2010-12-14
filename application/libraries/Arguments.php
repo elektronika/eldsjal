@@ -1,10 +1,9 @@
-<?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
-
-class CI_Arguments {
+<?php
+class Arguments extends Library {
 	protected $args = array();
 	
 	public function __construct() {
-		log_message('debug', "Arguments Class Initialized");
+		parent::__construct();
 		
 		foreach(get_instance()->uri->segment_array() as $segment) {
 			$args = explode(':', $segment);

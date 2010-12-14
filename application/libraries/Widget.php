@@ -1,6 +1,5 @@
 <?php
-
-class Widget {
+class Widget extends Library {
     function run($name) {        
 		$filename = APPPATH.'widgets/'.$name.EXT;
         if(file_exists($filename)) {
@@ -19,9 +18,5 @@ class Widget {
     function render($view, $data = array()) {
         extract($data);
         include APPPATH.'widgets/views/'.$view.EXT;
-    }
-
-    function __get($var) {
-        return $ci = get_instance()->$var;
     }
 }

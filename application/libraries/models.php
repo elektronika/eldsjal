@@ -1,10 +1,9 @@
 <?php
-Class models {
-	protected $ci;
+Class Models extends Library {
 	protected $models = array();
 	
 	public function __construct() {
-		$this->ci =& get_instance();
+		parent::__construct();
 		spl_autoload_register(array('models', 'autoload'));
 	}
 	

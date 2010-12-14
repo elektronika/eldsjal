@@ -1,12 +1,8 @@
 <?php
-class Alerts {
+class Alerts extends Library {
 	protected $alerts = array();
 	protected $alert_count = 0;
 	protected $loaded = FALSE;
-	
-	public function __get($var) {
-		return get_instance()->$var;
-	}
 	
 	public function count($type = FALSE) {
 		return $type ? $this->count_type($type) : $this->count_all();
