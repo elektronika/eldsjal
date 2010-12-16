@@ -19,6 +19,9 @@ Class Events extends Library {
 	}
 	
 	protected function event_loop($event, $args = array()) {
+		if($this->profiler && is_callable(array($this->profiler, 'add_data')))
+			$this->profiler->add_data('Triggered events', $event);
+			
 		if(isset($this->events[$event]))
 			foreach($this->events[$event] as $callback)
 				call_user_func_array($callback, $args);
