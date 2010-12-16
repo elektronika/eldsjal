@@ -1,34 +1,37 @@
 <?php
 Class Settings {
 	protected $CI;	
-	protected $settings;
-	protected $user_id;
+	protected $settings = array();
+	protected $user_id = 0;
 	protected $loaded = FALSE;
+	protected $user_settings = array();
 	
-	public function __construct() {
+	public function __construct($config = array()) {
+		$this->settings = $config;
 		$this->CI = get_instance();
 		$this->user_id = $this->CI->session->userid();
 	}
 	
 	protected function loadFromDatabase($user_id) {
-		$settings = array();
-		$result = $this->CI->db->where('user_id', 0)->or_where('user_id', (int) $user_id)->order_by('user_id', 'asc')->get('settings')->result();
-		foreach($result as $setting)
-			$settings[$setting->key] = $setting->value;
-		$this->settings = $settings;
+		$result = $this->CI->db->where('user_id', (int) $user_id)->get('settings')->result();
+		foreach($result as $setting) {
+			$this->settings[$setting->key] = $setting->value;
+			$this->user_settings[] = $setting->key;
+		}
 		$this->loaded = TRUE;
 		$this->saveToCache();
 	}
 	
 	protected function load() {
-		if( ! $this->loaded && ! $this->loadFromCache())
+		if( (bool) $this->user_id && ! $this->loaded && ! $this->loadFromCache())
 			$this->loadFromDatabase($this->user_id);		
 		return $this;
 	}
 	
 	protected function loadFromCache() {
-		if($settings = $this->CI->session->userdata('settings_cache')) {
-			$this->settings = $settings;
+		if($user_settings = $this->CI->session->userdata('settings_cache')) {
+			foreach($user_settings as $key => $value)
+				$this->settings[$key] = $value;
 			$this->loaded = TRUE;
 			return TRUE;
 		} else {
@@ -37,7 +40,10 @@ Class Settings {
 	}
 	
 	protected function saveToCache() {
-		$this->CI->session->set_userdata('settings_cache', $this->settings);
+		$settings = array();
+		foreach($this->user_settings as $key)
+			$settings[$key] = $this->settings[$key];
+		$this->CI->session->set_userdata('settings_cache', $settings);
 	}
 	
 	public function flush() {

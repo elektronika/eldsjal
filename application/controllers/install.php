@@ -38,10 +38,7 @@ class Install extends Controller {
 			
 			$this->load->library('migrations');
 			$this->migrations->install();
-			
-			$this->load->library('default_settings');
-			$this->default_settings->install();
-			
+						
 			// Fippla till första användaren, som blir admin
 			$admin_id = $this->models->user->create($this->input->post('admin_email'));
 			$user = new stdClass();

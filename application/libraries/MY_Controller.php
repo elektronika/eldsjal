@@ -15,7 +15,6 @@ class MY_Controller extends Controller {
 			} else {
 				$dsn = file_get_contents(APPPATH.'/dsn');
 				$this->load->database($dsn);
-				$this->load->library('settings'); //Kräver databas, så kan inte laddas mha autoload.php
 			}
 		} 		
 		
