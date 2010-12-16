@@ -12,7 +12,7 @@ else
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title><?php echo $site_name; ?> - <?php echo isset($page_title) ? $page_title : $slogan; ?></title>
+	<title><?php echo $site_name; ?> - <?php echo isset($page_title) ? $page_title : $slogan; ?><?php if($is_maintenance): ?> MAINTENANCE MODE<?php endif; ?></title>
 	<?php foreach($css as $stylesheet): ?>
 	<link rel="stylesheet" href="/<?php echo $stylesheet.'?'.filemtime($stylesheet); ?>" type="text/css"/>
 	<?php endforeach; ?>

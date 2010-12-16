@@ -26,7 +26,7 @@ class MY_Controller extends Controller {
 		}
 		
 		// Är sajten i maintenance mode?
-		if($this->is_maintenance() && ! $this->show_in_maintenance_mode) {
+		if( ! $this->isAdmin() && $this->is_maintenance() && ! $this->show_in_maintenance_mode) {
 			$this->redirect('/');
 			die();
 		}
@@ -47,6 +47,7 @@ class MY_Controller extends Controller {
 		$this->view->sublinks = array();
 		$this->view->breadcrumbs = array();
 		$this->view->isloggedin = $this->session->isLoggedIn();
+		$this->view->is_maintenance = $this->is_maintenance();
 				
 		$body_classes = array($this->settings->get('body_class'));
 		$segments = array();
