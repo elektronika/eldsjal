@@ -1,3 +1,6 @@
 [submodule "application/libraries/migrations"]
 	path = application/libraries/migrations
 	url = git://github.com/intedinmamma/Migrations.git
+[submodule "application/libraries/forms"]
+	path = application/libraries/forms
+	url = git://github.com/intedinmamma/Forms.git
