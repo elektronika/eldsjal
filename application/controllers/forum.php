@@ -75,7 +75,7 @@ class Forum extends MY_Controller {
 			$new_reply->topicid = $id;
 			$new_reply->userid = $this->session->userId();
 			
-			$post_id = $this->models->forum->create_post($new_reply);
+			$new_reply->id = $this->models->forum->create_post($new_reply);
 			
 			$topic = $this->models->forum->get_topic_by_id((int) $id);
 			
@@ -86,11 +86,13 @@ class Forum extends MY_Controller {
 			else
 				$item_type = 'forum_reply';
 			
-			$this->models->timeline->add($this->session->userId(), $item_type, $post_id, $topic->title, $new_reply->body, FALSE, NULL, $this->category_id, $topic->location_id);
+			$this->events->trigger('topic_reply', $new_reply, $topic);
+			
+			$this->models->timeline->add($this->session->userId(), $item_type, $new_reply->id, $topic->title, $new_reply->body, FALSE, NULL, $this->category_id, $topic->location_id);
 			
 			$page = floor($this->models->forum->count_posts_in_topic($id) / $this->settings->get('forum_posts_per_page')) * $this->settings->get('forum_posts_per_page');
 			$this->session->message('Inlägg sparat!');
-			$this->redirect('/forum/topic/'.$id.'/page:'.$page.'#post-'.$post_id);
+			$this->redirect('/forum/topic/'.$id.'/page:'.$page.'#post-'.$new_reply->id);
 		}
 	}
 	
