@@ -4,10 +4,15 @@ class Modules extends Library {
 	
 	public function __construct($config = array()) {
 		parent::__construct();
-		foreach($config['modules'] as $module) {
+		$this->benchmark->mark('load_modules_start');
+		foreach($config['load'] as $module) {
 			require(APPPATH.'modules/'.$module.'/'.$module.EXT);
-			$this->modules[$module] = new {$module.'Module'}();
+			$module_class = $module.'Module';
+			$this->modules[$module] = new $module_class();
+			if($this->profiler)
+				$this->profiler->add_data('Modules', $module);
 		}
+		$this->benchmark->mark('load_modules_end');
 	}
 }
 
