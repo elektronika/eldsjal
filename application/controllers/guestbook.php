@@ -61,8 +61,7 @@ class Guestbook extends MY_Controller {
 			$this->alerts->add('guestbook', $user->userid);
 			$this->session->message('Mysigt, nu har du lämnat ett litet avtryck. :)');
 			
-			$this->load->library('notifications');
-			$this->notifications->notify((int) $user_id, 'guestbook');
+			$this->events->trigger('guestbook_add', $user, $post);
 			
 			$this->redirect('/guestbook/view/'.$user_id);
 		}

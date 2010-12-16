@@ -43,8 +43,7 @@ class Messages extends MY_Controller {
 			$this->alerts->add('message', (int) $user_id, (int) $message_id);
 			$this->session->message('Meddelandet skickat!');
 			
-			$this->load->library('notifications');
-			$this->notifications->notify((int) $user_id, 'message');
+			$this->events->trigger('message_add', $user, $message);
 			
 			$this->redirect('/messages/view/'.$message_id);
 		}
@@ -77,8 +76,7 @@ class Messages extends MY_Controller {
 			$this->alerts->add('message', $user_id, (int) $message_id);
 			$this->session->message('Meddelandet skickat!');
 			
-			$this->load->library('notifications');
-			$this->notifications->notify((int) $user_id, 'message');
+			$this->events->trigger('message_add', $user, $message);
 			
 			$this->redirect('/messages/view/'.$message_id);
 		}	
