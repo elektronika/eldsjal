@@ -1,0 +1,3 @@
+[submodule "application/libraries/migrations"]
+	path = application/libraries/migrations
+	url = git://github.com/intedinmamma/Migrations.git

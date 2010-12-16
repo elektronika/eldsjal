@@ -1,4 +1,10 @@
 <?php
+/**
+ * Library class for migrations
+ *
+ * @package default
+ * @author Johnny Karhinen
+ */
 class Migrations {
 	protected $ci;
 	protected $meta_table;
@@ -6,19 +12,31 @@ class Migrations {
 	protected $current_version = NULL;
 	protected $versions = NULL;
 	
-	public function __construct() {
+	public function __construct($config = array()) {
 		$this->ci = get_instance();
-		$this->ci->config->load('migrations');
-		$this->meta_table = $this->ci->config->item('migrations_meta_table');
-		$this->migrations_path = $this->ci->config->item('migrations_path');
+		$this->meta_table = isset($config['migrations_meta_table']) ? $config['migrations_meta_table'] : 'migrations';
+		$this->migrations_path = isset($config['migrations_path']) ? $config['migrations_path'] : APPPATH . "migrations/";
 		$this->ci->load->dbforge();
 		$this->setup_meta_table();
 	}
 	
+	/**
+	 * Brings the database schema up to the latest version, i.e runs all migrations.
+	 *
+	 * @return void
+	 * @author Johnny Karhinen
+	 */
 	public function install() {
 		$this->version($this->max_version());
 	}
 	
+	/**
+	 * Takes the database schema up/down to the specified version.
+	 *
+	 * @param int $target 
+	 * @return void
+	 * @author Johnny Karhinen
+	 */
 	public function version($target) {
 		if($target > $this->current()) {
 			foreach(range($this->current() + 1, $target) as $version)
@@ -32,12 +50,24 @@ class Migrations {
 			$this->set_version($target);
 	}
 	
+	/**
+	 * Returns the currently active version of the database schema
+	 *
+	 * @return int
+	 * @author Johnny Karhinen
+	 */
 	public function current() {
 		if(is_null($this->current_version))
 			$this->current_version = $this->ci->db->get($this->meta_table)->row()->version;
 		return $this->current_version;
 	}
 	
+	/**
+	 * Returns the latest version number.
+	 *
+	 * @return int
+	 * @author Johnny Karhinen
+	 */
 	public function max_version() {
 		return max(array_keys($this->get_migrations()));
 	}
@@ -59,7 +89,10 @@ class Migrations {
 		$file_name = $this->versions[$version];
 		$class_name = preg_replace('/\d_|\.php/', '', basename($this->versions[$version])).'_migration';
 		require($file_name);
-		return new $class_name($this->ci);
+		if(is_a($class_name, 'Migration'))
+			return new $class_name($this->ci);
+		else
+			throw new Exception("The class {$class_name} is not a migration, sorry.");
 	}
 	
 	protected function get_migrations() {
@@ -74,6 +107,12 @@ class Migrations {
 	}
 }
 
+/**
+ * Base class for migrations
+ *
+ * @package default
+ * @author Johnny Karhinen
+ */
 abstract class Migration {
 	protected $db;
 	protected $dbforge;
@@ -83,6 +122,19 @@ abstract class Migration {
 		$this->dbforge = $ci->dbforge;
 	}
 	
+	/**
+	 * The method that is run when migrating from a schema version with a lower number
+	 *
+	 * @return void
+	 * @author Johnny Karhinen
+	 */
 	abstract public function up();
+	
+	/**
+	 * The method that is run when migrating from a schema version with a higher number
+	 *
+	 * @return void
+	 * @author Johnny Karhinen
+	 */
 	abstract public function down();
 }
