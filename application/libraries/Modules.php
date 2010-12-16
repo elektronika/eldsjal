@@ -9,6 +9,7 @@ class Modules extends Library {
 			require(APPPATH.'modules/'.$module.'/'.$module.EXT);
 			$module_class = $module.'Module';
 			$this->modules[$module] = new $module_class();
+			$this->events->trigger('module_load', $this->modules[$module]);
 			if($this->profiler)
 				$this->profiler->add_data('Modules', $module);
 		}
