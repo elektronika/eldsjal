@@ -25,7 +25,7 @@ class MY_Controller extends Controller {
 		}
 		
 		// Är sajten i maintenance mode?
-		if( ! $this->isAdmin() && $this->is_maintenance() && ! $this->show_in_maintenance_mode) {
+		if( ! $this->session->isAdmin() && $this->is_maintenance() && ! $this->show_in_maintenance_mode) {
 			$this->redirect('/');
 			die();
 		}
