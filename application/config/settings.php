@@ -45,4 +45,5 @@ $config = array (
   'widgets_right_front' => 'news,birthdays,upcoming',
   'wisdom_category' => 25,
   'maintenance_key' => 'topsecret',
+  'cron_key' => 'topsecret'
 );
