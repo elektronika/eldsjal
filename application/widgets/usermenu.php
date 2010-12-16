@@ -10,7 +10,7 @@ class Usermenu extends Widget {
 		$this->items[] = (object) array('href' => '/people', 'title' => 'Folk', 'class' => 'people');
 		$this->items[] = (object) array('href' => '/thoughts', 'title' => 'Tankar', 'class' => 'thoughts');
 
-		if($this->acl->check($this->settings->get('fadder_category'))) {
+		if(FALSE && $this->acl->check($this->settings->get('fadder_category'))) {
 			$pending = $this->db->query("select count(userid) as users from users where usertype = 0 and email <> ''")->row()->users;
 			$this->items[] = (object) array('href' => '/userAdmin.php', 'title' => 'Ny medlem'.$this->counter($pending), 'class' => 'fadder');
 			
