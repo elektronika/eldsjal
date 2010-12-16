@@ -20,8 +20,10 @@ class MY_Controller extends Controller {
 		} 		
 		
 		// Lite profiler kanske?
-		if($this->settings->get('enable_profiler'))
+		if($this->settings->get('enable_profiler')) {
+			$this->load->library('profiler');
 			$this->show_profiler = TRUE;
+		}
 		
 		// Är sajten i maintenance mode?
 		if($this->is_maintenance() && ! $this->show_in_maintenance_mode) {
