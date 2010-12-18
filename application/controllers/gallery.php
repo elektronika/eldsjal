@@ -14,7 +14,7 @@ class Gallery extends MY_Controller {
 		$cur_page = $this->arguments->get('page', 0);
 		
 		// Taggar
-		if($tagArgs = $this->arguments->getArray('tags')) {
+		if($tagArgs = $this->arguments->get_array('tags')) {
 			$tags = $this->models->tag->get_by_slugs($tagArgs);
 			foreach($tags as $tag) {
 				$tag_ids[] = $tag->artid;

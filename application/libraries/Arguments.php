@@ -1,10 +1,8 @@
 <?php
-class Arguments extends Library {
+class Arguments {
 	protected $args = array();
 	
-	public function __construct() {
-		parent::__construct();
-		
+	public function __construct() {		
 		foreach(get_instance()->uri->segment_array() as $segment) {
 			$args = explode(':', $segment);
 			$this->args[array_shift($args)] = $args;
@@ -15,7 +13,7 @@ class Arguments extends Library {
 		return (isset($this->args[$key])) ? current($this->args[$key]) : $fallback;
 	}
 	
-	public function getArray($key, $fallback = FALSE) {
+	public function get_array($key, $fallback = FALSE) {
 		return (isset($this->args[$key]) && count($this->args[$key]) > 0) ? $this->args[$key] : $fallback;
 	}
 }
