@@ -29,12 +29,12 @@ class tags_and_usertags_migration extends migration {
 		$this->dbforge->add_key('user_id');
 		$this->dbforge->add_key('tag_id');
 		$this->dbforge->add_key('kind');
-		$this->dbforge->create_table('usertags');
+		$this->dbforge->create_table('users_tags');
 	}
 	
 	public function down() {
 		$this->dbforge->drop_table('tags');
-		$this->dbforge->drop_table('usertags');
+		$this->dbforge->drop_table('users_tags');
 	}
 }
 ?>

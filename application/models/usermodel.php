@@ -208,18 +208,18 @@ class UserModel extends AutoModel {
 	}
 	
 	public function add_address_info($user) {
-		$address = $this->db->where('userid', $user->userid)->get('address')->row();
-		if( ! empty($address)) {
-			$user->street_address = $address->Gatuadress1;
-			$user->postal_code = $address->Postnummer;
-			$user->postal_city = $address->Stad;
-			$user->country = $address->Land;
-		} else {
-			$user->street_address = 
-			$user->postal_code = 
-			$user->postal_city = 
-			$user->country = '';
-		}
+		// $address = $this->db->where('userid', $user->userid)->get('address')->row();
+		// if( ! empty($address)) {
+		// 	$user->street_address = $address->Gatuadress1;
+		// 	$user->postal_code = $address->Postnummer;
+		// 	$user->postal_city = $address->Stad;
+		// 	$user->country = $address->Land;
+		// } else {
+		// 	$user->street_address = 
+		// 	$user->postal_code = 
+		// 	$user->postal_city = 
+		// 	$user->country = '';
+		// }
 		
 		return $user;
 	}
@@ -280,7 +280,7 @@ class UserModel extends AutoModel {
 	}
 	
 	public function get_tags($user_id, $kind = NULL, $structure_by_kind = FALSE) {
-		$tags = $this->db->where('user_id', $user_id)->join('tags', 'id = tag_id')->get('user_tags')->result();
+		$tags = $this->db->where('user_id', $user_id)->join('tags', 'tags.id = tag_id')->get('users_tags')->result();
 		if($structure_by_kind) {
 			$tags_structured = array('teach' => array(), 'learn' => array());
 			foreach($tags as $tag) {
@@ -293,10 +293,10 @@ class UserModel extends AutoModel {
 	}
 	
 	public function set_tags($user_id, $kind, Array $tags) {
-		$this->db->delete('user_tags', array('user_id' => $user_id, 'kind' => $kind));
+		$this->db->delete('users_tags', array('user_id' => $user_id, 'kind' => $kind));
 		$tag_ids = $this->tag_ids($tags);
 		foreach($tag_ids as $tag_id)
-			$this->db->insert('user_tags', array('user_id' => $user_id, 'kind' => $kind, 'tag_id' => $tag_id));
+			$this->db->insert('users_tags', array('user_id' => $user_id, 'kind' => $kind, 'tag_id' => $tag_id));
 	}
 	
 	public function tag_ids(Array $tag_names) {
