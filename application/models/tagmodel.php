@@ -17,4 +17,8 @@ class TagModel extends AutoModel {
 	public function get_by_slugs(Array $slugs) {
 		return $this->db->select('artid, artname, slug')->where_in('slug', $slugs)->get('artlist')->result();
 	}
+	
+	public function get_by_ids(Array $ids) {
+		return $this->db->where_in('id', $ids)->get('tags')->result();
+	}
 }

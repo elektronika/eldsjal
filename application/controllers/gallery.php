@@ -14,12 +14,11 @@ class Gallery extends MY_Controller {
 		$cur_page = $this->arguments->get('page', 0);
 		
 		// Taggar
-		if($tagArgs = $this->arguments->get_array('tags')) {
-			$tags = $this->models->tag->get_by_slugs($tagArgs);
+		if($tag_args = $this->arguments->get_array('tags')) {
+			$tags = $this->models->tag->get_by_ids($tag_args);
 			foreach($tags as $tag) {
-				$tag_ids[] = $tag->artid;
-				$tag_names[] = $tag->artname;
-				$tag_slugs[] = $tag->slug;
+				$tag_ids[] = $tag->id;
+				$tag_names[] = $tag->title;
 			}
 		}
 		
@@ -37,24 +36,25 @@ class Gallery extends MY_Controller {
 		// Taggmolnet
 		if(isset($tags)) {
 			$this->view->page_title = 'Bilder ('.implode(', ', $tag_names).')';
-			$tagcloud_prefix = '/gallery/tags:'.implode(':', $tag_slugs).':';
+			$tagcloud_prefix = '/gallery/tags:'.implode(':', $tag_ids).':';
 			
 			$tag_joins = '';
 			foreach ($tags as $x => $tag)
-		    	$tag_joins .= " JOIN imageartlist ia_{$x} ON ial.imageid = ia_{$x}.imageid AND ia_{$x}.artid = '{$tag->artid}'";
+		    	$tag_joins .= " JOIN images_tags it_{$x} ON it.image_id = it_{$x}.image_id AND it_{$x}.tag_id = '{$tag->id}'";
 			unset($tag);
 
-			$whereors = "ial.artid = '".implode("' OR ial.artid = '", $tag_ids)."'";			
-			$tagcloud = $this->db->query("SELECT DISTINCT ial.artid AS tid, al.artname AS tag, slug, COUNT(DISTINCT ial.imageid) AS size FROM imageartlist AS ial JOIN artlist AS al ON ial.artid = al.artid {$tag_joins} WHERE NOT ($whereors) GROUP BY al.artid ORDER BY size DESC")->result();
+			$whereors = "it.tag_id = '".implode("' OR it.tag_id = '", $tag_ids)."'";			
+
+			$tagcloud = $this->db->query("SELECT DISTINCT tags.id, tags.title, COUNT(DISTINCT it.image_id) AS size FROM images_tags AS it JOIN tags ON it.tag_id = tags.id {$tag_joins} WHERE NOT ($whereors) GROUP BY tags.id ORDER BY size DESC")->result();
 		} else {
 			$tagcloud_prefix = '/gallery/tags:';
-			$tagcloud = $this->db->query('SELECT artname AS tag, COUNT( * ) AS size, slug FROM `imageartlist` JOIN artlist ON imageartlist.artid = artlist.artid GROUP BY artname ORDER BY size DESC')->result();
+			$tagcloud = $this->db->query('SELECT *, COUNT( * ) AS size FROM `images_tags` JOIN tags ON images_tags.tag_id = tags.id GROUP BY title ORDER BY size DESC')->result();
 		}
 		
 		// "Avtaggningslänkarna"
 		if(isset($tags)) {
 			foreach($tags as $key => &$tag) {
-				$tags_tmp = $tag_slugs;
+				$tags_tmp = $tag_ids;
 				unset($tags_tmp[$key]);
 				if(count($tags_tmp) > 0)
 					$tag->href = 'tags:'.implode(':', $tags_tmp);
@@ -74,7 +74,7 @@ class Gallery extends MY_Controller {
 			$this->_user_filter($this->db, $user);
 		$number_of_images = $this->db->get('images')->num_rows;
 		
-		$pagination_tags = isset($tags) ? 'tags:'.implode(':', $tag_slugs).'/' : '';
+		$pagination_tags = isset($tags) ? 'tags:'.implode(':', $tag_ids).'/' : '';
 		$this->pagination->initialize(array(
 			'base_url' => '/gallery/'.$pagination_tags.'page:',
 			'per_page' => $images_per_page,
@@ -93,10 +93,10 @@ class Gallery extends MY_Controller {
 	
 	// Borde egentligen ligga i image-modellen
 	protected function _tags_filter(&$db, $tag_ids) {
-		$db->select('COUNT(artid) AS matches')
-			->join('imageartlist', 'images.imageid = imageartlist.imageid')
-			->where_in('imageartlist.artid', $tag_ids)
-			->group_by('imageartlist.imageid')
+		$db->select('COUNT(tag_id) AS matches')
+			->join('images_tags', 'images.imageid = images_tags.image_id')
+			->where_in('images_tags.tag_id', $tag_ids)
+			->group_by('images_tags.image_id')
 			->having('matches', count($tag_ids));
 	}
 	
@@ -178,8 +178,10 @@ class Gallery extends MY_Controller {
 				}
 				
 				// Lägg till kategorier
-				if($tags = $this->input->post('tag'))
-					$this->models->image->set_categories($image_id, array_keys($tags));
+				if($tags = $this->input->post('tag')) {
+					$tag_ids = $this->models->user->tag_ids(array_map('trim', explode(',', $tags)));
+					$this->models->image->set_tags($image_id, $tag_ids);
+				}
 				
 				if( ! empty($error))
 					$this->session->message($error, 'warning');

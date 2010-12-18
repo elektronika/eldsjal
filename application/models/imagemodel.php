@@ -63,10 +63,10 @@ class ImageModel extends AutoModel {
 		return ($this->db->where('imageId', $image_id)->get('images')->row()->private = 1);
 	}
 	
-	public function set_categories($image_id, Array $category_ids) {
-		$this->db->delete('imageartlist', array('imageid' => $image_id));
-		foreach($category_ids as $id) {
-			$this->db->insert('imageartlist', array('artid' => $id, 'imageid' => $image_id));
+	public function set_tags($image_id, Array $tag_ids) {
+		$this->db->delete('images_tags', array('image_id' => $image_id));
+		foreach($tag_ids as $id) {
+			$this->db->insert('images_tags', array('tag_id' => $id, 'image_id' => $image_id));
 		}
 	}
 }

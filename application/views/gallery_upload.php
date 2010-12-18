@@ -3,15 +3,11 @@
 <?php echo form_open_multipart('gallery/upload')
 .input("file", "file", "Börja med att välja filen som ska laddas upp...")
 .input("text", "title", "...ge den en schysst titel...")
-.input("text", "body", "...och en lattjo beskrivning")
-.submit("Spara"); ?>
-
-<fieldset id="categories">
-	<legend>Sen bockar du i de kategorier du tycker passar. Men inget löjl!</legend>
-<?php foreach($tags as $tag) echo form_label(form_checkbox("tag[{$tag->id}]", 1).$tag->tag); ?>
-
-</fieldset>
-</form>
+.input("text", "body", "...en lattjo beskrivning...")
+.input('text', 'tags', '...och avsluta med några kategorier du tycker passar.', NULL, '', array('autocomplete', 'tags'))
+.'<p>Separera varje kategori med kommatecken, typ så här: "poi, eldkastare, grafitti". Fast utan citationstecknena då såklart. :)</p>'
+.submit("Spara")
+.form_close(); ?>
 <?php end_region(); ?>
 
 <?php require('layout.php'); ?>

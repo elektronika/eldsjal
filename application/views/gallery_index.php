@@ -8,7 +8,7 @@
 <div>
 Visar bilder som matchar
 <?php foreach($tags as $tag): ?>
-	<?php echo $tag->artname; ?><a href="/gallery/<?php echo $tag->href; ?>">(x)</a>
+	<?php echo $tag->title; ?><a href="/gallery/<?php echo $tag->href; ?>">(x)</a>
 <?php endforeach; ?>
 </div>
 <?php endif; ?>

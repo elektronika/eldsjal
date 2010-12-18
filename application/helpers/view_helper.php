@@ -586,7 +586,7 @@ function tagcloud(Array $tags, $prefix) {
 	} ?>
 	<div class="tagcloud">
 	<?php foreach($tags as $tag): ?>
-		<a class="tag tag-level-<?php echo $tag->level; ?>" href="<?php echo $prefix.$tag->slug; ?>"><?php echo $tag->tag; ?> (<?php echo $tag->size; ?>)</a>
+		<a class="tag tag-level-<?php echo $tag->level; ?>" href="<?php echo $prefix.$tag->id; ?>"><?php echo $tag->title; ?> (<?php echo $tag->size; ?>)</a>
 	<?php endforeach; ?>
 	</div>
 <?php }
