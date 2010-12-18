@@ -154,6 +154,7 @@ h2 {
 	color: #614C22;
 	font-size: 16px;
 	font-weight: bold;
+	margin-top: 0;
 }
 
 #widget-topmenu #quicksearch .form-item-text {
@@ -205,11 +206,6 @@ h2 {
 
 .float-right {
 	float: right;
-}
-
-label {
-	clear: both;
-	display: block;
 }
 
 .pager, .datepager {
@@ -593,6 +589,9 @@ span.online {
 label {
 	color: #666;
 	display: block;
+	clear: both;
+	display: block;
+	margin-top: 10px;
 }
 
 fieldset {
@@ -600,7 +599,7 @@ fieldset {
 	margin-bottom: 10px;
 }
 
-.form-item-text, .form-item-password, .form-item-textarea, .form-item-submit {
+.form-item-text, .form-item-password, .form-item-textarea, .form-item-submit, input[type=text], input[type=password], textarea {
 	padding: 2px;
 	background: #ddd;
 	border: 1px solid #ccc;
@@ -630,7 +629,7 @@ input[type=checkbox] {
 	margin-right: 5px;
 }
 
-input.form-item-submit {
+input.form-item-submit, input[type=submit] {
 	clear: both;
 	display: block;
 	margin-top: 20px;
@@ -1044,6 +1043,16 @@ div.autocomplete { border:1px solid #bbb; background:#FFF; cursor:default; text-
 .autocomplete .selected { background:#D3AF3F; }
 .autocomplete div { padding:2px 5px; white-space:nowrap; overflow:hidden; }
 .autocomplete strong { font-weight:normal; color:#000; }
+
+/* Folk-sökar-sidan */
+.page-people label[for=wants_to_learn], .page-people label[for=wants_to_teach] {
+	display: inline;
+}
+
+.page-people input[name=does] {
+	display: block;
+	clear: both;
+}
 
 /* Extragrejer, måste ligga sist! */
 
