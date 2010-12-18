@@ -6,7 +6,7 @@ class Board extends MY_Controller {
 	}
 	
     public function get_index() {
-		$this->view->members = $this->db->query('SELECT username, users.userid, board.title, users.first_name, users.last_name, users.email FROM users JOIN board ON users.userid = board.userid WHERE rights = 10 ORDER BY sort')->result();
+		$this->view->members = $this->db->select('username, users.userid, board.title, users.first_name, users.last_name, users.email')->join('board', 'users.userid = board.userid')->where('rights', 10)->order_by('sort')->get('users')->result();
     }
 	
 	// Snabbhack för de statiska sidorna
