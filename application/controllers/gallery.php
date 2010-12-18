@@ -248,7 +248,7 @@ class Gallery extends MY_Controller {
 	public function post_delete($image_id) {
 		$image = $this->models->image->get_by_id((int) $image_id);
 		$this->db->delete('images', array('imageid' => $image->id));
-		$this->db->delete('imageartlist', array('imageid' => $image->id));
+		$this->db->delete('images_tags', array('image_id' => $image->id));
 		@unlink($this->settings->get('gallery_folder').$image->id.'.'.$this->settings->get('default_image_extension'));
 		@unlink($this->settings->get('gallery_folder').'tn_'.$image->id.'.'.$this->settings->get('default_image_extension'));
 		$this->models->timeline->delete($image->id, 'image');
