@@ -4,6 +4,8 @@ class Migrate extends MY_Controller {
 		parent::__construct();
 		$this->load->library('migrations');
 		$this->output->enable_profiler(TRUE);
+		$this->redirect = TRUE; // Så den inte försöker visa en view.
+		$this->show_profiler = TRUE; // Så man ser vad som görs.
 	}
 	
 	public function get_index() {
