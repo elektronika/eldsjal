@@ -163,11 +163,28 @@ function post($post) {
 				<?php echo rq($post->body); ?>
 			</div>
 			<div class="meta">
-				<?php echo fuzzytime($post->created); ?> <?php echo actions($post->actions); ?>
+				<?php echo fuzzytime($post->created); ?> <?php echo actions($post->actions); ?> <?php echo tags($post); ?>
 			</div>
 		</div>
 		<span class="clear">&nbsp;</span>
 	</div><?php
+}
+
+function tags($post) {
+	$out = '<div class="actions tags">';
+	if( isset($post->tags) && is_array($post->tags) && ! empty($post->tags)) {
+		$out .= '<span class="label">Taggar: </span>';
+		foreach($post->tags as $tag) {
+			$out .= "<a class='tag' title='Visa mer som är taggat med {$tag->title}' href='{$post->tag_url_prefix}{$tag->id}'>{$tag->title}</a>";
+			if(isset($post->untag_prefix))
+				$out .= "<a class='untag' href='{$post->untag_prefix}{$post->id}/{$tag->id}' title='Ta bort taggen {$tag->title}'>x</a>";
+		}
+	}
+	if(isset($post->add_tag_url))
+		$out .= form_open($post->add_tag_url, array('class' => 'add-tag'), array('post_id' => $post->id)).input('text', 'tag', 'Lägg till tagg', NULL, '', array('autocomplete', 'tags')).submit('»').form_close();
+	$out .= '</div>';
+	return $out;
+	
 }
 
 function rq( $content ) {
