@@ -86,6 +86,8 @@ class Gallery extends MY_Controller {
 		$this->view->tagcloud_prefix = $tagcloud_prefix;
 		$this->view->tagcloud = $tagcloud;		
 		$this->view->sublinks[] = array('href' => '/gallery/upload', 'title' => 'Ladda upp bild');
+		if($this->session->isLoggedIn())
+			$this->view->sublinks[] = array('href' => '/gallery/user/'.$this->session->userId(), 'title' => 'Dina bilder');
 		$this->view->sublinks[] = array('href' => '/gallery/random', 'title' => 'Slumpa bild!');
 	
 		$this->util->trail('spanar på lite schyssta bilder');
