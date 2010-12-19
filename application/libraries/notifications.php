@@ -1,9 +1,9 @@
 <?php
 Class Notifications extends Library {	
 	public function notify($user_id, $type, $data = array()) {
-		$message = $this->load->view('notifications/'.$type, $data, TRUE);
-		foreach($this->services_for_user($user_id) as $service)
-			$this->send($message, $service);
+		// $message = $this->load->view('notifications/'.$type, $data, TRUE);
+		// foreach($this->services_for_user($user_id) as $service)
+			// $this->send($message, $service);
 	}
 	
 	public function services_for_user($user_id) {

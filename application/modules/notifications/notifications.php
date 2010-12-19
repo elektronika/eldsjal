@@ -6,10 +6,12 @@ class NotificationsModule extends Module {
 	}
 	
 	public function guestbook_add($user, $post) {
-		$this->notifications->notiy($user->id, 'guestbook');
+		$this->load->library('notifications');
+		$this->notifications->notify($user->id, 'guestbook');
 	}
 	
 	public function message_add($user, $post) {
-		$this->notifications->notiy($user->id, 'message');		
+		$this->load->library('notifications');
+		$this->notifications->notify($user->id, 'message');		
 	}
 }
