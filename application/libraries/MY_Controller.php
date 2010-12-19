@@ -1,7 +1,7 @@
 <?php
 class MY_Controller extends Controller {
 	public $redirect = FALSE;
-	public $show_profiler = TRUE;
+	public $show_profiler = FALSE;
 	protected $show_in_maintenance_mode = FALSE;
 	protected $check_dsn = TRUE;
 	

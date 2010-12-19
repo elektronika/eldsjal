@@ -3,7 +3,8 @@ Class Events extends Library {
 	protected $events = array();
 	
 	public function trigger($event) {
-		$this->event_loop($event, array_slice(func_get_args(), 1));
+		$args = func_get_args();
+		$this->event_loop($event, array_slice($args, 1));
 	}
 	
 	public function trigger_chained($event) {

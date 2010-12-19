@@ -1,4 +1,8 @@
 <?php
+function values_locations() {
+	return get_instance()->models->location->get_all_assoc();
+}
+
 $config = array(
 	'topic' => array(
 		array(
@@ -35,9 +39,7 @@ $config = array(
 			'field' => 'location_id',
 			'label' => 'Plats/område',
 			'type' => 'dropdown',
-			'values' => function() {
-				return get_instance()->models->location->get_all_assoc();
-			},
+			'values' => 'values_locations',
 			'object' => 'topic'
 		)
 	),

@@ -307,7 +307,7 @@ class ForumModel extends AutoModel {
 			'latestEntryBy' => 'updater',
 			'forumCategoryId' => 'category_id',
 		);
-		$topic = $this->db->query("SELECT ft.*, fc.*, COUNT(fm.messageid) - 1 AS replies, COUNT(fm.messageid) AS posts FROM forumtopics AS ft JOIN forumcategory AS fc ON fc.forumcategoryid = ft.forumcategoryid JOIN forummessages AS fm ON ft.topicid = fm.topicid WHERE ft.topicid = ".intval($topic_id))->row();		
+		$topic = $this->db->query("SELECT ft.*, fc.*, COUNT(fm.messageid) - 1 AS replies, COUNT(fm.messageid) AS posts FROM forumtopics AS ft JOIN forumcategory AS fc ON fc.forumcategoryid = ft.forumcategoryid JOIN forummessages AS fm ON ft.topicid = fm.topicid WHERE ft.topicid = ".intval($topic_id).' GROUP BY ft.topicid')->row();		
 		return $this->util->remap($topic, $remap);
 	}
 	
