@@ -108,7 +108,6 @@ class Gallery extends MY_Controller {
 	}
 	
 	public function get_upload() {
-		$this->view->tags = $this->models->tag->get_all();
 		$this->util->trail('laddar upp en bild. Yay!');
 	}
 	
@@ -181,7 +180,7 @@ class Gallery extends MY_Controller {
 				
 				// Lägg till kategorier
 				if($tags = $this->input->post('tag')) {
-					$tag_ids = $this->models->user->tag_ids(array_map('trim', explode(',', $tags)));
+					$tag_ids = $this->models->tag->tag_ids($this->models->tag->tags_to_array($this->input->post('tag')), TRUE);
 					$this->models->image->set_tags($image_id, $tag_ids);
 				}
 				
@@ -201,6 +200,13 @@ class Gallery extends MY_Controller {
 		$image = $this->models->image->get_by_id((int) $image_id);
 		if($image->userid == $this->session->userid() || $this->session->isAdmin())
 			$image->actions[] = array('href' => '/gallery/delete/'.$image->id, 'title' => 'Radera', 'class' => 'delete');
+		
+		$tag_actions = array();	
+		$image->tags = $this->models->image->get_tags((int) $image_id);
+		$image->tag_url_prefix = '/gallery/tags:';
+		$image->untag_prefix = '/gallery/untag/';
+		$image->add_tag_url = '/gallery/add_tag/';
+		
 		$this->view->sublinks[] = array('href' => '/gallery', 'title' => 'Tillbaka till galleriet');
 		$this->view->sublinks[] = array('href' => '/gallery/user/'.$image->userid, 'title' => $image->username.'s andra bilder');
 		$this->view->sublinks[] = array('href' => '/gallery/random', 'title' => 'Slumpa bild!');
@@ -260,5 +266,35 @@ class Gallery extends MY_Controller {
 	
 	public function acl_delete($image_id) {
 		return ($this->session->isAdmin() || $this->models->image->get_by_id((int) $image_id)->userid == $this->session->userid());
+	}
+	
+	public function get_untag($image_id, $tag_id) {
+		$this->view->title = 'Bekräfta tagg-borttagning';
+		$this->view->message = 'Är du säker på att du vill ta bort taggen?';
+		$this->view->template = 'confirm';
+	}
+	
+	public function post_untag($image_id, $tag_id) {
+		$this->models->image->untag((int) $image_id, (int) $tag_id);
+		$this->session->message('Taggen borttagen!');
+		$this->redirect('/gallery/view/'.$image_id);
+	}
+	
+	public function acl_untag($image_id, $tag_id) {
+		$image = $this->models->image->get_by_id((int) $image_id);
+		return $this->session->isAdmin() || $image->userid == $this->session->userId();
+	}
+	
+	public function post_add_tag() {
+		$image_id = $this->input->post('post_id');
+		$tags = $this->models->tag->tags_to_array($this->input->post('tag'));
+		$tag_ids = $this->models->tag->tag_ids($tags, TRUE);
+		$this->models->image->add_tags((int) $image_id, $tag_ids);
+		$this->session->message = 'Donat!';
+		$this->redirect('/gallery/view/'.$image_id);
+	}
+	
+	public function acl_add_tag() {
+		return $this->session->isLoggedIn();
 	}
 }

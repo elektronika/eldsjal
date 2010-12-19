@@ -69,4 +69,33 @@ class ImageModel extends AutoModel {
 			$this->db->insert('images_tags', array('tag_id' => $id, 'image_id' => $image_id));
 		}
 	}
+	
+	public function get_tags($image_id) {
+		return $this->db
+			->select('tags.*')
+			->join('images_tags', 'images_tags.tag_id = tags.id')
+			->where('image_id', $image_id)
+			->get('tags')
+			->result();
+	}
+	
+	public function get_tags_assoc($image_id) {
+		$out = array();
+		foreach($this->get_tags($image_id) as $tag)
+			$out[$tag->id] = $tag->title;
+		return $out;
+	}
+	
+	public function untag($image_id, $tag_id) {
+		$this->db->where(array('image_id' => $image_id, 'tag_id' => $tag_id))->delete('images_tags');
+	}
+	
+	public function add_tags($image_id, Array $tag_ids) {
+		foreach($tag_ids as $tag_id)
+			$this->add_tag($image_id, $tag_id);
+	}
+	
+	public function add_tag($image_id, $tag_id) {
+		$this->db->insert('images_tags', array('image_id' => $image_id, 'tag_id' => $tag_id));
+	}
 }
