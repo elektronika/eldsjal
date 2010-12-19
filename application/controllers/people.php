@@ -27,7 +27,9 @@ class People extends MY_Controller {
 			if( ! empty($does))
 				$tag_ids = $this->models->tag->tag_ids(array_map('trim', explode(',', $does)));
 		
-		$items = $this->db
+		$this->db->start_cache();
+		
+		$items =& $this->db
 			->select("username, last_name, first_name, users.userid, born_month, born_year, born_date, presentation AS body, locationname AS location, hasimage, ping")
 			->join('locations', 'city = locationid');
 			
@@ -44,16 +46,8 @@ class People extends MY_Controller {
 			if($city != 'all')
 				$items->where('city', (int) $city);
 		
-		if( ! empty($tag_ids)) {
+		if( ! empty($tag_ids))
 			$items->distinct()->join('users_tags', 'users.userid = users_tags.user_id')->where_in('tag_id', $tag_ids);
-			$tag_kinds = array();
-			if($this->input->get('wants_to_learn'))
-				$tag_kinds[] = 'learn';
-			if($this->input->get('wants_to_teach'))
-				$tag_kinds[] = 'teach';
-			if( ! empty($tag_kinds))
-				$items->where_in('users_tags.kind', $tag_kinds);
-		}
 									
 		if($sort_by = $this->input->get('sort_by')) {
 			if(in_array($sort_by, array_keys($sort_options)))
@@ -66,12 +60,21 @@ class People extends MY_Controller {
 		
 		if($query = $this->input->get('query'))
 			$items->like('username', $query)->or_like('first_name', $query)->or_like('last_name', $query);
-			
-		$items = $items->where('deleted', 0)->get('users', 20)->result();
+		
+		$items->where('deleted <>', 1);
+		
+		$this->db->stop_cache();
+		$total_count = $items->count_all_results('users');
+		
+		$offset = (int) $this->input->get('offset');
+		$items = $items->get('users', 20, $offset)->result();
 		
 		// Om man bara hittar en person så kan man lika gärna visa den. Lika bra, fast bättre.
-		if(count($items) == 1)
+		if(count($items) == 1 && $offset == 0)
 			$this->redirect('/user/'.current($items)->userid);
+			
+
+		$this->db->flush_cache();		
 			
 		foreach($items as &$item) {
 			$item->body = truncate(remove_tags($item->body), 110);
@@ -81,13 +84,27 @@ class People extends MY_Controller {
 		
 		$locations = $this->models->location->get_all_assoc();
 		
+		$url_parts = $_GET;
+		if(isset($url_parts['offset']))
+			unset($url_parts['offset']);
+		$url_parts = array_filter($url_parts);
+		
+		$this->load->library('pagination');
+		$this->pagination->initialize(array(
+			'base_url' => '/people/?'.http_build_query($url_parts).'&offset=',
+			'per_page' => 20,
+			'total_rows' => $total_count,
+			'cur_page' => $offset
+		));
+		$this->view->pager = $this->pagination->create_links();
+		
 		$this->view->before = form_open('/people/search', array('method' => 'get'))
 			.input('text', 'query', 'Namn/användarnamn', $this->input->get('query'))
 			.form_label('Stad', 'city')
 			.form_dropdown('city', array('all' => 'Alla') + $locations, $this->input->get('city'))
 			.input('text', 'does', 'Sysslar med', $this->input->get('does'), '', array('autocomplete', 'tags'))
-			.form_label(form_checkbox('wants_to_learn', 1, $this->input->get('wants_to_learn')).'Vill lära sig', 'wants_to_learn')
-			.form_label(form_checkbox('wants_to_teach', 1, $this->input->get('wants_to_teach')).'Vill lära ut', 'wants_to_teach')
+			// .form_label(form_checkbox('wants_to_learn', 1, $this->input->get('wants_to_learn')).'Vill lära sig', 'wants_to_learn')
+			// .form_label(form_checkbox('wants_to_teach', 1, $this->input->get('wants_to_teach')).'Vill lära ut', 'wants_to_teach')
 			// .form_dropdown('does', array('anything' => 'Vad som helst') + $tags, $this->input->get('does'))
 			.form_label('Sortera efter', 'sort_by')
 			.form_dropdown('sort_by', $sort_options, $this->input->get('sort_by'))
