@@ -1,4 +1,8 @@
 <?php region('content'); ?>
+<?php
+if( ! isset($form_action))
+	$form_action = current_url();
+?>
 <h3><?php echo $message; ?></h3>
 <p>Du vet, det går liksom inte att ångra. Om du är osäker så är det bara att trycka på bakåt-knappen i webbläsaren!</p>
 
