@@ -11,8 +11,8 @@ class Forum extends MY_Controller {
 	}
 	
 	public function acl_topic($id = 0) {
-		$category_id = $this->models->forum->get_topic_by_id((int) $id)->category_id;
-		return $this->acl->check($category_id);
+		$this->view->topic = $this->models->forum->get_topic_by_id((int) $id);
+		return $this->acl->check($this->view->topic->category_id);
 	}
 	
 	public function get_topic($id) {
@@ -20,35 +20,33 @@ class Forum extends MY_Controller {
 		$posts_per_page = $this->settings->get('forum_posts_per_page');
 		$cur_page = (int) $this->arguments->get('page', 0);
 
-		$topic = $this->models->forum->get_topic_by_id((int) $id);
-		$this->util->trail('läser tråden '.$topic->title, $topic->forumSecurityLevel);
-		$this->view->topic = $topic;
+		$this->util->trail('läser tråden '.$this->view->topic->title, $this->view->topic->forumSecurityLevel);
 		$this->view->posts = $this->models->forum->get_posts_for_topic((int) $id, $cur_page, $posts_per_page);
 		
 		if(in_array($id, $this->alerts->item_ids('event')))
 			$this->alerts->remove('event', NULL, $id);
 		
 		if($this->session->isLoggedIn())
-			$this->models->forum->add_track($id, $this->session->userId());
+			$this->models->forum->add_track((int) $id, $this->session->userId());
 		
 		$this->pagination->initialize(array(
 			'base_url' => '/forum/topic/'.$id.'/page:',
 			'per_page' => $posts_per_page,
-			'total_rows' => $topic->posts,
+			'total_rows' => $this->view->topic->posts,
 			'cur_page' => $cur_page
 		));
 		$this->view->pager = $this->pagination->create_links();
 		
-		$this->view->page_title = $topic->title;
+		$this->view->page_title = $this->view->topic->title;
 		$this->view->cur_page = $cur_page;
-		$this->view->is_last_page = (bool) ($topic->replies - $cur_page < $posts_per_page);
-		$this->view->user_can_reply = ($topic->locked != 1) && $this->acl_reply($id);
+		$this->view->is_last_page = (bool) ($this->view->topic->replies - $cur_page < $posts_per_page);
+		$this->view->user_can_reply = ($this->view->topic->locked != 1) && $this->acl_reply($id);
 		$this->view->is_logged_in = $this->session->isLoggedIn();
 		$this->view->breadcrumbs[] = array('href' => '/forum', 'title' => 'Forum');
-		$this->view->breadcrumbs[] = array('href' => '/forum/category/'.$topic->forumCategoryID, 'title' => $topic->forumCategoryName);
+		$this->view->breadcrumbs[] = array('href' => '/forum/category/'.$this->view->topic->forumCategoryID, 'title' => $this->view->topic->forumCategoryName);
 		
-		if($topic->is_event) {
-			$this->view->sublinks[] = array('href' => '/calendar/browse/'.date('Y', $topic->date_from).'/'.date('m', $topic->date_from), 'title' => datespan($topic->date_from, $topic->date_to));
+		if($this->view->topic->is_event) {
+			$this->view->sublinks[] = array('href' => '/calendar/browse/'.date('Y', $this->view->topic->date_from).'/'.date('m', $this->view->topic->date_from), 'title' => datespan($this->view->topic->date_from, $this->view->topic->date_to));
 			if($this->models->event->user_has_signed_up($this->session->userId(), $id))
 				$this->view->sublinks[] = array('href' => '/calendar/signoff/'.$id, 'title' => 'Njae, jag ska nog inte med. :/');
 			else
@@ -61,8 +59,9 @@ class Forum extends MY_Controller {
 	}
 	
 	public function acl_reply($id) {
-		$this->category_id = $this->models->forum->get_topic_by_id((int) $id)->category_id;
-		return $this->session->isloggedin() && $this->acl->check($this->category_id, 'reply');
+		if( ! isset($this->view->topic))
+			$this->view->topic = $this->models->forum->get_topic_by_id((int) $id);
+		return $this->session->isloggedin() && $this->acl->check($this->view->topic->category_id, 'reply');
 	}
 
 	public function post_topic($id) {
