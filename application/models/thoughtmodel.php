@@ -61,15 +61,16 @@ class ThoughtModel extends AutoModel {
 	}
 	
 	public function get_timeline($page = 0) {
-		if(intval($page) > 0)
-			$page = intval($page);
-		else
-			$page = 0;
 		$thoughts_per_page = $this->settings->get('thoughts_per_page'); // Borde inte vara där
-		return $this->db->query("SELECT diary.diaryid AS id, diary.diarytopic AS title, diary.diary AS body, diary.diarydate AS created, users.username, users.userid, users.ping, CONCAT('/thoughts/view/', diaryid) AS href FROM diary JOIN users on diary.userid = users.userid ORDER BY diary.diarydate DESC LIMIT {$page}, {$thoughts_per_page}")->result();
+		return $this->db
+			->select("diary.diaryid AS id, diary.diarytopic AS title, diary.diary AS body, diary.diarydate AS created, users.username, users.userid, users.ping, CONCAT('/thoughts/view/', diaryid) AS href", FALSE)
+			->join('users', 'diary.userid = users.userid')
+			->order_by('diarydate', 'desc')
+			->get('diary', $thoughts_per_page, $page)
+			->result();
 	}
 	
 	public function total_amount() {
-		return $this->db->query("SELECT COUNT(*) AS count FROM diary")->row()->count;
+		return $this->db->count_all('diary');
 	}
 }
