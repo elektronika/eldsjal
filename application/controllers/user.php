@@ -2,7 +2,7 @@
 class User extends MY_Controller {	
 	public function get_view($user_id) {
 		$user = $this->models->user->get_by_id((int) $user_id);
-		$user->does = $this->models->user->artList($user->userid);
+		$user->activities = $this->models->user->get_tags($user->userid, 'activity');
 		
 		// De här grejerna ska ligga separat sen. Måste.
 		if($user->userid == 4757)
@@ -27,8 +27,8 @@ class User extends MY_Controller {
 			$props[] = (object) array('title' => 'Hemsida', 'value' => "<a href='{$user->webpage}'>{$user->webpage}</a>");
 		$props[] = (object) array('title' => 'Medlem sedan', 'value' => $user->userid == 69 ? 'Tidernas begynnelse' : shortdate($user->register_date));
 		$props[] = (object) array('title' => 'Senast inloggad', 'value' => $user->ping > (time() - $this->settings->get('online_timeout')) ? '<span class="online">Online!</span>' : fuzzytime($user->lastLogin));
-		if( ! empty($user->does))
-			$props[] = (object) array('title' => 'Sysslar med', 'value' => natural_implode($user->does, 'och'));		
+		if( ! empty($user->activities))
+			$props[] = (object) array('title' => 'Sysslar med', 'value' => natural_implode($user->activities, 'och'));		
 		$user->properties = $props;
 		
 		$this->view->user = $user;
@@ -61,9 +61,8 @@ class User extends MY_Controller {
 		$user = $this->models->user->add_address_info($user);
 		$this->view->page_title = $user->first_name.' "'.$user->username.'" '.$user->last_name;
 		$this->view->user = $user;
-		$tags = $this->models->user->get_tags((int) $user_id, NULL, TRUE);
-		$this->view->wants_to_learn = implode(', ', $tags['learn']);
-		$this->view->wants_to_teach = implode(', ', $tags['teach']);
+		$activites = $this->models->user->get_tags((int) $user_id, 'activity');
+		$this->view->activites = implode(', ', $activites);
 		$this->view->locations = $this->models->location->get_all_assoc();
 		$this->view->sublinks = $this->models->user->sublinks((int) $user_id, 'settings');
 		$this->view->form_action = '/user/'.$user_id.'/edit';
@@ -102,8 +101,7 @@ class User extends MY_Controller {
 		$this->form_validation->set_rules('public_email', 'E-mail', 'trim|xss_clean|valid_email');			
 		$this->form_validation->set_rules('msn', 'MSN', 'trim|xss_clean|valid_email');			
 		$this->form_validation->set_rules('webpage', 'Hemsida', 'trim|xss_clean|prep_url');
-		$this->form_validation->set_rules('learn', '', 'trim|xss_clean');		
-		$this->form_validation->set_rules('teach', '', 'trim|xss_clean');		
+		$this->form_validation->set_rules('activities', '', 'trim|xss_clean');		
 		
 		// Radera konto
 		if($this->input->post('delete_password') != '')
@@ -147,13 +145,10 @@ class User extends MY_Controller {
 			else
 				$this->handle_image($user);
 			
-			// Lära & lära ut
-			$learn_tags = array_filter(array_map('mb_strtolower', array_map('trim', explode(',', $this->input->post('learn')))));
-			$this->models->user->set_tags((int) $user_id, 'learn', $learn_tags);
-			
-			$teach_tags = array_filter(array_map('mb_strtolower', array_map('trim', explode(',', $this->input->post('teach')))));
-			$this->models->user->set_tags((int) $user_id, 'teach', $teach_tags);
-			
+			// Sysslar med
+			$activities = $this->models->tag->tags_to_array($this->input->post('activites'));
+			$tag_ids = $this->models->tag->tag_ids($activities, TRUE);
+			$this->models->user->set_tags((int) $user_id, 'activity', $tag_ids);
 			
 			// Radera konto
 			if($this->input->post('delete_password') != '') {

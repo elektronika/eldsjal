@@ -25,7 +25,7 @@ class People extends MY_Controller {
 		$tag_ids = array();
 		if($does = $this->input->get('does'))
 			if( ! empty($does))
-				$tag_ids = $this->models->user->tag_ids(array_map('trim', explode(',', $does)));
+				$tag_ids = $this->models->tag->tag_ids(array_map('trim', explode(',', $does)));
 		
 		$items = $this->db
 			->select("username, last_name, first_name, users.userid, born_month, born_year, born_date, presentation AS body, locationname AS location, hasimage, ping")

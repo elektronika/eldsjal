@@ -12,7 +12,7 @@ class convert_userartlist_to_usertags_migration extends migration {
 		// Konvertera user-länkningarna
 		$old_user_tags = $this->db->get('userartlist')->result();
 		foreach($old_user_tags as $user_tag)
-			$this->db->insert('users_tags', array('tag_id' => $new_tags[$user_tag->artId], 'user_id' => $user_tag->userId, 'kind' => 'learn'));
+			$this->db->insert('users_tags', array('tag_id' => $new_tags[$user_tag->artId], 'user_id' => $user_tag->userId, 'kind' => 'activity'));
 	}
 	
 	public function down() {
