@@ -599,7 +599,7 @@ fieldset {
 	margin-bottom: 10px;
 }
 
-.form-item-text, .form-item-password, .form-item-textarea, .form-item-submit, input[type=text], input[type=password], textarea {
+.form-item-text, .form-item-password, .form-item-textarea, .form-item-submit, input[type=submit], input[type=text], input[type=password], textarea {
 	padding: 2px;
 	background: #ddd;
 	border: 1px solid #ccc;
@@ -642,7 +642,7 @@ textarea#form-item-body, .form-item-textarea {
 	height: 150px;
 }
 
-.form-error-description {
+.form-error-description, .form-error {
 	font-style: italic;
 	font-size: 10px;
 }

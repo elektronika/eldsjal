@@ -24,24 +24,20 @@ class Thoughts extends MY_Controller {
     }
 	
 	public function get_today() {
+		$thought = $this->models->thought->get_todays_thought($this->session->userId());		
+		$this->view->form = $this->forms->get('thought', NULL, $thought);
 		$this->view->page_title = 'Dagens tanke';
 		$this->util->trail('präntar ner dagens tanke');
-		$thought = $this->models->thought->get_todays_thought($this->session->userId());
-		$this->view->thought = $thought ? $thought : (object) array('title' => '', 'body' => '');
 	}
 	
 	public function post_today() {
-		$this->form_validation->set_rules('title', 'Rubrik', 'trim|xss_clean|required');
-		$this->form_validation->set_rules('body', 'Din tanke', 'trim|xss_clean|required');
-		$this->form_validation->set_message('required', 'Fältet "%s" måste fyllas i hörru.');
-		
-		if ($this->form_validation->run() == FALSE) {
-			$this->get_today();
+		if($this->forms->validate('thought')) {
+			$thought = $this->forms->get_object('thought');
+			$thought->id = $this->models->thought->set_todays_thought($thought, $this->session->userId());
+			$this->models->timeline->add($this->session->userId(), 'thought', $thought->id, $thought->title, $thought->body, TRUE, NULL, -1, $this->session->userdata('location'));
+			$this->redirect('/thoughts/view/'.$thought->id);
 		} else {
-			$new_thought = (object) $this->input->post_array(array('title', 'body'));
-			$thought_id = $this->models->thought->set_todays_thought($new_thought, $this->session->userId());
-			$this->models->timeline->add($this->session->userId(), 'thought', $thought_id, $new_thought->title, $new_thought->body, TRUE, NULL, -1, $this->session->userdata('location'));
-			$this->redirect('/thoughts/view/'.$thought_id);
+			$this->get_today();
 		}
 	}
 	
