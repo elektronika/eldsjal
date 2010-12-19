@@ -13,6 +13,20 @@ class Gallery extends MY_Controller {
 		$images_per_page = $this->settings->get('images_per_page');
 		$cur_page = $this->arguments->get('page', 0);
 		
+		// Nytaggade bilder för användaren
+		if($this->alerts->count('image_tag')) {
+			$item_ids = $this->alerts->item_ids('image_tag');
+			$this->view->newly_tagged = $this->db
+				->select('images.imageid AS item_id, images.imagename AS title, users.userid, users.username, tags.title as tag, tags.id AS tag_id')
+				->join('images', 'images_tags.image_id = images.imageid')
+				->join('tags', 'images_tags.tag_id = tags.id')
+				->join('users', 'images_tags.added_by = users.userid')
+				->where_in('images_tags.id', $item_ids)
+				->get('images_tags')
+				->result();
+			$this->alerts->remove('image_tag', $this->session->userId());
+		}
+		
 		// Taggar
 		if($tag_args = $this->arguments->get_array('tags')) {
 			$tags = $this->models->tag->get_by_ids($tag_args);
@@ -287,9 +301,13 @@ class Gallery extends MY_Controller {
 	
 	public function post_add_tag() {
 		$image_id = $this->input->post('post_id');
+		$image = $this->models->image->get_by_id((int) $image_id);
 		$tags = $this->models->tag->tags_to_array($this->input->post('tag'));
 		$tag_ids = $this->models->tag->tag_ids($tags, TRUE);
-		$this->models->image->add_tags((int) $image_id, $tag_ids);
+		$tagging_ids = $this->models->image->add_tags((int) $image_id, $tag_ids, $this->session->userId());
+		if($image->userid != $this->session->userId())
+			foreach($tagging_ids as $tagging_id)
+				$this->alerts->add('image_tag', $image->userid, $tagging_id);
 		$this->session->message = 'Donat!';
 		$this->redirect('/gallery/view/'.$image_id);
 	}

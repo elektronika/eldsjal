@@ -127,7 +127,7 @@ h2 {
 	float: left;
 }
 
-#navbar a span {
+#navbar a span.tagline {
 	font-weight: normal;
 	display: block;
 	font-size: 10px;
@@ -540,8 +540,8 @@ span.online {
 	margin-left: 2px;
 }
 
-.usermenu a .counter {
-	color: #999;
+.counter {
+	color: #333;
 }
 
 .usermenu a:hover {
@@ -874,6 +874,10 @@ a.thumbnail {
 
 .page-gallery-view #region-content .userimage {
 	display: none;
+}
+
+.newly-tagged div {
+	clear: both;
 }
 
 /* Nyhetsrutan på förstasidan */

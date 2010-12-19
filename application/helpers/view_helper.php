@@ -640,3 +640,7 @@ function wisdom_item($item) { ?>
 function guestbook_form($user_id, $prefix = NULL) {
 	return form_open('/guestbook/view/'.$user_id, NULL, array('prefix' => $prefix)).textarea('body', 'Gästboksmeddelande').submit('Pytsa in\'ett i gästboka!').form_close();
 }
+
+function counter($number, $type = 'random') {
+	return " <span class='counter' id='alert-counter-{$type}'>".($number > 0 ? "($number)" : '').'</span>';
+}

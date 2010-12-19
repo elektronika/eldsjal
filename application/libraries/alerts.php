@@ -3,6 +3,7 @@ class Alerts extends Library {
 	protected $alerts = array();
 	protected $alert_count = 0;
 	protected $loaded = FALSE;
+	protected $item_ids = array();
 	
 	public function count($type = FALSE) {
 		return $type ? $this->count_type($type) : $this->count_all();
@@ -21,6 +22,10 @@ class Alerts extends Library {
 	
 	protected function count_all() {
 		return $this->load()->alert_count;
+	}
+	
+	public function item_ids($type) {
+		return isset($this->item_ids[$type]) ? $this->item_ids[$type] : array();
 	}
 	
 	public function remove($type, $user_id = NULL, $item_id = NULL) {
@@ -46,8 +51,11 @@ class Alerts extends Library {
 		if( ! $this->loaded) {
 			$alerts = $this->db->where('user_id', $this->session->userId())->get('alerts')->result();
 			$this->alert_count = count($alerts);
-			foreach($alerts as $alert)
+			foreach($alerts as $alert) {
 				$this->alerts[$alert->type][] = $alert;
+				if( ! empty($alert->item_id))
+					$this->item_ids[$alert->type][] = $alert->item_id;
+			}
 			$this->loaded = TRUE;
 		}
 		

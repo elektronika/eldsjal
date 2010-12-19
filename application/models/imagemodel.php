@@ -90,12 +90,15 @@ class ImageModel extends AutoModel {
 		$this->db->where(array('image_id' => $image_id, 'tag_id' => $tag_id))->delete('images_tags');
 	}
 	
-	public function add_tags($image_id, Array $tag_ids) {
+	public function add_tags($image_id, Array $tag_ids, $added_by = NULL) {
+		$tagging_ids = array();
 		foreach($tag_ids as $tag_id)
-			$this->add_tag($image_id, $tag_id);
+			$tagging_ids[] = $this->add_tag($image_id, $tag_id, $added_by);
+		return $tagging_ids;
 	}
 	
-	public function add_tag($image_id, $tag_id) {
-		$this->db->insert('images_tags', array('image_id' => $image_id, 'tag_id' => $tag_id));
+	public function add_tag($image_id, $tag_id, $added_by = NULL) {
+		$this->db->insert('images_tags', array('image_id' => $image_id, 'tag_id' => $tag_id, 'added_by' => $added_by));
+		return $this->db->insert_id();
 	}
 }
