@@ -11,6 +11,7 @@ class WhatsupModel extends AutoModel {
 	}
 	
 	public function get() {
-		return $message = $this->db->query('SELECT message FROM history WHERE security = 0 AND userid <> '.$this->session->userId().' ORDER BY id DESC LIMIT 1')->row() ? $message->message : NULL;
+		$whatsup = $this->db->where(array('security' => 0, 'userid <>' => $this->session->userId()))->order_by('id', 'desc')->get('history', 1);
+		return $whatsup ? $whatsup->row()->message : FALSE;
 	}
 }
