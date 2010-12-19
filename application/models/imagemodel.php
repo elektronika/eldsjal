@@ -72,7 +72,7 @@ class ImageModel extends AutoModel {
 	
 	public function get_tags($image_id) {
 		return $this->db
-			->select('tags.*')
+			->select('tags.*, images_tags.id AS tagging_id')
 			->join('images_tags', 'images_tags.tag_id = tags.id')
 			->where('image_id', $image_id)
 			->get('tags')

@@ -24,7 +24,6 @@ class Gallery extends MY_Controller {
 				->where_in('images_tags.id', $item_ids)
 				->get('images_tags')
 				->result();
-			$this->alerts->remove('image_tag', $this->session->userId());
 		}
 		
 		// Taggar
@@ -221,6 +220,10 @@ class Gallery extends MY_Controller {
 		$image->untag_prefix = '/gallery/untag/';
 		$image->add_tag_url = '/gallery/add_tag/';
 		
+		foreach($image->tags as $tag)
+			if(in_array($tag->tagging_id, $this->alerts->item_ids('image_tag')))
+				$this->alerts->remove('image_tag', NULL, (int) $tag->tagging_id);
+		
 		$this->view->sublinks[] = array('href' => '/gallery', 'title' => 'Tillbaka till galleriet');
 		$this->view->sublinks[] = array('href' => '/gallery/user/'.$image->userid, 'title' => $image->username.'s andra bilder');
 		$this->view->sublinks[] = array('href' => '/gallery/random', 'title' => 'Slumpa bild!');
@@ -274,6 +277,7 @@ class Gallery extends MY_Controller {
 		@unlink($this->settings->get('gallery_folder').$image->id.'.'.$this->settings->get('default_image_extension'));
 		@unlink($this->settings->get('gallery_folder').'tn_'.$image->id.'.'.$this->settings->get('default_image_extension'));
 		$this->models->timeline->delete($image->id, 'image');
+		$this->alerts->remove('image_tag', FALSE, (int) $image_id);
 		$this->session->message('Poff botta!');
 		$this->redirect('/gallery');
 	}
@@ -314,5 +318,10 @@ class Gallery extends MY_Controller {
 	
 	public function acl_add_tag() {
 		return $this->session->isLoggedIn();
+	}
+	
+	function get_markallasseen() {
+		$this->alerts->remove('image_tag');
+		$this->redirect('/gallery');
 	}
 }

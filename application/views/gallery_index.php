@@ -1,6 +1,7 @@
 <?php region('content'); ?>
 <?php if(isset($newly_tagged)): ?>
 	<div class="newly_tagged">
+		<h3><?php if(count($newly_tagged) > 1): ?>Några utav dina bilder har blivit taggade! <a href="/gallery/markallasseen">(markera alla som visade)</a><?php else: ?>En utav dina bilder har blivit taggad!<?php endif; ?></h3>
 	<?php foreach($newly_tagged as $image): ?>
 		<div>
 			<?php echo thumbnail($image); ?>
