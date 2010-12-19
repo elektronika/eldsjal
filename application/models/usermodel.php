@@ -10,10 +10,6 @@ class UserModel extends AutoModel {
 			);
 	}
 	
-	public function user_id_for_slug($slug) {
-		return $this->db->query("SELECT userid FROM users WHERE slug = ".$this->db->escape($slug))->row()->userid;
-	}
-	
 	public function get_by_id($user_id) {
 		$user = $this->db
 			->select('users.*, locations.*, fadder.userid AS fadder_id, fadder.username AS fadder_name')
@@ -72,10 +68,6 @@ class UserModel extends AutoModel {
 		return ! empty($ids) ? $this->db->select('userid, username, ping')->where_in('userid', $ids)->get('users')->result() : array();
 	}
 	
-	public function get_by_slug($slug) {
-		return $this->get_by_id($this->user_id_for_slug($slug));
-	}
-	
 	public function allow_anonymous_viewers($user_id) {
 		return ($this->db->query("SELECT private FROM users WHERE userid = {$user_id}")->row()->private < 2);
 	}
@@ -86,7 +78,7 @@ class UserModel extends AutoModel {
 	}
 	
 	public function get_restricted_fields() {
-		$fields = array('userid', 'lastLogin', 'lastSeen', 'fourlast', 'member', 'slug', 'redirect', 'born_year', 'born_month', 'born_date', 'userType', 'register_date', 'approvedBy', 'eldsjalFind', 'reset_key', 'deleted', 'hasimage', 'salt', 'password');
+		$fields = array('userid', 'lastLogin', 'lastSeen', 'fourlast', 'member', 'redirect', 'born_year', 'born_month', 'born_date', 'userType', 'register_date', 'approvedBy', 'eldsjalFind', 'reset_key', 'deleted', 'hasimage', 'salt', 'password');
 		return array_combine($fields, $fields);
 	}
 	
@@ -169,7 +161,7 @@ class UserModel extends AutoModel {
 		
 	public function get_names_for(Array $user_ids) {
 		$out = array();
-		$names = $this->db->select('userid, username, slug')->where_in('userid', $user_ids)->get('users')->result();
+		$names = $this->db->select('userid, username')->where_in('userid', $user_ids)->get('users')->result();
 		foreach($names as $name)
 			$out[$name->userid] = $name;
 		return $out;
@@ -180,7 +172,7 @@ class UserModel extends AutoModel {
 	}
 	
 	public function get_latest_logins($limit = 10) {
-		return $this->db->select('userid, username, slug, lastlogin')->order_by('lastlogin', 'desc')->get('users', $limit)->result();
+		return $this->db->select('userid, username, lastlogin')->order_by('lastlogin', 'desc')->get('users', $limit)->result();
 	}
 	
 	public function sublinks($user_id, $active = NULL) {
