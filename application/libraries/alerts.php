@@ -33,7 +33,8 @@ class Alerts extends Library {
 		
 		if(is_null($user_id))
 			$user_id = $this->session->userId();
-		$this->db->where('user_id', $user_id);
+		if($user_id)
+			$this->db->where('user_id', $user_id);
 		
 		if( ! is_null($item_id) && $item_id)
 			$this->db->where('item_id', $item_id);

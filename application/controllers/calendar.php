@@ -3,6 +3,14 @@ class Calendar extends MY_Controller {
 	function get_index() {
 		$this->view->upcoming = $this->models->event->get_upcoming($this->acl->get_by_right('read'), 5);
 		$this->view->attending = $this->models->event->get_upcoming_by_attendance($this->session->userId());
+		if($this->alerts->count('event'))
+			$this->view->newly_added = $this->db
+				->select("topicname AS title, topicid AS id, date_from, topicdate AS created, DATE(FROM_UNIXTIME(date_from)) AS body, userid, username, CONCAT('/forum/topic/', topicid) AS href", FALSE)
+				->join('users', 'forumtopics.topicposterid = users.userid')
+				->where_in('topicid', $this->alerts->item_ids('event'))
+				->order_by('date_from', 'asc')
+				->get('forumtopics')
+				->result();
 		$this->view->page_title = 'Kalendern';
 		$this->view->sublinks[] = array('href' => '/calendar/browse/'.date('Y/m/j'), 'title' => 'Visa idag');
 		$this->view->sublinks[] = array('href' => '/calendar/browse/'.date('Y/m'), 'title' => 'Visa denna månaden');
@@ -133,5 +141,10 @@ class Calendar extends MY_Controller {
 	function acl_signoff($event_id) {
 		$category_id = $this->models->forum->get_topic_by_id((int) $event_id)->category_id;
 		return $this->session->isloggedin() && $this->acl->check($category_id);
+	}
+	
+	function get_markallasseen() {
+		$this->alerts->remove('event');
+		$this->redirect('/calendar');
 	}
 }

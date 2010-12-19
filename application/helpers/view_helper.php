@@ -171,6 +171,8 @@ function post($post) {
 }
 
 function tags($post) {
+	if(empty($post->tags) && ! isset($post->add_tag_url))
+		return '';
 	$out = '<div class="actions tags">';
 	if( isset($post->tags) && is_array($post->tags) && ! empty($post->tags)) {
 		$out .= '<span class="label">Taggar: </span>';

@@ -25,6 +25,9 @@ class Forum extends MY_Controller {
 		$this->view->topic = $topic;
 		$this->view->posts = $this->models->forum->get_posts_for_topic((int) $id, $cur_page, $posts_per_page);
 		
+		if(in_array($id, $this->alerts->item_ids('event')))
+			$this->alerts->remove('event', NULL, $id);
+		
 		if($this->session->isLoggedIn())
 			$this->models->forum->add_track($id, $this->session->userId());
 		
@@ -171,6 +174,12 @@ class Forum extends MY_Controller {
 				'location_id' => (int) $this->input->post('location')
 			));
 			
+			if($this->input->post('is_event') && $this->input->post('location')) {				
+				$users = $this->db->select('userid AS id')->where('city', $this->input->post('location'))->get('users')->result_array();
+				foreach($users as $user)
+					$this->alerts->add('event', $user['id'], $topic_id);
+			}
+			
 			if((bool) $this->input->post('is_event'))
 				$item_type = 'event_new';
 			elseif((bool) $this->input->post('is_wiki'))
@@ -210,6 +219,7 @@ class Forum extends MY_Controller {
 	public function post_edit($post_id) {
 		$post_is_first = $this->models->forum->post_is_first($post_id);
 		$post = $this->models->forum->get_post_by_id($post_id);
+		$old_location_id = $this->db->select('location_id')->where('topicid', $post->topic_id)->get('forumtopics')->row()->location_id;
 		
 		if($post_is_first)
 			$this->form_validation->set_rules('title', 'Rubrik', 'trim|xss_clean|required');
@@ -241,6 +251,18 @@ class Forum extends MY_Controller {
 					'is_wiki' => (int) $this->input->post('is_wiki'),
 					'location_id' => (int) $this->input->post('location')
 				));
+				
+				if($this->input->post('is_event') && $old_location_id != $this->input->post('location')) {
+					// Radera gamla alerts för eventet först
+					$this->alerts->remove('event', FALSE, $post->topic_id);
+					
+					$users = $this->db->select('userid AS id')->where('city', $this->input->post('location'))->get('users')->result_array();
+					foreach($users as $user)
+						$this->alerts->add('event', $user['id'], $post->topic_id);
+				} elseif( ! $this->input->post('is_event')) {
+					$this->alerts->remove('event', FALSE, $post->topic_id);					
+				}
+					
 			}
 			if($post->body != $this->input->post('body'))
 				$this->models->forum->update_post($post_id, $this->input->post('body'));
