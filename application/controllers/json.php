@@ -13,6 +13,6 @@ class Json extends MY_Controller {
 	
 	function get_tagsearch() {
 		$this->view->data->query = $this->input->get('query');
-		$this->view->data->suggestions = $this->models->user->search_tags($this->input->get('query'), 'after');
+		$this->view->data->suggestions = $this->models->tag->search_tags($this->input->get('query'), 'after');
 	}
 }

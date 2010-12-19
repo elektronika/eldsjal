@@ -280,44 +280,18 @@ class UserModel extends AutoModel {
 				$tags_structured[$kind][] = $tag->title;
 			}
 			$tags = $tags_structured;
+		} else {
+			$tags_structured = array();
+			foreach($tags as $tag)
+				$tags_structured[] = $tag->title;
+			$tags = $tags_structured;
 		}
 		return $tags;
 	}
 	
-	public function set_tags($user_id, $kind, Array $tags) {
+	public function set_tags($user_id, $kind, Array $tag_ids) {
 		$this->db->delete('users_tags', array('user_id' => $user_id, 'kind' => $kind));
-		$tag_ids = $this->tag_ids($tags);
 		foreach($tag_ids as $tag_id)
 			$this->db->insert('users_tags', array('user_id' => $user_id, 'kind' => $kind, 'tag_id' => $tag_id));
-	}
-	
-	public function tag_ids(Array $tag_names) {
-		if(empty($tag_names))
-			return array();
-			
-		$tags = $this->db->where_in('title', $tag_names)->get('tags')->result();
-		$tag_ids = array();
-		
-		foreach($tags as $tag)
-			$tag_ids[$tag->title] = $tag->id;
-			
-		$new_tags = array_diff($tag_names, array_keys($tag_ids));
-		foreach($new_tags as $tag)
-			$tag_ids[$tag] = $this->create_tag($tag);
-			
-		return $tag_ids;
-	}
-	
-	public function create_tag($title) {
-		$this->db->insert('tags', array('title' => $title));
-		return $this->db->insert_id();
-	}
-	
-	public function search_tags($term, $wildcard = 'both') {
-		$matches = $this->db->like('title', $term, $wildcard)->get('tags')->result();
-		$out = array();
-		foreach($matches as $match)
-			$out[] = $match->title;
-		return $out;
 	}
 }
