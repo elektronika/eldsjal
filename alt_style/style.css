@@ -1054,6 +1054,57 @@ div.autocomplete { border:1px solid #bbb; background:#FFF; cursor:default; text-
 	clear: both;
 }
 
+/* Mini-formuläret för att lägga till taggar */
+.add-tag {
+	display: inline;
+}
+
+.add-tag input {
+	display: inline;
+	margin: 0;
+	clear: none;
+	margin-left: 5px;
+	padding: 3px;
+}
+
+.add-tag label, .add-tag input[type=submit] {
+	display: none;
+}
+
+.add-tag input[type=text] {
+	width: 40px;
+	background-image: url('icons/tag_blue_add.png');
+	background-repeat: no-repeat;
+	background-position: center left;
+	padding-left: 18px;
+}
+
+/* Tagg-listor */
+.tags .label {
+	display: none;
+}
+
+.tags {
+	background: transparent url('icons/tag_blue.png') no-repeat center left;
+	padding: 5px 0;
+	padding-left: 18px;
+	font-style: normal;
+}
+
+.tags a {
+	margin-right: 5px;
+}
+
+.tags .untag {
+	position: relative;
+	left: -3px;
+	color: #777;
+}
+
+.tags .untag:hover {
+	color: #111;
+}
+
 /* Extragrejer, måste ligga sist! */
 
 /* moonfia's giraff */
