@@ -221,7 +221,7 @@ class Gallery extends MY_Controller {
 		$image->add_tag_url = '/gallery/add_tag/';
 		
 		foreach($image->tags as $tag)
-			if(in_array($tag->tagging_id, $this->alerts->item_ids('image_tag')))
+			if($this->alerts->item_has_alert('image_tag', $tag->tagging_id))
 				$this->alerts->remove('image_tag', NULL, (int) $tag->tagging_id);
 		
 		$this->view->sublinks[] = array('href' => '/gallery', 'title' => 'Tillbaka till galleriet');

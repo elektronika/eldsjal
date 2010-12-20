@@ -28,6 +28,10 @@ class Alerts extends Library {
 		return isset($this->item_ids[$type]) ? $this->item_ids[$type] : array();
 	}
 	
+	public function item_has_alert($type, $item_id) {
+		return isset($this->item_ids[$type]) && isset($this->item_ids[$type][$item_id]);
+	}
+	
 	public function remove($type, $user_id = NULL, $item_id = NULL) {
 		$this->db->where('type', $type);
 		
@@ -55,7 +59,7 @@ class Alerts extends Library {
 			foreach($alerts as $alert) {
 				$this->alerts[$alert->type][] = $alert;
 				if( ! empty($alert->item_id))
-					$this->item_ids[$alert->type][] = $alert->item_id;
+					$this->item_ids[$alert->type][$alert->item_id] = $alert->item_id;
 			}
 			$this->loaded = TRUE;
 		}
