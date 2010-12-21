@@ -226,18 +226,7 @@ class ForumModel extends AutoModel {
 		foreach($topics as &$topic) {
 			$this->util->ormify($topic);
 			$topic->classes = $topic->actions = array();
-			
-			if($topic->locked)
-				$topic->classes['locked'] = 'locked';
-			if($topic->sticky)
-				$topic->classes['sticky'] = 'sticky';
-			if($topic->is_event)
-				$topic->classes['is_event'] = 'is_event';
-			if($topic->is_wiki)
-				$topic->classes['is_wiki'] = 'is_wiki';
-			if($topic->replies == 0)
-				$topic->classes['no-replies'] = 'no-replies';
-            
+            $this->add_topic_classes($topic);
 			if( ! is_null($topic->track)) {
 				if($topic->track < $topic->updated)
 					$topic->classes['new'] = 'new';
@@ -255,6 +244,19 @@ class ForumModel extends AutoModel {
 			$topic->actions[] = array('title' => 'Redigera', 'href' => '/forum/edit/'.$topic->first_post, 'class' => 'edit');
 			$topic->actions[] = array('title' => 'Radera', 'href' => '/forum/delete/'.$topic->first_post, 'class' => 'delete confirm');				
 		}
+	}
+	
+	protected function add_topic_classes(&$topic) {
+		if($topic->locked)
+			$topic->classes['locked'] = 'locked';
+		if($topic->sticky)
+			$topic->classes['sticky'] = 'sticky';
+		if($topic->is_event)
+			$topic->classes['is_event'] = 'is_event';
+		if($topic->is_wiki)
+			$topic->classes['is_wiki'] = 'is_wiki';
+		if($topic->replies == 0)
+			$topic->classes['no-replies'] = 'no-replies';
 	}
 	
 	public function add_track($topic_id, $user_id) {
@@ -309,6 +311,33 @@ class ForumModel extends AutoModel {
 		);
 		$topic = $this->db->query("SELECT ft.*, fc.*, COUNT(fm.messageid) - 1 AS replies, COUNT(fm.messageid) AS posts FROM forumtopics AS ft JOIN forumcategory AS fc ON fc.forumcategoryid = ft.forumcategoryid JOIN forummessages AS fm ON ft.topicid = fm.topicid WHERE ft.topicid = ".intval($topic_id).' GROUP BY ft.topicid')->row();		
 		return $this->util->remap($topic, $remap);
+	}
+	
+	public function get_topics_by_id(Array $topic_ids) {
+		$remap = array(
+			'topicName' => 'title',
+			'topicPosterId' => 'creator',
+			'topicDate' => 'created',
+			'topicId' => 'id',
+			'latestEntry' => 'updated',
+			'latestEntryBy' => 'updater',
+			'forumCategoryId' => 'category_id',
+		);
+		$topics = $this->db->select("ft.*, fc.*, COUNT(fm.messageid) - 1 AS replies, COUNT(fm.messageid) AS posts, userid, username", FALSE)
+			->join('forumcategory AS fc', 'fc.forumcategoryid = ft.forumcategoryid')
+			->join('forummessages AS fm', 'ft.topicid = fm.topicid')
+			->join('users', 'topicposterid = userid')
+			->where_in('ft.topicid', $topic_ids)
+			->group_by('ft.topicid')
+			->get('forumtopics AS ft')
+			->result();
+			// return;
+		$topics = $this->util->remapLoop($topics, $remap);
+		foreach($topics as &$topic) {
+			$this->add_topic_classes($topic);
+			$topic->creator = (object) array('username' => $topic->username, 'userid' => $topic->userid);
+		}
+		return $topics;
 	}
 	
 	public function get_post_by_id($post_id) {

@@ -3,6 +3,10 @@ class Forum extends MY_Controller {
 	public function get_index() {
 		$this->util->trail('spanar över forumkategorierna');
 		$this->view->categories = $this->models->forum->get_categories_for_usertype($this->session->usertype(), $this->session->userId(), $this->session->lastlogin());
+		
+		if($this->alerts->count('forum'))
+			$this->view->new_topics = $this->models->forum->get_topics_by_id($this->alerts->item_ids('forum'));
+		
 		$this->view->page_title = 'Forum';
 		$this->view->sublinks[] = array('href' => '/forum/random', 'title' => 'Slumpad tråd');
 		
@@ -23,8 +27,9 @@ class Forum extends MY_Controller {
 		$this->util->trail('läser tråden '.$this->view->topic->title, $this->view->topic->forumSecurityLevel);
 		$this->view->posts = $this->models->forum->get_posts_for_topic((int) $id, $cur_page, $posts_per_page);
 		
-		if(in_array($id, $this->alerts->item_ids('event')))
-			$this->alerts->remove('event', NULL, $id);
+		$this->alerts->remove('event', NULL, $id);
+		$this->alerts->remove('forum', NULL, $id);
+		
 		
 		if($this->session->isLoggedIn())
 			$this->models->forum->add_track((int) $id, $this->session->userId());
@@ -173,11 +178,10 @@ class Forum extends MY_Controller {
 				'location_id' => (int) $this->input->post('location')
 			));
 			
-			if($this->input->post('is_event') && $this->input->post('location')) {				
-				$users = $this->db->select('userid AS id')->where('city', $this->input->post('location'))->get('users')->result_array();
-				foreach($users as $user)
-					$this->alerts->add('event', $user['id'], $topic_id);
-			}
+			if($this->input->post('is_event') && $this->input->post('location'))
+				$this->alerts->add('event', $this->models->user->user_ids_by_location($this->input->post('location')), $topic_id);
+			elseif($this->input->post('location'))
+				$this->alerts->add('forum', $this->models->user->user_ids_by_location($this->input->post('location')), $topic_id);
 			
 			if((bool) $this->input->post('is_event'))
 				$item_type = 'event_new';
@@ -254,12 +258,17 @@ class Forum extends MY_Controller {
 				if($this->input->post('is_event') && $old_location_id != $this->input->post('location')) {
 					// Radera gamla alerts för eventet först
 					$this->alerts->remove('event', FALSE, $post->topic_id);
+					$this->alerts->remove('forum', FALSE, $post->topic_id);
 					
-					$users = $this->db->select('userid AS id')->where('city', $this->input->post('location'))->get('users')->result_array();
-					foreach($users as $user)
-						$this->alerts->add('event', $user['id'], $post->topic_id);
+					$this->alerts->add('event', $this->models->user->user_ids_by_location($this->input->post('location')), $post->topic_id);
 				} elseif( ! $this->input->post('is_event')) {
-					$this->alerts->remove('event', FALSE, $post->topic_id);					
+					$this->alerts->remove('event', FALSE, $post->topic_id);
+					
+					if($old_location_id != $this->input->post('location')) {
+						$this->alerts->remove('forum', FALSE, $post->topic_id);
+						if($this->input->post('location') !== '0')
+							$this->alerts->add('event', $this->models->user->user_ids_by_location($this->input->post('location')), $post->topic_id);							
+					}
 				}
 					
 			}
@@ -413,5 +422,10 @@ class Forum extends MY_Controller {
 			$this->models->forum->set_acl($this->session->userId(), $category_id, TRUE, TRUE, TRUE, TRUE);
 			$this->redirect('/forum/category/'.$category_id);
 		}
+	}
+	
+	function get_markallasseen() {
+		$this->alerts->remove('forum');
+		$this->redirect('/forum');
 	}
 }

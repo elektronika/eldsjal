@@ -294,4 +294,12 @@ class UserModel extends AutoModel {
 		foreach($tag_ids as $tag_id)
 			$this->db->insert('users_tags', array('user_id' => $user_id, 'kind' => $kind, 'tag_id' => $tag_id));
 	}
+	
+	public function user_ids_by_location($location_id) {
+		$user_ids = array();
+		$users = $this->db->select('userid AS id')->where('city', $location_id)->get('users')->result_array();
+		foreach($users as $user)
+			$user_ids[$user['id']] = $user['id'];
+		return $user_ids;
+	}
 }
