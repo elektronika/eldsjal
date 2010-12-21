@@ -1,7 +1,8 @@
 <?php
-class Cron extends Controller {
+class Cron extends MY_Controller {
 	public function __construct() {
-		parent::Controller();
+		parent::__construct();
+		$this->redirect = TRUE;
 	}
 	
 	public function get_hourly($key = '') {
@@ -18,7 +19,7 @@ class Cron extends Controller {
 	
 	protected function cron_event($period, $key) {
 		if($this->key_is_valid($key))
-			$this->event->trigger('cron_'.$period);
+			$this->events->trigger('cron_'.$period);
 		else
 			show_error('Sorry, access key not valid');
 	}
