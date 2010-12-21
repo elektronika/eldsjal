@@ -238,6 +238,10 @@ thead {
 	line-height: 19px;
 }
 
+#forum-topics {
+	width: 100%;
+}
+
 #forum-topics td.topic-subject, #messages td.message-counterpart, #forum-categories td.category-title {
 	padding-left: 22px;
 }
@@ -464,6 +468,11 @@ span.online {
 	background: #F9F7ED;
 	color: #CC0000;
 	border: none;
+}
+
+.vertical-margin {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 /* Actions, med ikoner */
