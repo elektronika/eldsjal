@@ -90,10 +90,10 @@ class User extends MY_Controller {
 		$this->form_validation->set_rules('presentation', 'Presentation', 'trim|xss_clean|required|min_length[5]');			
 		$this->form_validation->set_rules('first_name', 'Förnamn', 'trim|xss_clean|required');			
 		$this->form_validation->set_rules('last_name', 'Efternamn', 'trim|xss_clean|required');			
-		$this->form_validation->set_rules('street_address', 'Gatuadress', 'trim|xss_clean|required');			
-		$this->form_validation->set_rules('postal_code', 'Postnummer', 'trim|xss_clean|required');			
-		$this->form_validation->set_rules('postal_city', 'Postort', 'trim|xss_clean|required');			
-		$this->form_validation->set_rules('country', 'Land', 'trim|xss_clean|required');
+		// $this->form_validation->set_rules('street_address', 'Gatuadress', 'trim|xss_clean|required');			
+		// $this->form_validation->set_rules('postal_code', 'Postnummer', 'trim|xss_clean|required');			
+		// $this->form_validation->set_rules('postal_city', 'Postort', 'trim|xss_clean|required');			
+		// $this->form_validation->set_rules('country', 'Land', 'trim|xss_clean|required');
 		$this->form_validation->set_rules('privacy', '', 'trim|xss_clean|required|integer');
 		$this->form_validation->set_rules('city', '', 'trim|xss_clean|required|integer');
 		
