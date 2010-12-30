@@ -1130,6 +1130,11 @@ div.autocomplete { border:1px solid #bbb; background:#FFF; cursor:default; text-
 	background: transparent url('/images/vattenpipa.gif') no-repeat top right;
 }
 
+/* linda's pingvin */
+.page-user-view-5530 #region-content {
+	background: transparent url('/images/pingvin.png') no-repeat top right;
+}
+
 /* Longmans egna logga */
 .longman #widget-logo h1 {
 	background-image: url('longmanslogo.png');
